@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ja-fleet", "ja-fleet\ja-fleet.csproj", "{83C7E63E-F0CA-4464-B5E6-F77E5863C13C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83C7E63E-F0CA-4464-B5E6-F77E5863C13C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83C7E63E-F0CA-4464-B5E6-F77E5863C13C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83C7E63E-F0CA-4464-B5E6-F77E5863C13C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83C7E63E-F0CA-4464-B5E6-F77E5863C13C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
