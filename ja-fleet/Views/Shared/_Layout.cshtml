@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta name="google-site-verification" content="gaEmZmJrwC5Ay5P-0hcqz_IteB60VIJNDlIbfsSFlxo" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - JA-Fleet</title>
 
@@ -28,14 +29,26 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="ANA" asp-action="Index">ANAグループ</a></li>
+                    <li><a asp-area="" asp-controller="JAL" asp-action="Index">JALグループ</a></li>
+                    <li><a asp-area="" asp-controller="LCC" asp-action="Index">LCC</a></li>
+                    <li><a asp-area="" asp-controller="Other" asp-action="Index">その他航空会社</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
+    <div class="container" style="color:red">
+        <h2>
+            <u>只今公開準備中です！</u><br />
+        </h2>
+        <h3>
+            このサイトは以前51ANさんが公開されていた本邦航空会社の機材一覧を引き継いで、<br />
+            51ANさんの承諾を得て公開しています。<br />
+            現時点で掲載中のデータは2017/7現在のものであり、整備中の段階です。<br />
+            その他、デザインなども調整中です。
+            整備完了まで今しばらくお待ち下さい。<br />
+        </h3>
+    </div>
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -45,6 +58,14 @@
     </div>
 
     <environment exclude="Development">
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47052530-4"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-47052530-4');
+        </script>
     </environment>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
             asp-fallback-src="~/lib/jquery/dist/jquery.min.js"

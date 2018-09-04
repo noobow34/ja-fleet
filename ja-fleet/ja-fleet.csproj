@@ -8,4 +8,10 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\JAL\" />
+    <Folder Include="Views\ANA\" />
+    <Folder Include="Views\LCC\" />
+    <Folder Include="Views\Other\" />
+  </ItemGroup>
 </Project>
