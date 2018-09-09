@@ -2,8 +2,11 @@
     ViewData["Title"] = "Top";
 }
 
-<h1>@ViewData["Title"]</h1>
-【本邦航空会社（日本国内航空会社） 機材一覧サイト】<br />
------<br />
-現在公開準備中<br />
-管理者：<a href="https://twitter.com/noobow">ぬーぼー（@@noobow）</a><br />
+<h1>JA-Fleet</h1>
+<h2>【本邦航空会社（日本国内航空会社） 機材一覧サイト】</h2>
+<a asp-area="" asp-controller="ANA" asp-action="Index"><h3>ANAグループ</h3></a>
+<a asp-area="" asp-controller="JAL" asp-action="Index"><h3>JALグループ</h3></a>
+<a asp-area="" asp-controller="LCC" asp-action="Index"><h3>LCC</h3></a>
+<a asp-area="" asp-controller="Other" asp-action="Index"><h3>その他航空会社</h3></a>
+<hr />
+    管理者：<a href="https://twitter.com/noobow">ぬーぼー（@@noobow）</a><br />
