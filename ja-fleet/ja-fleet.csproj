@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="ClosedXML" Version="0.93.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -13,5 +14,6 @@
     <Folder Include="Views\ANA\" />
     <Folder Include="Views\LCC\" />
     <Folder Include="Views\Other\" />
+    <Folder Include="Excel\" />
   </ItemGroup>
 </Project>

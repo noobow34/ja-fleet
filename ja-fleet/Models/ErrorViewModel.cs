@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace ja_fleet.Models
+namespace jafleet.Models
 {
     public class ErrorViewModel
     {

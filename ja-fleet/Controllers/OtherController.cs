@@ -4,15 +4,22 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ja_fleet.Models;
+using jafleet.Models;
+using jafleet.Excel;
 
-namespace ja_fleet.Controllers
+namespace jafleet.Controllers
 {
     public class OtherController : Controller
     {
         public IActionResult Index()
         {
             return View();
+        }
+
+        public JsonResult Data()
+        {
+            ExcelReader excelReader = new ExcelReader();
+            return Json(excelReader.GetAircraftInfo("Other"));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
