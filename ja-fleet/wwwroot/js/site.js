@@ -23,11 +23,14 @@ function setupTable(tableName,url)
                     {data: 'wifi'},
                     {data: 'remarks'},
                 ],
-                "paging":   false,
-                "ordering": false,
-                "columnDefs": [{
-                    "targets": '_all',
-                    "className": 'dt-center'
+                paging:   false,
+                ordering: false,
+                fixedHeader: true,
+                scrollY: '700px',
+                scrollCollapse: true,
+                columnDefs: [{
+                    targets: '_all',
+                    className: 'dt-center'
                 }]
 
             });
