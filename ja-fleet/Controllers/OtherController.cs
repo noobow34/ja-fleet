@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using jafleet.Excel;
+using jafleet.EF;
+using jafleet.Constants;
 
 namespace jafleet.Controllers
 {
@@ -18,8 +20,11 @@ namespace jafleet.Controllers
 
         public JsonResult Data()
         {
-            ExcelReader excelReader = new ExcelReader();
-            return Json(excelReader.GetAircraftInfo("Other"));
+            List<AircraftView> list;
+            using (var context = new jafleetContext()){
+                list = context.AircraftView.Where(p => p.AirlineGroupCode == AirlineGroupCpode.Other).OrderBy(p => p.DisplayOrder).ToList();
+            }
+            return Json(list);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
