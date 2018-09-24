@@ -22,7 +22,6 @@ namespace jafleet.Controllers
                 groupName = context.AirlineGroup.FirstOrDefault(p => p.AirlineGroupCode == id)?.AirlineGroupName;
             }
 
-            ViewData["Title"] = groupName + "- JA-Fleet";
             ViewData["Title"] = groupName;
             ViewData["TableId"] = id;
             ViewData["api"] = "/api/airlinegroup/" + id;
@@ -36,10 +35,9 @@ namespace jafleet.Controllers
             string airlineName;
             using (var context = new jafleetContext())
             {
-                airlineName = context.Airline.FirstOrDefault(p => p.AirlineGroupCode == id)?.AirlineNameJpShort;
+                airlineName = context.Airline.FirstOrDefault(p => p.AirlineCode == id)?.AirlineNameJpShort;
             }
 
-            ViewData["Title"] = airlineName + "- JA-Fleet";
             ViewData["Title"] = airlineName;
             ViewData["TableId"] = id;
             ViewData["api"] = "/api/airline/" + id;
@@ -56,7 +54,6 @@ namespace jafleet.Controllers
                 typeName = context.Type.FirstOrDefault(p => p.TypeCode == id)?.TypeName;
             }
 
-            ViewData["Title"] = typeName + "- JA-Fleet";
             ViewData["Title"] = typeName;
             ViewData["TableId"] = id;
             ViewData["api"] = "/api/type/" + id;
