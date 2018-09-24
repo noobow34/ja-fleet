@@ -1,10 +1,5 @@
-﻿@{
-    ViewData["Title"] = "JALグループ";
-}
-
-<h2>@ViewData["Title"]</h2>
-
-<table id="JAL" class="display cell-border compact dt-body-center" style="width:100%">
+﻿<h2>@ViewData["Title"]</h2>
+<table id="@ViewData["TableId"]" class="display cell-border compact dt-body-center" style="width:100%">
     <thead>
         <tr>
             <th>航空会社</th>
@@ -21,7 +16,6 @@
 @section ScriptsPartial{
 <script tyep="text/javascript">
 $(document).ready(function() {
-    setupTable('#JAL','/api/airlinegroup/J');
-        } );
-</script>
+    setupTable('#' + '@ViewData["TableId"]','@ViewData["api"]');
+        } );</script>
 }

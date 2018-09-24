@@ -16,12 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\JAL\" />
-    <Folder Include="Views\ANA\" />
-    <Folder Include="Views\LCC\" />
-    <Folder Include="Views\Other\" />
     <Folder Include="Excel\" />
     <Folder Include="EF\" />
     <Folder Include="Constants\" />
+    <Folder Include="Views\Aircraft\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Index.cshtml" />
+    <Content Remove="Views\ANA\Index.cshtml" />
   </ItemGroup>
 </Project>

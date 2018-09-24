@@ -1,4 +1,22 @@
-﻿<!DOCTYPE html>
+﻿@using jafleet.EF;
+@{
+    List<Airline> ana = new List<Airline>();
+    List<Airline> jal = new List<Airline>();
+    List<Airline> lcc = new List<Airline>();
+    List<Airline> other = new List<Airline>();
+    List<jafleet.EF.Type> type = new List<jafleet.EF.Type>();
+
+    using (var context = new jafleetContext())
+    {
+        ana = context.Airline.Where(p => p.AirlineGroupCode == "A").OrderBy(p => p.DisplayOrder).ToList();
+        jal = context.Airline.Where(p => p.AirlineGroupCode == "J").OrderBy(p => p.DisplayOrder).ToList();
+        lcc = context.Airline.Where(p => p.AirlineGroupCode == "L").OrderBy(p => p.DisplayOrder).ToList();
+        other = context.Airline.Where(p => p.AirlineGroupCode == "O").OrderBy(p => p.DisplayOrder).ToList();
+        type = context.Type.OrderBy(p => p.DisplayOrder).ToList();
+    }
+
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -14,6 +32,16 @@
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
+    <style type="text/css">
+        <!--
+        .scrollable-menu {
+            height: auto;
+            max-height: 500px;
+            overflow-x: hidden;
+        }
+        -->
+    </style>
+
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -26,31 +54,80 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="ANA" asp-action="Index">ANAグループ</a></li>
-                    <li><a asp-area="" asp-controller="JAL" asp-action="Index">JALグループ</a></li>
-                    <li><a asp-area="" asp-controller="LCC" asp-action="Index">LCC</a></li>
-                    <li><a asp-area="" asp-controller="Other" asp-action="Index">その他航空会社</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ANAグループ<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="A">全て</a></li>
+                            <li role="separator" class="divider"></li>
+                            @foreach (Airline a in ana)
+                            {
+                                <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">JALグループ<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="J">全て</a></li>
+                            <li role="separator" class="divider"></li>
+                            @foreach (Airline a in jal)
+                            {
+                                <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">LCC<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="L">全て</a></li>
+                            <li role="separator" class="divider"></li>
+                            @foreach (Airline a in lcc)
+                            {
+                                <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">その他航空会社<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="O">全て</a></li>
+                            <li role="separator" class="divider"></li>
+                            @foreach (Airline a in other)
+                            {
+                                <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">型式別<span class="caret"></span></a>
+                        <ul class="dropdown-menu scrollable-menu">
+                            @foreach (jafleet.EF.Type a in type)
+    {
+                        <li><a asp-area="" asp-controller="Aircraft" asp-action="Type" asp-route-id="@a.TypeCode">@a.TypeName</a></li>
+}
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - JA-Fleet</p>
-        </footer>
     </div>
 
     <environment exclude="Development">
     </environment>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47052530-4"></script>
-        <script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47052530-4"></script>
+    <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'UA-47052530-4');
-        </script>
+    </script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
             asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
             asp-fallback-test="window.jQuery"
