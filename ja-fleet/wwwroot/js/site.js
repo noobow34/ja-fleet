@@ -27,6 +27,7 @@ function setupTable(tableName,url)
                 ordering: false,
                 fixedHeader: true,
                 scrollY: '700px',
+                scrollX: true,
                 scrollCollapse: true,
                 columnDefs: [{
                     targets: '_all',
