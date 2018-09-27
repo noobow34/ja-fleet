@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
+using jafleet.EF;
+using jafleet.Constants;
 
 namespace jafleet.Controllers
 {
@@ -12,7 +11,16 @@ namespace jafleet.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            HomeModel hm = new HomeModel();
+            using (var context = new jafleetContext())
+            {
+                hm.ana = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup).OrderBy(p => p.DisplayOrder).ToList();
+                hm.jal = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup).OrderBy(p => p.DisplayOrder).ToList();
+                hm.lcc = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToList();
+                hm.other = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToList();
+            }
+
+            return View(hm);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

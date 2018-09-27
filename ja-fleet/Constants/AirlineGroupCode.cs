@@ -1,6 +1,6 @@
 namespace jafleet.Constants
 {
-    public class AirlineGroupCpode{
+    public static class AirlineGroupCode{
         public static string ANAGroup = "A";
         public static string JALGroup = "J";
         public static string LCC = "L";

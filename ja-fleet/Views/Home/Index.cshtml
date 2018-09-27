@@ -2,21 +2,8 @@
 @using jafleet.EF
 @{
     ViewData["Title"] = "Top";
-
-    List<Airline> ana = new List<Airline>();
-    List<Airline> jal = new List<Airline>();
-    List<Airline> lcc = new List<Airline>();
-    List<Airline> other = new List<Airline>();
-
-    using (var context = new jafleetContext())
-    {
-        ana = context.Airline.Where(p => p.AirlineGroupCode == "A").OrderBy(p => p.DisplayOrder).ToList();
-        jal = context.Airline.Where(p => p.AirlineGroupCode == "J").OrderBy(p => p.DisplayOrder).ToList();
-        lcc = context.Airline.Where(p => p.AirlineGroupCode == "L").OrderBy(p => p.DisplayOrder).ToList();
-        other = context.Airline.Where(p => p.AirlineGroupCode == "O").OrderBy(p => p.DisplayOrder).ToList();
-    }
 }
-
+@model HomeModel
 <h1>JA-Fleet</h1>
 <h4>【本邦航空会社機材一覧サイト】</h4>
 <div style="width:50%">
@@ -33,7 +20,7 @@
                 <h4>
                     <a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="A">全て</a><br />
                 </h4>
-                @foreach (Airline a in ana)
+                @foreach (Airline a in Model.ana)
                 {
                     <h4>
                         <a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a><br />
@@ -57,7 +44,7 @@
                 <h4>
                     <a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="J">全て</a><br />
                 </h4>
-                @foreach (Airline a in jal)
+                @foreach (Airline a in Model.jal)
                 {
                     <h4>
                         <a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a><br />
@@ -81,7 +68,7 @@
                 <h4>
                     <a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="L">全て</a><br />
                 </h4>
-                @foreach (Airline a in lcc)
+                @foreach (Airline a in Model.lcc)
                 {
                     <h4>
                         <a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a><br />
@@ -105,7 +92,7 @@
                 <h4>
                     <a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="L">全て</a><br />
                 </h4>
-                @foreach (Airline a in other)
+                @foreach (Airline a in Model.other)
                 {
                     <h4>
                         <a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a><br />
