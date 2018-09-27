@@ -3,19 +3,21 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App"/>
-    <PackageReference Include="ClosedXML" Version="0.93.1"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.3"/>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="BuildBundlerMinifier" Version="2.8.391"/>
+    <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Excel\"/>
-    <Folder Include="EF\"/>
-    <Folder Include="Constants\"/>
-    <Folder Include="Views\Aircraft\"/>
+    <Folder Include="EF\" />
+    <Folder Include="Constants\" />
+    <Folder Include="Views\Aircraft\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Models\Aircraft.cs" />
+    <Compile Remove="Excel\ExcelReader.cs" />
   </ItemGroup>
 </Project>
