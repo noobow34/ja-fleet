@@ -1,9 +1,9 @@
-@using jafleet.Models
+@using jafleet.Manager
 @using jafleet.EF
 @{
     ViewData["Title"] = "Top";
 }
-@model HomeModel
+
 <h1>JA-Fleet</h1>
 <h4>【本邦航空会社機材一覧サイト】</h4>
 <div style="width:50%">
@@ -20,7 +20,7 @@
                 <h4>
                     <a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="A">全て</a><br />
                 </h4>
-                @foreach (Airline a in Model.ana)
+                @foreach (Airline a in MasterManager.ANA)
                 {
                     <h4>
                         <a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a><br />
@@ -44,7 +44,7 @@
                 <h4>
                     <a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="J">全て</a><br />
                 </h4>
-                @foreach (Airline a in Model.jal)
+                @foreach (Airline a in MasterManager.JAL)
                 {
                     <h4>
                         <a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a><br />
@@ -68,7 +68,7 @@
                 <h4>
                     <a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="L">全て</a><br />
                 </h4>
-                @foreach (Airline a in Model.lcc)
+                @foreach (Airline a in MasterManager.LCC)
                 {
                     <h4>
                         <a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a><br />
@@ -92,7 +92,7 @@
                 <h4>
                     <a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="L">全て</a><br />
                 </h4>
-                @foreach (Airline a in Model.other)
+                @foreach (Airline a in MasterManager.Other)
                 {
                     <h4>
                         <a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a><br />

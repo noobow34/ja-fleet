@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using jafleet.Manager;
 
 namespace jafleet
 {
@@ -17,6 +18,7 @@ namespace jafleet
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            MasterManager.ReadAll();
         }
 
         public IConfiguration Configuration { get; }

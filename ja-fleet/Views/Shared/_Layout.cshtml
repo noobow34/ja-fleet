@@ -1,23 +1,6 @@
-﻿@using jafleet.EF;
-@using jafleet.Constants;
+﻿@using jafleet.Manager;
+@using jafleet.EF;
 
-@{
-    List<Airline> ana = new List<Airline>();
-    List<Airline> jal = new List<Airline>();
-    List<Airline> lcc = new List<Airline>();
-    List<Airline> other = new List<Airline>();
-    List<jafleet.EF.Type> type = new List<jafleet.EF.Type>();
-
-    using (var context = new jafleetContext())
-    {
-        ana = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup).OrderBy(p => p.DisplayOrder).ToList();
-        jal = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup).OrderBy(p => p.DisplayOrder).ToList();
-        lcc = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToList();
-        other = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToList();
-        type = context.Type.OrderBy(p => p.DisplayOrder).ToList();
-    }
-
-}
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 </head>
 
-<body class=".no-thank-yu">
+<body>
     <header>
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
@@ -48,7 +31,7 @@
                             <ul class="dropdown-menu">
                                 <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="A">全て</a></li>
                                 <li role="separator" class="divider"></li>
-                                @foreach (Airline a in ana)
+                                @foreach (Airline a in MasterManager.ANA)
                                 {
                                     <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
                                 }
@@ -60,7 +43,7 @@
                             <ul class="dropdown-menu">
                                 <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="J">全て</a></li>
                                 <li role="separator" class="divider"></li>
-                                @foreach (Airline a in jal)
+                                @foreach (Airline a in MasterManager.JAL)
                                 {
                                     <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
                                 }
@@ -72,7 +55,7 @@
                             <ul class="dropdown-menu">
                                 <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="L">全て</a></li>
                                 <li role="separator" class="divider"></li>
-                                @foreach (Airline a in lcc)
+                                @foreach (Airline a in MasterManager.LCC)
                                 {
                                     <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
                                 }
@@ -84,7 +67,7 @@
                             <ul class="dropdown-menu">
                                 <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="O">全て</a></li>
                                 <li role="separator" class="divider"></li>
-                                @foreach (Airline a in other)
+                                @foreach (Airline a in MasterManager.Other)
                                 {
                                     <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
                                 }
@@ -94,7 +77,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">型式別<span class="caret"></span></a>
                             <ul class="dropdown-menu scrollable-menu">
-                                @foreach (jafleet.EF.Type a in type)
+                                @foreach (jafleet.EF.Type a in MasterManager.Type)
                                 {
                                     <li><a asp-area="" asp-controller="Aircraft" asp-action="Type" asp-route-id="@a.TypeCode">@a.TypeName</a></li>
                                 }
@@ -110,8 +93,6 @@
         @RenderBody()
     </div>
 
-    <environment exclude="Development">
-    </environment>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47052530-4"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -120,13 +101,13 @@
       gtag('config', 'UA-47052530-4');
     </script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-src="~/lib/jquery/jquery.min.js"
             asp-fallback-test="window.jQuery"
             crossorigin="anonymous"
             integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
     </script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+            asp-fallback-src="~/lib/bootstrap/js/bootstrap.min.js"
             asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
             crossorigin="anonymous"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">

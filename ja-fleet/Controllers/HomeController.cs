@@ -11,16 +11,7 @@ namespace jafleet.Controllers
     {
         public IActionResult Index()
         {
-            HomeModel hm = new HomeModel();
-            using (var context = new jafleetContext())
-            {
-                hm.ana = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup).OrderBy(p => p.DisplayOrder).ToList();
-                hm.jal = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup).OrderBy(p => p.DisplayOrder).ToList();
-                hm.lcc = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToList();
-                hm.other = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToList();
-            }
-
-            return View(hm);
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

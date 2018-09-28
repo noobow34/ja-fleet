@@ -15,6 +15,7 @@
     <Folder Include="EF\" />
     <Folder Include="Constants\" />
     <Folder Include="Views\Aircraft\" />
+    <Folder Include="Manager\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\Aircraft.cs" />
