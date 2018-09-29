@@ -10,6 +10,7 @@
     <title>@ViewData["Title"] - JA-Fleet</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap-multiselect.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 </head>
@@ -26,15 +27,16 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Search" asp-action="Index">検索</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ANAグループ<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="A">全て</a></li>
                                 <li role="separator" class="divider"></li>
                                 @foreach (Airline a in MasterManager.ANA)
-                                {
-                                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
-                                }
+            {
+                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
+}
                             </ul>
                         </li>
 
@@ -44,9 +46,9 @@
                                 <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="J">全て</a></li>
                                 <li role="separator" class="divider"></li>
                                 @foreach (Airline a in MasterManager.JAL)
-                                {
-                                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
-                                }
+            {
+                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
+}
                             </ul>
                         </li>
 
@@ -56,9 +58,9 @@
                                 <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="L">全て</a></li>
                                 <li role="separator" class="divider"></li>
                                 @foreach (Airline a in MasterManager.LCC)
-                                {
-                                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
-                                }
+            {
+                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
+}
                             </ul>
                         </li>
 
@@ -68,9 +70,9 @@
                                 <li><a asp-area="" asp-controller="Aircraft" asp-action="AirlineGroup" asp-route-id="O">全て</a></li>
                                 <li role="separator" class="divider"></li>
                                 @foreach (Airline a in MasterManager.Other)
-                                {
-                                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
-                                }
+            {
+                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Airline" asp-route-id="@a.AirlineCode">@a.AirlineNameJpShort</a></li>
+}
                             </ul>
                         </li>
 
@@ -78,9 +80,9 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">型式別<span class="caret"></span></a>
                             <ul class="dropdown-menu scrollable-menu">
                                 @foreach (jafleet.EF.Type a in MasterManager.Type)
-                                {
-                                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Type" asp-route-id="@a.TypeCode">@a.TypeName</a></li>
-                                }
+            {
+                    <li><a asp-area="" asp-controller="Aircraft" asp-action="Type" asp-route-id="@a.TypeCode">@a.TypeName</a></li>
+}
                             </ul>
                         </li>
                     </ul>
@@ -113,6 +115,7 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
     </script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/js/bootstrap-multiselect.js" asp-append-version="true"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
     @RenderSection("ScriptsPartial", required: false)

@@ -149,7 +149,7 @@ namespace jafleet.EF
 
                 entity.Property(e => e.Key).HasColumnName("KEY");
 
-                entity.Property(e => e.Valu).HasColumnName("VALU");
+                entity.Property(e => e.Value).HasColumnName("VALUE");
             });
 
             modelBuilder.Entity<Maker>(entity =>

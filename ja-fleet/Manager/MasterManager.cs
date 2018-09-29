@@ -11,13 +11,77 @@ namespace jafleet.Manager
         public static void ReadAll(){
             using (var context = new jafleetContext())
             {
+                _allAirline = context.Airline.OrderBy(p => p.DisplayOrder).ToArray();
                 _ana = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup).OrderBy(p => p.DisplayOrder).ToArray();
                 _jal = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup).OrderBy(p => p.DisplayOrder).ToArray();
                 _lcc = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToArray();
                 _other = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToArray();
                 _type = context.Type.OrderBy(p => p.DisplayOrder).ToArray();
+                _operation = context.Code.Where(p => p.CodeType == "OPE").OrderBy(p => p.Key).ToArray();
+                _wifi = context.Code.Where(p => p.CodeType == "WIFI").OrderBy(p => p.Key).ToArray();
             }
         }
+
+        private static Code[] _wifi = null;
+        public static Code[] Wifi
+        {
+            get
+            {
+                if (_wifi == null)
+                {
+                    using (var context = new jafleetContext())
+                    {
+                        _wifi = context.Code.Where(p => p.CodeType == "WIFI").OrderBy(p => p.Key).ToArray();
+                    }
+                }
+                return _wifi;
+            }
+            set
+            {
+                _wifi = value;
+            }
+        }
+
+        private static Code[] _operation = null;
+        public static Code[] Operation
+        {
+            get
+            {
+                if (_operation == null)
+                {
+                    using (var context = new jafleetContext())
+                    {
+                        _operation = context.Code.Where(p => p.CodeType == "OPE").OrderBy(p => p.Key).ToArray();
+                    }
+                }
+                return _operation;
+            }
+            set
+            {
+                _operation = value;
+            }
+        }
+
+        private static Airline[] _allAirline = null;
+        public static Airline[] AllAirline
+        {
+            get
+            {
+                if (_allAirline == null)
+                {
+                    using (var context = new jafleetContext())
+                    {
+                        _allAirline = context.Airline.OrderBy(p => p.DisplayOrder).ToArray();
+                    }
+                }
+                return _allAirline;
+            }
+            set
+            {
+                _allAirline = value;
+            }
+        }
+
 
         private static Airline[] _ana = null;
         public static Airline[] ANA

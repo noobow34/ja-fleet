@@ -16,9 +16,21 @@
     <Folder Include="Constants\" />
     <Folder Include="Views\Aircraft\" />
     <Folder Include="Manager\" />
+    <Folder Include="Views\Search\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\Aircraft.cs" />
     <Compile Remove="Excel\ExcelReader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\lib\semantic\components\accordion.css" />
+    <Content Remove="wwwroot\lib\bootstrap\js\bootstrap-multiselect.js" />
+    <Content Remove="wwwroot\lib\bootstrap\css\bootstrap-multiselect.css" />
+    <Content Remove="wwwroot\lib\bootstrap\js\bootstrap-multiselect %28コピー%29.js" />
+    <Content Remove="wwwroot\lib\bootstrap\js\bootstrap-multiselect.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\lib\bootstrap\js\bootstrap-multiselect.js" />
+    <None Include="wwwroot\lib\bootstrap\css\bootstrap-multiselect.css" />
   </ItemGroup>
 </Project>

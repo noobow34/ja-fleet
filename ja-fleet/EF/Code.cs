@@ -7,6 +7,6 @@ namespace jafleet.EF
     {
         public string CodeType { get; set; }
         public string Key { get; set; }
-        public string Valu { get; set; }
+        public string Value { get; set; }
     }
 }
