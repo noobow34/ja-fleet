@@ -30,9 +30,14 @@
     <Content Remove="wwwroot\lib\bootstrap\css\bootstrap-multiselect.css" />
     <Content Remove="wwwroot\lib\bootstrap\js\bootstrap-multiselect %28コピー%29.js" />
     <Content Remove="wwwroot\lib\bootstrap\js\bootstrap-multiselect.min.js" />
+    <Content Remove="wwwroot\images\JA-Fleet_1.png" />
+    <Content Remove="wwwroot\images\JA-Fleet_2.jpg" />
+    <Content Remove="wwwroot\images\JA-Fleet_2.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\lib\bootstrap\js\bootstrap-multiselect.js" />
     <None Include="wwwroot\lib\bootstrap\css\bootstrap-multiselect.css" />
+    <None Include="wwwroot\images\JA-Fleet_1.png" />
+    <None Include="wwwroot\images\JA-Fleet_2.png" />
   </ItemGroup>
 </Project>

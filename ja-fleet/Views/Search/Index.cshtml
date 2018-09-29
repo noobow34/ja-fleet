@@ -6,9 +6,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap-multiselect.min.css" asp-append-version="true" />
 }
     <h2>@ViewData["Title"]</h2>
-
-    @using (Html.BeginForm())
-    {
+    
     <div class="row">
         <div class="col-xs-4 col-sm-2">
             <div class="form-group">
@@ -69,8 +67,6 @@
             <input type="button" value="検索" id="serach" class="btn btn-primary" />
         </div>
 
-        }
-
         <table id="SerachResult" class="display cell-border compact dt-body-center nowrap" style="width:100%">
             <thead>
                 <tr>
@@ -78,14 +74,13 @@
                     <th>機種</th>
                     <th>機体記号</th>
                     <th>製造番号</th>
-                    <th>登録（予定）年月日</th>
+                    <th>登録年月日</th>
                     <th>運用</th>
                     <th>Wi-Fi</th>
                     <th>備考（特別塗装など）</th>
                 </tr>
             </thead>
         </table>
-
         @section ScriptsPartial{
         <script src="~/lib/bootstrap/js/bootstrap-multiselect.min.js" asp-append-version="true"></script>
         <script tyep="text/javascript">
