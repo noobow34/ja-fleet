@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace jafleet.EF
 {
@@ -22,6 +24,14 @@ namespace jafleet.EF
         public virtual DbSet<Code> Code { get; set; }
         public virtual DbSet<Maker> Maker { get; set; }
         public virtual DbSet<Type> Type { get; set; }
+
+        /*public static readonly LoggerFactory MyLoggerFactory
+= new LoggerFactory(new[]
+{
+            new ConsoleLoggerProvider((category, level)
+                => category == DbLoggerCategory.Database.Command.Name
+                && level == LogLevel.Information, true)
+});*/
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

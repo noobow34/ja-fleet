@@ -2,82 +2,86 @@
     ViewData["Title"] = "検索";
 }
 @model SearchModel
-<h2>@ViewData["Title"]</h2>
-
-@using (Html.BeginForm())
-{
-    <div class="form-group">
-        機体記号にはワイルドカード（*:任意の文字、_:任意の一文字）が使えます
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.RegistrationNumber, new { @class = "control-label" })
-        @Html.TextBoxFor(model => model.RegistrationNumber, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })
-        @Html.DropDownListFor(model => model.Airline,
-                                                 new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
-                                                 "",
-                                                 new { @class = "form-control",@mutiple = "multiple" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })
-        @Html.DropDownListFor(model => model.Type,
-                                                 new SelectList(Model.TypeList, "TypeCode", "TypeName"),
-                                                 "",
-                                                 new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.RegistrationDate, new { @class = "control-label" })
-        @Html.TextBoxFor(model => model.RegistrationDate, new { @class = "form-control" })
-        @Html.DropDownListFor(model => model.RegistrationSelection,
-                                                    Model.RegistrationSelectionList,
-                                                    new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })
-        @Html.DropDownListFor(model => model.OperationCode,
-                                                  new SelectList(Model.OperationList, "Key", "Value"),
-                                                  "",
-                                                  new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })
-        @Html.DropDownListFor(model => model.WiFiCode,
-                                                   new SelectList(Model.WiFiList, "Key", "Value"),
-                                                   "",
-                                                   new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.ExistRemarks, new { @class = "control-label" })
-        @Html.CheckBoxFor(model => model.ExistRemarks)
-    </div>
-    <div class="form-group">
-        <input type="button" value="検索" id="serach" class="btn btn-primary" />
-    </div>
-
+@section CssPartial{
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap-multiselect.min.css" asp-append-version="true" />
 }
+    <h2>@ViewData["Title"]</h2>
 
-<table id="SerachResult" class="display cell-border compact dt-body-center nowrap" style="width:100%">
-    <thead>
-        <tr>
-            <th>航空会社</th>
-            <th>機種</th>
-            <th>機体記号</th>
-            <th>製造番号</th>
-            <th>登録（予定）年月日</th>
-            <th>運用</th>
-            <th>Wi-Fi</th>
-            <th>備考（特別塗装など）</th>
-        </tr>
-    </thead>
-</table>
+    @using (Html.BeginForm())
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.RegistrationNumber, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.RegistrationNumber, new { placeholder = "ワイルドカード使用可（*:任意の文字、_:任意の一文字）", @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.Airline,
+                                                                    new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
+                                                                    new { @multiple = "multiple" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.Type,
+                                                                    new SelectList(Model.TypeList, "TypeCode", "TypeName"),
+                                                                    new { @multiple = "multiple" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.RegistrationDate, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.RegistrationDate, new {placeholder ="2018/09の書式で入力", @class = "form-control" })
+            @Html.DropDownListFor(model => model.RegistrationSelection,
+                                                                       Model.RegistrationSelectionList,
+                                                                       new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.OperationCode,
+                                                                     new SelectList(Model.OperationList, "Key", "Value"),
+                                                                     new { @multiple = "multiple" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.WiFiCode,
+                                                                      new SelectList(Model.WiFiList, "Key", "Value"),
+                                                                      "　",
+                                                                      new { @class = "form-control" })
+        </div>
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.ExistRemarks, new { @class = "control-label" })
+            @Html.CheckBoxFor(model => model.ExistRemarks)
+        </div>*@
+        <div class="form-group">
+            <input type="button" value="検索" id="serach" class="btn btn-primary" />
+        </div>
 
-@section ScriptsPartial{
-    <script tyep="text/javascript">
+    }
+
+    <table id="SerachResult" class="display cell-border compact dt-body-center nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>航空会社</th>
+                <th>機種</th>
+                <th>機体記号</th>
+                <th>製造番号</th>
+                <th>登録（予定）年月日</th>
+                <th>運用</th>
+                <th>Wi-Fi</th>
+                <th>備考（特別塗装など）</th>
+            </tr>
+        </thead>
+    </table>
+
+    @section ScriptsPartial{
+        <script src="~/lib/bootstrap/js/bootstrap-multiselect.min.js" asp-append-version="true"></script>
+        <script tyep="text/javascript">
 var isLoading = true;
 var table;
 $(document).ready(function() {
+    $('#Airline').multiselect({maxHeight:400});
+    $('#Type').multiselect({maxHeight:400});
+    $('#OperationCode').multiselect();
+    $('#RegistrationSelection').multiselect();
+    $('#WiFiCode').multiselect();
+
     $.extend( $.fn.dataTable.defaults, {
         language: {
             url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
@@ -91,6 +95,12 @@ $(document).ready(function() {
                             d.RegistrationNumber = GetRegistrationNumber();
                             d.IsLoading = GetIsLoading();
                             d.Airline = GetAirline();
+                            d.Type = GetType();
+                            d.OperationCode = GetOperationCode();
+                            d.RegistrationDate = GetRegistrationDate();
+                            d.RegistrationSelection = GetRegistrationSelection();
+                            d.WiFiCode = GetWiFiCode();
+                            d.ExistRemarks = GetExistRemarks();
                         },
                 dataSrc: ''
         },
@@ -133,8 +143,34 @@ function GetIsLoading(){
 }
 
 function GetAirline(){
-    return $('#Airline').val();
+    var airline = $('#Airline').val().toString();
+    return airline.replace(',','|');
 }
 
-    </script>
+function GetType(){
+    var type = $('#Type').val() .toString();
+    return type.replace(',','|');
 }
+
+function GetRegistrationDate(){
+    return $('#RegistrationDate').val();
+}
+
+function GetRegistrationSelection(){
+    return $('#RegistrationSelection').val();
+}
+
+function GetWiFiCode(){
+    return $('#WiFiCode').val();
+}
+
+function GetExistRemarks(){
+    return $('#ExistRemarks').val();
+}
+
+function GetOperationCode(){
+    var operation = $('#OperationCode').val() .toString();
+    return operation.replace(',','|');
+}
+        </script>
+    }

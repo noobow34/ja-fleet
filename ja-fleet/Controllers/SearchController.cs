@@ -32,6 +32,9 @@ namespace jafleet.Controllers
             }
             AircraftView[] searchResult = null;
             String reg;
+            String[] airline;
+            String[] type;
+            String[] operation;
             if (model.RegistrationNumber == null){
                 reg = "*";
             }else{
@@ -40,7 +43,27 @@ namespace jafleet.Controllers
             using (var context = new jafleetContext())
             {
                 var regex = new Regex("^" + reg + "$");
-                searchResult = context.AircraftView.Where(p => regex.IsMatch(p.RegistrationNumber)).ToArray();
+                var query = context.AircraftView.Where(p => regex.IsMatch(p.RegistrationNumber));
+
+                if(!String.IsNullOrEmpty(model.Airline)){
+                    airline = model.Airline.Split("|");
+                    query = query.Where(p => airline.Contains(p.Airline));
+                }
+
+                if(!String.IsNullOrEmpty(model.Type)){
+                    type = model.Type.Split("|");
+                    query = query.Where(p => type.Contains(p.TypeCode));
+                }
+
+                if(!String.IsNullOrEmpty(model.OperationCode)){
+                    operation = model.OperationCode.Split("|");
+                    query = query.Where(p => operation.Contains(p.OperationCode));
+                }
+
+                /*if(model.ExistRemarks){
+                    query = query.Where(p => !String.IsNullOrEmpty(p.Remarks));
+                }*/
+                searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
             }
             return Json(searchResult);
         }

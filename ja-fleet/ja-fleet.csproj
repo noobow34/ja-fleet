@@ -10,6 +10,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EF\" />
@@ -21,6 +22,7 @@
   <ItemGroup>
     <Compile Remove="Models\Aircraft.cs" />
     <Compile Remove="Excel\ExcelReader.cs" />
+    <Compile Remove="Manager\AppLoggerProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\lib\semantic\components\accordion.css" />

@@ -6,9 +6,9 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/lib/bootstrap/css/bootstrap-multiselect.css",
+    "outputFileName": "wwwroot/lib/bootstrap/css/bootstrap-multiselect.min.css",
     "inputFiles": [
-      "wwwroot/lib/bootstrap/css/bootstrap-multiselect.min.css"
+      "wwwroot/lib/bootstrap/css/bootstrap-multiselect.css"
     ]
   },
   {
@@ -23,9 +23,9 @@
     "sourceMap": false
   },
   {
-    "outputFileName": "wwwroot/lib/bootstrap/js/bootstrap-multiselect.js",
+    "outputFileName": "wwwroot/lib/bootstrap/js/bootstrap-multiselect.min.js",
     "inputFiles": [
-      "wwwroot/lib/bootstrap/js/bootstrap-multiselect.min.js"
+      "wwwroot/lib/bootstrap/js/bootstrap-multiselect.js"
     ],
     "minify": {
       "enabled": true,
