@@ -9,41 +9,57 @@
 
     @using (Html.BeginForm())
     {
-        <div class="form-group">
-            @Html.LabelFor(model => model.RegistrationNumber, new { @class = "control-label" })
-            @Html.TextBoxFor(model => model.RegistrationNumber, new { placeholder = "ワイルドカード使用可（*:任意の文字、_:任意の一文字）", @class = "form-control" })
+    <div class="row">
+        <div class="col-xs-4 col-sm-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.RegistrationNumber, new { @class = "control-label" })<br />
+                @Html.TextBoxFor(model => model.RegistrationNumber, new { data_toggle = "tooltip", Title = "ワイルドカード<br>（＊：任意の文字、<br>　_：任意の一文字）", data_html = "true",  @class = "form-control" })
+            </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })
-            @Html.DropDownListFor(model => model.Airline,
-                                                                    new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
-                                                                    new { @multiple = "multiple" })
+        <div class="col-xs-4 col-sm-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })<br />
+                @Html.DropDownListFor(model => model.Airline,
+                                                                         new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
+                                                                         new { @multiple = "multiple" })
+            </div>
+            </div>
+                <div class="col-xs-4 col-sm-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })<br />
+                @Html.DropDownListFor(model => model.Type,
+                                                                         new SelectList(Model.TypeList, "TypeCode", "TypeName"),
+                                                                         new { @multiple = "multiple" })
+            </div>
+                    </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })
-            @Html.DropDownListFor(model => model.Type,
-                                                                    new SelectList(Model.TypeList, "TypeCode", "TypeName"),
-                                                                    new { @multiple = "multiple" })
+    <div class="row">
+        <div class="col-xs-4 col-sm-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.RegistrationDate, new { @class = "control-label" })<br />
+                @Html.TextBoxFor(model => model.RegistrationDate, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.RegistrationSelection,
+                                                            Model.RegistrationSelectionList,
+                                                            new { Title = "2018/09(yyyy/mm)の書式",  @class = "form-control" })
+            </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.RegistrationDate, new { @class = "control-label" })
-            @Html.TextBoxFor(model => model.RegistrationDate, new {placeholder ="2018/09の書式で入力", @class = "form-control" })
-            @Html.DropDownListFor(model => model.RegistrationSelection,
-                                                                       Model.RegistrationSelectionList,
-                                                                       new { @class = "form-control" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })
-            @Html.DropDownListFor(model => model.OperationCode,
-                                                                     new SelectList(Model.OperationList, "Key", "Value"),
-                                                                     new { @multiple = "multiple" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })
-            @Html.DropDownListFor(model => model.WiFiCode,
-                                                                      new SelectList(Model.WiFiList, "Key", "Value"),
-                                                                      "　",
-                                                                      new { @class = "form-control" })
+        <div class="col-xs-4 col-sm-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })<br />
+                @Html.DropDownListFor(model => model.OperationCode,
+                                                                        new SelectList(Model.OperationList, "Key", "Value"),
+                                                                        new { @multiple = "multiple" })
+            </div>
+            </div>
+                <div class="col-xs-4 col-sm-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })<br />
+                @Html.DropDownListFor(model => model.WiFiCode,
+                                                                         new SelectList(Model.WiFiList, "Key", "Value"),
+                                                                         "　",
+                                                                         new { @class = "form-control" })
+            </div>
+                    </div>
         </div>
         @*<div class="form-group">
             @Html.LabelFor(model => model.ExistRemarks, new { @class = "control-label" })
@@ -53,24 +69,24 @@
             <input type="button" value="検索" id="serach" class="btn btn-primary" />
         </div>
 
-    }
+        }
 
-    <table id="SerachResult" class="display cell-border compact dt-body-center nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>航空会社</th>
-                <th>機種</th>
-                <th>機体記号</th>
-                <th>製造番号</th>
-                <th>登録（予定）年月日</th>
-                <th>運用</th>
-                <th>Wi-Fi</th>
-                <th>備考（特別塗装など）</th>
-            </tr>
-        </thead>
-    </table>
+        <table id="SerachResult" class="display cell-border compact dt-body-center nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th>航空会社</th>
+                    <th>機種</th>
+                    <th>機体記号</th>
+                    <th>製造番号</th>
+                    <th>登録（予定）年月日</th>
+                    <th>運用</th>
+                    <th>Wi-Fi</th>
+                    <th>備考（特別塗装など）</th>
+                </tr>
+            </thead>
+        </table>
 
-    @section ScriptsPartial{
+        @section ScriptsPartial{
         <script src="~/lib/bootstrap/js/bootstrap-multiselect.min.js" asp-append-version="true"></script>
         <script tyep="text/javascript">
 var isLoading = true;
@@ -81,6 +97,8 @@ $(document).ready(function() {
     $('#OperationCode').multiselect();
     $('#RegistrationSelection').multiselect();
     $('#WiFiCode').multiselect();
+    $('#RegistrationNumber').tooltip();
+    $('#RegistrationDate').tooltip();
 
     $.extend( $.fn.dataTable.defaults, {
         language: {
@@ -144,12 +162,12 @@ function GetIsLoading(){
 
 function GetAirline(){
     var airline = $('#Airline').val().toString();
-    return airline.replace(',','|');
+    return airline.replace(/,/g,'|');
 }
 
 function GetType(){
     var type = $('#Type').val() .toString();
-    return type.replace(',','|');
+    return type.replace(/,/g,'|');
 }
 
 function GetRegistrationDate(){
@@ -169,8 +187,8 @@ function GetExistRemarks(){
 }
 
 function GetOperationCode(){
-    var operation = $('#OperationCode').val() .toString();
-    return operation.replace(',','|');
+    var operation = $('#OperationCode').val().toString();
+    return operation.replace(/,/g,'|');
 }
         </script>
-    }
+        }

@@ -35,6 +35,8 @@ namespace jafleet.Controllers
             String[] airline;
             String[] type;
             String[] operation;
+            String wifi;
+            String registrationDate;
             if (model.RegistrationNumber == null){
                 reg = "*";
             }else{
@@ -53,6 +55,26 @@ namespace jafleet.Controllers
                 if(!String.IsNullOrEmpty(model.Type)){
                     type = model.Type.Split("|");
                     query = query.Where(p => type.Contains(p.TypeCode));
+                }
+
+                if(!String.IsNullOrEmpty(model.WiFiCode)){
+                    wifi = model.WiFiCode;
+                    query = query.Where(p => p.WifiCode == wifi);
+                }
+
+                if(!String.IsNullOrEmpty(model.RegistrationDate)){
+                    registrationDate = model.RegistrationDate;
+                    if(model.RegistrationSelection == "0"){
+                        query = query.Where(p => p.RegisterDate.StartsWith(registrationDate));
+                    }else if(model.RegistrationSelection == "1"){
+                        registrationDate += "zzz";
+                        query = query.Where(p => p.RegisterDate.CompareTo(registrationDate) <= 0);
+                    }else if (model.RegistrationSelection == "2")
+                    {
+                        registrationDate += "zzz";
+                        query = query.Where(p => p.RegisterDate.CompareTo(registrationDate) >= 0);
+                    }
+
                 }
 
                 if(!String.IsNullOrEmpty(model.OperationCode)){

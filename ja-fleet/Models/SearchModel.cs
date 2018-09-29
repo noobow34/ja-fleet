@@ -29,7 +29,7 @@ namespace jafleet.Models
         public Code[] WiFiList { get; set; }
         public String WiFiCode { get; set; }
 
-        [Display(Name = "登録（予定）年月")]
+        [Display(Name = "登録(予定)年月")]
         public String RegistrationDate { get; set; }
         public String RegistrationSelection { get; set; }
         public List<SelectListItem> RegistrationSelectionList { get; set; }

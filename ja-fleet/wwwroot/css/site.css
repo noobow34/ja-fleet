@@ -1,4 +1,7 @@
-﻿.scrollable-menu {
+﻿.nav > li > a {
+    padding: 10px 4px;
+}
+.scrollable-menu {
     height: auto;
     max-height: 500px;
     overflow-x: hidden;
