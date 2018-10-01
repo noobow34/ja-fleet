@@ -35,10 +35,10 @@
         <div class="col-xs-4 col-sm-2">
             <div class="form-group">
                 @Html.LabelFor(model => model.RegistrationDate, new { @class = "control-label" })<br />
-                @Html.TextBoxFor(model => model.RegistrationDate, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.RegistrationDate, new { data_toggle = "tooltip", Title = "2018/09(yyyy/mm)の書式", @class = "form-control" })
                 @Html.DropDownListFor(model => model.RegistrationSelection,
-                                                            Model.RegistrationSelectionList,
-                                                            new { Title = "2018/09(yyyy/mm)の書式",  @class = "form-control" })
+                                              Model.RegistrationSelectionList,
+                                              new { @class = "form-control" })
             </div>
         </div>
         <div class="col-xs-4 col-sm-2">
@@ -87,9 +87,9 @@
 var isLoading = true;
 var table;
 $(document).ready(function() {
-    $('#Airline').multiselect({maxHeight:400});
-    $('#Type').multiselect({maxHeight:400});
-    $('#OperationCode').multiselect();
+    $('#Airline').multiselect({maxHeight:400,buttonWidth: '150px'});
+    $('#Type').multiselect({maxHeight:400,buttonWidth: '150px'});
+    $('#OperationCode').multiselect({buttonWidth: '150px'});
     $('#RegistrationSelection').multiselect();
     $('#WiFiCode').multiselect();
     $('#RegistrationNumber').tooltip();
