@@ -2,15 +2,21 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>ローカルストレージ設定</title>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"></script>
     <script>
     $(document).ready(function() {
         localStorage['ga_exclude']='1';
+        $('#ga_local').val(localStorage['ga_exclude']);
+    });
+    $('#setbutton').click(function() {
+        localStorage['ga_exclude']=$('#ga_local').val();
     });
     </script>
 </head>
     <body>
-        exclude
+        1ならanalytics除外<br />
+        <input type="text" id="ga_local"><br />
+        <input id="setbutton" type="button" value="セット"><br />
     </body>
 </html>
