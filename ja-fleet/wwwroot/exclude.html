@@ -6,11 +6,12 @@
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"></script>
     <script>
     $(document).ready(function() {
-        localStorage['ga_exclude']='1';
         $('#ga_local').val(localStorage['ga_exclude']);
     });
     $('#setbutton').click(function() {
         localStorage['ga_exclude']=$('#ga_local').val();
+        $('#ga_local').val(localStorage['ga_exclude']);
+        alert('設定しました');
     });
     </script>
 </head>
