@@ -5,16 +5,16 @@
 @section CssPartial{
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css"/>
 }
-    <h2>@ViewData["Title"]</h2>
+    <h3>@ViewData["Title"]</h3>
     
     <div class="row">
-        <div class="col-xs-6 col-sm-2">
+        <div class="col-xs-4 col-sm-2">
             <div class="form-group">
                 @Html.LabelFor(model => model.RegistrationNumber, new { @class = "control-label" })<br />
                 @Html.TextBoxFor(model => model.RegistrationNumber, new { data_toggle = "tooltip", Title = "ワイルドカード<br>（＊：任意の文字、<br>　_：任意の一文字）", data_html = "true",  @class = "form-control" })
             </div>
         </div>
-        <div class="col-xs-12 col-sm-3">
+        <div class="col-xs-8 col-sm-3">
             <div class="form-group">
                 @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.Airline,
@@ -22,7 +22,7 @@
                                                                          new { @multiple = "multiple" })
             </div>
             </div>
-                <div class="col-xs-12 col-sm-3">
+                <div class="col-xs-12 col-sm-4">
             <div class="form-group">
                 @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.Type,
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="col-xs-6 col-sm-3">
+        <div class="col-xs-7 col-sm-3">
             <div class="form-group">
                 @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.OperationCode,
@@ -51,7 +51,7 @@
                                                                            new { @multiple = "multiple" })
             </div>
         </div>
-        <div class="col-xs-8 col-sm-3">
+        <div class="col-xs-2 col-sm-3">
             <div class="form-group">
                 @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.WiFiCode,
@@ -91,9 +91,9 @@
 var isLoading = true;
 var table;
 $(document).ready(function() {
-    $('#Airline').multiselect({maxHeight:400,buttonWidth: '200px',nonSelectedText: '（未選択）'});
-    $('#Type').multiselect({maxHeight:400,buttonWidth: '200px',nonSelectedText: '（未選択）'});
-    $('#OperationCode').multiselect({buttonWidth: '200px',nonSelectedText: '（未選択）'});
+    $('#Airline').multiselect({maxHeight:400,nonSelectedText: '（未選択）'});
+    $('#Type').multiselect({maxHeight:400,nonSelectedText: '（未選択）'});
+    $('#OperationCode').multiselect({nonSelectedText: '（未選択）'});
     $('#RegistrationSelection').multiselect();
     $('#WiFiCode').multiselect();
     $('#RegistrationNumber').tooltip();
