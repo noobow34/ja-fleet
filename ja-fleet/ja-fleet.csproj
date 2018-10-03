@@ -20,12 +20,4 @@
     <Folder Include="Views\Search\" />
     <Folder Include="wwwroot\lib\bootstrap\locales\" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Models\Aircraft.cs" />
-    <Compile Remove="Excel\ExcelReader.cs" />
-    <Compile Remove="Manager\AppLoggerProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="wwwroot\lib\bootstrap\locales\bootstrap-datepicker.ja.min.js" />
-  </ItemGroup>
 </Project>
