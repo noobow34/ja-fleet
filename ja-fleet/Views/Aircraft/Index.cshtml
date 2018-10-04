@@ -57,6 +57,7 @@ $(document).ready(function() {
 });
 $('#IncludeRetire').change(function() {
     table.ajax.url('@ViewData["api"]?includeRetire=' + getIncludeRetire()).load();
+    table.ajax.reload();
 });
 function getIncludeRetire(){
     return $('#IncludeRetire').prop('checked');
