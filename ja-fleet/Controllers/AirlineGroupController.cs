@@ -10,30 +10,34 @@ namespace jafleet.Controllers
     [ApiController]
     public class AirlineGroupController : Controller
     {
-            // GET api/values
-            [HttpGet]
-            public ActionResult<IEnumerable<string>> Get()
+        // GET api/values
+        [HttpGet]
+        public ActionResult<IEnumerable<string>> Get()
+        {
+            List<AircraftView> list;
+            using (var context = new jafleetContext())
             {
-                List<AircraftView> list;
-                using (var context = new jafleetContext())
-                {
-                    list = context.AircraftView.ToList();
-                }
-                return Json(list);
+                list = context.AircraftView.ToList();
             }
+            return Json(list);
+        }
 
-            // GET api/values/5
-            [HttpGet("{id}")]
-            public ActionResult<string> Get(string id)
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public ActionResult<string> Get(string id, [FromQuery]Boolean includeRetire)
+        {
+            List<AircraftView> list;
+            String[] ids = id.ToUpper().Split(",");
+            using (var context = new jafleetContext())
             {
-                List<AircraftView> list;
-                String[] ids = id.ToUpper().Split(",");
-                using (var context = new jafleetContext())
-                {
-                list = context.AircraftView.Where(p => ids.Contains(p.AirlineGroupCode)).OrderBy(p => p.DisplayOrder).ToList();
+                var q = context.AircraftView.Where(p => ids.Contains(p.AirlineGroupCode));
+                if(!includeRetire){
+                    q = q.Where(p => p.OperationCode != "8");
                 }
-                return Json(list);
+                list = q.OrderBy(p => p.DisplayOrder).ToList();
             }
+            return Json(list);
+        }
 
     }
 }

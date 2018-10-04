@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using System.Collections.Generic;
 using jafleet.EF;
 

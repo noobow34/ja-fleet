@@ -24,13 +24,18 @@ namespace jafleet.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(string id)
+        public ActionResult<string> Get(string id, [FromQuery]Boolean includeRetire)
         {
             List<AircraftView> list;
             String[] ids = id.ToUpper().Split(",");
             using (var context = new jafleetContext())
             {
-                list = context.AircraftView.Where(p => ids.Contains(p.Airline)).OrderBy(p => p.DisplayOrder).ToList();
+                var q = context.AircraftView.Where(p => ids.Contains(p.AirlineGroupCode));
+                if (!includeRetire)
+                {
+                    q = q.Where(p => p.OperationCode != "8");
+                }
+                list = q.OrderBy(p => p.DisplayOrder).ToList();
             }
             return Json(list);
         }

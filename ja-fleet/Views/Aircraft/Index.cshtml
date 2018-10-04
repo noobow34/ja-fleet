@@ -1,4 +1,10 @@
-﻿<h2>@ViewData["Title"]</h2>
+﻿@model AircraftModel
+<h2>@ViewData["Title"]</h2>        
+<div class="form-group">
+@Html.CheckBoxFor(model => model.IncludeRetire)
+@Html.LabelFor(model => model.IncludeRetire, new { @class = "control-label" })
+</div>
+
 <table id="@ViewData["TableId"]" class="display cell-border compact dt-body-center nowrap" style="width:100%">
     <thead>
         <tr>
@@ -15,8 +21,45 @@
 </table>
 @section ScriptsPartial{
 <script tyep="text/javascript">
+var table;
 $(document).ready(function() {
-    setupTable('#' + '@ViewData["TableId"]','@ViewData["api"]');
-        } );
+    $.extend( $.fn.dataTable.defaults, {
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
+        }
+    });
+    table = $('#' + '@ViewData["TableId"]').DataTable({
+        ajax: {url:'@ViewData["api"]?includeRetire=' + getIncludeRetire(),
+                dataSrc: ''},
+        columns: [
+            {data: 'airlineNameJpShort'},
+            {data: 'typeName'},
+            {data: 'registrationNumber'},
+            {data: 'serialNumber'},
+            {data: 'registerDate'},
+            {data: 'operation'},
+            {data: 'wifi'},
+            {data: 'remarks'},
+        ],
+        paging:   false,
+        ordering: false,
+        fixedHeader: true,
+        searching: false,
+        scrollY: '700px',
+        scrollX: true,
+        scrollCollapse: true,
+        columnDefs: [{
+            targets: '_all',
+            className: 'dt-center'
+        }]
+
+    });
+});
+$('#IncludeRetire').change(function() {
+    table.ajax.url('@ViewData["api"]?includeRetire=' + getIncludeRetire()).load();
+});
+function getIncludeRetire(){
+    return $('#IncludeRetire').prop('checked');
+}
 </script>
 }
