@@ -30,7 +30,7 @@ namespace jafleet.Controllers
             String[] ids = id.ToUpper().Split(",");
             using (var context = new jafleetContext())
             {
-                var q = context.AircraftView.Where(p => ids.Contains(p.AirlineGroupCode));
+                var q = context.AircraftView.Where(p => ids.Contains(p.Airline));
                 if (!includeRetire)
                 {
                     q = q.Where(p => p.OperationCode != "8");
