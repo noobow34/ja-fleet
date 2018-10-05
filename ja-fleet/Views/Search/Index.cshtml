@@ -4,6 +4,15 @@
 @model SearchModel
 @section CssPartial{
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css"/>
+    <style type="text/css">
+        <!--
+        input[type="checkbox"] {
+            -webkit-transform: scale(1.5);
+            transform: scale(1.5);
+            margin-right: 0.5em;
+        }
+            -->
+    </style>
 }
     <h3>@ViewData["Title"]</h3>
     
@@ -32,7 +41,7 @@
                     </div>
         </div>
     <div class="row">
-        <div class="col-xs-6 col-sm-2">
+        <div class="col-xs-12 col-sm-2">
             <div class="form-group">
                 @Html.LabelFor(model => model.RegistrationDate, new { @class = "control-label" })<br />
                 @Html.TextBoxFor(model => model.RegistrationDate, new { @class = "form-control", type = "month" } )
@@ -43,7 +52,7 @@
             </div>
         </div>
 
-        <div class="col-xs-7 col-sm-3">
+        <div class="col-xs-5 col-sm-3">
             <div class="form-group">
                 @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.OperationCode,
@@ -51,7 +60,7 @@
                                                                            new { @multiple = "multiple" })
             </div>
         </div>
-        <div class="col-xs-2 col-sm-3">
+        <div class="col-xs-2 col-sm-1">
             <div class="form-group">
                 @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.WiFiCode,
@@ -62,14 +71,16 @@
         </div>
         <div class="col-xs-2 col-sm-1">
             <div class="form-group">
-                <br /><input type="button" value="検索" id="serach" class="btn btn-primary" />
+                @Html.LabelFor(model => model.ExistRemarks, new { @class = "control-label" })
+                @Html.CheckBoxFor(model => model.ExistRemarks)
             </div>
         </div>
-    </div>
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.ExistRemarks, new { @class = "control-label" })
-            @Html.CheckBoxFor(model => model.ExistRemarks)
-        </div>*@
+            <div class="col-xs-2 col-sm-1">
+                <div class="form-group">
+                    <br /><input type="button" value="検索" id="serach" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
 
         <table id="SerachResult" class="display cell-border compact dt-body-center nowrap" style="width:100%">
             <thead>
@@ -181,7 +192,7 @@ function GetWiFiCode(){
 }
 
 function GetExistRemarks(){
-    return $('#ExistRemarks').val();
+    return $('#ExistRemarks').prop('checked');
 }
 
 function GetOperationCode(){

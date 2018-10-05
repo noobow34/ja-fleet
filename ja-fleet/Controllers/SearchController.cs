@@ -82,9 +82,9 @@ namespace jafleet.Controllers
                     query = query.Where(p => operation.Contains(p.OperationCode));
                 }
 
-                /*if(model.ExistRemarks){
-                    query = query.Where(p => !String.IsNullOrEmpty(p.Remarks));
-                }*/
+                if(model.ExistRemarks){
+                    query = query.Where(p => p.Remarks != null);
+                }
                 searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
             }
             return Json(searchResult);
