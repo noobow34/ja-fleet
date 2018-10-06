@@ -36,7 +36,11 @@ namespace jafleet.Models
                                         , new SelectListItem { Value = "2", Text = "以降" } };
 
         [Display(Name = "備考")]
-        public Boolean ExistRemarks { get; set; } = false;
+        public String Remarks { get; set; } = String.Empty;
+        public List<SelectListItem> RemarksList { get; set; }
+            = new List<SelectListItem>{ new SelectListItem { Value = "1", Text = "なし" }
+                                        , new SelectListItem { Value = "2", Text = "あり" } };
+
 
         public Boolean IsLoading { get; set; }
     }

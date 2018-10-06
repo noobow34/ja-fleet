@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "検索";
+    ViewData["Title"] = "編集検索";
 }
 @model SearchModel
 @section CssPartial{
@@ -119,7 +119,7 @@ $(document).ready(function() {
         }
     });
     table = $('#SerachResult').DataTable({
-        ajax: {url:'/Search/DoSearch',
+        ajax: {url:'/EditList/DoSearch',
                 type:'POST',
                 dataType: 'json',
                 data : function(d){
