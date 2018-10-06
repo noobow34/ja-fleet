@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using jafleet.EF;
 using System.Text.RegularExpressions;
-using System.Runtime.InteropServices.WindowsRuntime;
 using jafleet.Manager;
 
 namespace jafleet.Controllers

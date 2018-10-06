@@ -20,5 +20,6 @@
     <Folder Include="Views\Search\" />
     <Folder Include="wwwroot\lib\bootstrap\locales\" />
     <Folder Include="Views\EditList\" />
+    <Folder Include="Views\Edit\" />
   </ItemGroup>
 </Project>
