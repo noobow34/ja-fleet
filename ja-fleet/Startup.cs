@@ -56,6 +56,10 @@ namespace jafleet
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute("EditStore", "Edit/Store",
+                    defaults: new { controller = "Edit", action = "Store" });
+                routes.MapRoute("Edit", "Edit/{id?}",
+                    defaults: new { controller = "Edit", action = "Index" });
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
