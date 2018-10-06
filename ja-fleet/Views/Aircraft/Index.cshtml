@@ -32,14 +32,14 @@ $(document).ready(function() {
         ajax: {url:'@ViewData["api"]?includeRetire=' + getIncludeRetire(),
                 dataSrc: ''},
         columns: [
-            {data: 'airlineNameJpShort'},
-            {data: 'typeName'},
-            {data: 'registrationNumber'},
-            {data: 'serialNumber'},
-            {data: 'registerDate'},
-            {data: 'operation'},
-            {data: 'wifi'},
-            {data: 'remarks'},
+            {data: 'airlineNameJpShort',className: 'dt-center'},
+            {data: 'typeName',className: 'dt-center'},
+            {data: 'registrationNumber',className: 'dt-center'},
+            {data: 'serialNumber',className: 'dt-center'},
+            {data: 'registerDate',className: 'dt-center'},
+            {data: 'operation',className: 'dt-center'},
+            {data: 'wifi',className: 'dt-center'},
+            {data: 'remarks',className: 'dt-left'}
         ],
         paging:   false,
         ordering: false,
@@ -47,12 +47,7 @@ $(document).ready(function() {
         searching: false,
         scrollY: '700px',
         scrollX: true,
-        scrollCollapse: true,
-        columnDefs: [{
-            targets: '_all',
-            className: 'dt-center'
-        }]
-
+        scrollCollapse: true
     });
 });
 $('#IncludeRetire').change(function() {
