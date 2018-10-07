@@ -42,9 +42,10 @@ $(document).ready(function() {
             {data: 'remarks',className: 'dt-left'}
         ],
         createdRow: function( row, data, dataIndex){
-                        if(data['UpdateTime'] != null){
-                            var updateTime = moment(data['UpdateTime']);
+                        if(data['updateTime'] != null){
+                            var updateTime = moment(data['updateTime']);
                             var today = moment();
+                            alert(today.diff(updateTime, 'days', true));
                             if(today.diff(updateTime, 'days', true) <= 7){
                                 $(row).css({"background-color":"#FFCCFF"});
                             }
