@@ -20,9 +20,9 @@ namespace jafleet.EF
         public string Remarks { get; set; }
         [Display(Name = "製造番号")]
         public string SerialNumber { get; set; }
-        [Display(Name = "作成日時")]
-        public string UpdateTime { get; set; }
         [Display(Name = "更新日時")]
+        public string UpdateTime { get; set; }
+        [Display(Name = "作成日時")]
         public string CreationTime { get; set; }
     }
 }
