@@ -41,6 +41,15 @@ $(document).ready(function() {
             {data: 'wifi',className: 'dt-center'},
             {data: 'remarks',className: 'dt-left'}
         ],
+        createdRow: function( row, data, dataIndex){
+                        if(data['UpdateTime'] != null){
+                            var updateTime = moment(data['UpdateTime']);
+                            var today = moment();
+                            if(today.diff(updateTime, 'days', true) <= 7){
+                                $(row).css({"background-color":"#FFCCFF"});
+                            }
+                        }
+            },
         paging:   false,
         ordering: false,
         fixedHeader: true,
