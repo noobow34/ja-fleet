@@ -4,6 +4,8 @@ namespace jafleet.EF
 {
     public partial class Aircraft
     {
+        [Display(Name = "航空会社")]
+        public string Airline { get; set; }
         [Display(Name = "機体記号")]
         public string RegistrationNumber { get; set; }
         [Display(Name = "型式")]
@@ -18,9 +20,9 @@ namespace jafleet.EF
         public string Remarks { get; set; }
         [Display(Name = "製造番号")]
         public string SerialNumber { get; set; }
+        [Display(Name = "作成日時")]
         public string UpdateTime { get; set; }
+        [Display(Name = "更新日時")]
         public string CreationTime { get; set; }
-        [Display(Name = "航空会社")]
-        public string Airline { get; set; }
     }
 }
