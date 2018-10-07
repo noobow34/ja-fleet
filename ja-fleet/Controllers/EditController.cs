@@ -34,18 +34,30 @@ namespace jafleet.Controllers
 
         [HttpPost]
         public IActionResult Store( EditModel model){
-            String reg = model.Aircraft.RegistrationNumber;
-            using (var context = new jafleetContext())
-            {
-                if(model.IsNew){
-                    context.Aircraft.Add(model.Aircraft);
-                }else{
-                    context.Entry(model.Aircraft).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            try{
+                String reg = model.Aircraft.RegistrationNumber;
+                using (var context = new jafleetContext())
+                {
+                    if (model.IsNew)
+                    {
+                        context.Aircraft.Add(model.Aircraft);
+                    }
+                    else
+                    {
+                        context.Entry(model.Aircraft).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
+            }catch(Exception ex){
+                model.ex = ex;
             }
 
-            return Redirect("/Edit/" + model.Aircraft.RegistrationNumber);
+            model.AirlineList = MasterManager.AllAirline;
+            model.TypeList = MasterManager.Type;
+            model.OperationList = MasterManager.Operation;
+            model.WiFiList = MasterManager.Wifi;
+            return View("Index", model);
+            //return Redirect("/Edit/" + model.Aircraft.RegistrationNumber);
         }
     }
 }

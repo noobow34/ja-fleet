@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using jafleet.EF;
+using System.Dynamic;
 namespace jafleet.Models
 {
     public class EditModel
@@ -20,5 +21,7 @@ namespace jafleet.Models
 
         [Display(Name = "WiFi")]
         public Code[] WiFiList { get; set; }
+
+        public Exception ex { get; set; };
     }
 }
