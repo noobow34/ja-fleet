@@ -11,6 +11,9 @@
     </PackageReference>
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
+    <PackageReference Include="NLog" Version="4.5.10" />
+    <PackageReference Include="NLog.Config" Version="4.5.10" />
+    <PackageReference Include="ToString.Fody" Version="1.10.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EF\" />

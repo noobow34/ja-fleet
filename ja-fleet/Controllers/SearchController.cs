@@ -11,6 +11,8 @@ namespace jafleet.Controllers
 {
     public class SearchController : Controller
     {
+        private static NLog.Logger infologger = NLog.LogManager.GetLogger("infologger");
+
         public IActionResult Index(SearchModel model)
         {
             using (var context = new jafleetContext())
@@ -35,6 +37,9 @@ namespace jafleet.Controllers
             String[] operation;
             String wifi;
             String registrationDate;
+
+            infologger.Info(model.ToString());
+
             if (model.RegistrationNumber == null){
                 reg = "*";
             }else{
@@ -88,6 +93,7 @@ namespace jafleet.Controllers
                 }
 
                 searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
+                infologger.Info("件数：" + searchResult.Length.ToString());
             }
             return Json(searchResult);
         }
