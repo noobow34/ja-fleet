@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
-using jafleet.EF;
-using jafleet.Constants;
+using Microsoft.AspNetCore.Diagnostics;
+using System;
 
 namespace jafleet.Controllers
 {
@@ -17,6 +16,11 @@ namespace jafleet.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            Console.WriteLine("test");
+            Console.WriteLine(exceptionFeature.Error);
+
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
