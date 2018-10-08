@@ -16,11 +16,6 @@ namespace jafleet.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-
-            Console.WriteLine("test");
-            Console.WriteLine(exceptionFeature.Error);
-
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
