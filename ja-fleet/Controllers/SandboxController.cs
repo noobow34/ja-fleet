@@ -2,7 +2,7 @@
 
 namespace jafleet.Controllers
 {
-    public class Sandbox : Controller
+    public class SandboxController : Controller
     {
         public IActionResult Index()
         {
