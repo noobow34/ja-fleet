@@ -3,7 +3,7 @@
 }
 @model SearchModel
 @section CssPartial{
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
     <style type="text/css">
         <!--
         input[type="checkbox"] {
@@ -11,97 +11,97 @@
             transform: scale(1.5);
             margin-right: 0.5em;
         }
-            -->
+        -->
     </style>
 }
-    <h3>@ViewData["Title"]</h3>
-    
-    <div class="row">
-        <div class="col-xs-4 col-sm-2">
-            <div class="form-group">
-                @Html.LabelFor(model => model.RegistrationNumber, new { @class = "control-label" })<br />
-                @Html.TextBoxFor(model => model.RegistrationNumber, new { data_toggle = "tooltip", Title = "ワイルドカード<br>（＊：任意の文字、<br>　_：任意の一文字）", data_html = "true",  @class = "form-control" })
-            </div>
-        </div>
-        <div class="col-xs-8 col-sm-3">
-            <div class="form-group">
-                @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })<br />
-                @Html.DropDownListFor(model => model.Airline,
-                                                                         new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
-                                                                         new { @multiple = "multiple" })
-            </div>
-            </div>
-                <div class="col-xs-12 col-sm-4">
-            <div class="form-group">
-                @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })<br />
-                @Html.DropDownListFor(model => model.Type,
-                                                                         new SelectList(Model.TypeList, "TypeCode", "TypeName"),
-                                                                         new { @multiple = "multiple" })
-            </div>
-                    </div>
-        </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-2">
-            <div class="form-group">
-                @Html.LabelFor(model => model.RegistrationDate, new { @class = "control-label" })<br />
-                @Html.TextBoxFor(model => model.RegistrationDate, new { @class = "form-control", type = "month" } )
-                @Html.DropDownListFor(model => model.RegistrationSelection,
-                            Model.RegistrationSelectionList,
-                            new { @class = "form-control" })
+<h3>@ViewData["Title"]</h3>
 
-            </div>
+<div class="row">
+    <div class="col-xs-4 col-sm-2">
+        <div class="form-group">
+            @Html.LabelFor(model => model.RegistrationNumber, new { @class = "control-label" })<br />
+            @Html.TextBoxFor(model => model.RegistrationNumber, new { data_toggle = "tooltip", Title = "ワイルドカード<br>（＊：任意の文字、<br>　_：任意の一文字）", data_html = "true", @class = "form-control" })
         </div>
+    </div>
+    <div class="col-xs-8 col-sm-3">
+        <div class="form-group">
+            @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })<br />
+            @Html.DropDownListFor(model => model.Airline,
+                                                                          new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
+                                                                          new { @multiple = "multiple" })
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+            @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })<br />
+            @Html.DropDownListFor(model => model.Type,
+                                                                          new SelectList(Model.TypeList, "TypeCode", "TypeName"),
+                                                                          new { @multiple = "multiple" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-2">
+        <div class="form-group">
+            @Html.LabelFor(model => model.RegistrationDate, new { @class = "control-label" })<br />
+            @Html.TextBoxFor(model => model.RegistrationDate, new { @class = "form-control", type = "month" })
+            @Html.DropDownListFor(model => model.RegistrationSelection,
+                             Model.RegistrationSelectionList,
+                             new { @class = "form-control" })
 
-        <div class="col-xs-5 col-sm-3">
-            <div class="form-group">
-                @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })<br />
-                @Html.DropDownListFor(model => model.OperationCode,
-                                                             new SelectList(Model.OperationList, "Key", "Value"),
-                                                             new { @multiple = "multiple" })
-            </div>
         </div>
-        <div class="col-xs-2 col-sm-1">
-            <div class="form-group">
-                @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })<br />
-                @Html.DropDownListFor(model => model.WiFiCode,
-                                                                            new SelectList(Model.WiFiList, "Key", "Value"),
-                                                                            "　",
-                                                                            new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="col-xs-2 col-sm-1">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Remarks, new { @class = "control-label" })<br />
-                @Html.DropDownListFor(model => model.RemarksList,
-                                  Model.RemarksList,
-                                    "　",
-                                      new { @class = "form-control" })
-            </div>
-        </div>
-            <div class="col-xs-2 col-sm-1">
-                <div class="form-group">
-                    <br /><input type="button" value="検索" id="serach" class="btn btn-primary" />
-                </div>
-            </div>
-        </div>
+    </div>
 
-        <table id="SerachResult" class="display cell-border compact dt-body-center nowrap" style="width:100%">
-            <thead>
-                <tr>
-                    <th>航空会社</th>
-                    <th>機種</th>
-                    <th>機体記号</th>
-                    <th>製造番号</th>
-                    <th>登録年月日</th>
-                    <th>運用</th>
-                    <th>Wi-Fi</th>
-                    <th>備考（特別塗装など）</th>
-                </tr>
-            </thead>
-        </table>
-        @section ScriptsPartial{
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
-        <script tyep="text/javascript">
+    <div class="col-xs-5 col-sm-3">
+        <div class="form-group">
+            @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })<br />
+            @Html.DropDownListFor(model => model.OperationCode,
+                                                              new SelectList(Model.OperationList, "Key", "Value"),
+                                                              new { @multiple = "multiple" })
+        </div>
+    </div>
+    <div class="col-xs-2 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })<br />
+            @Html.DropDownListFor(model => model.WiFiCode,
+                                                                             new SelectList(Model.WiFiList, "Key", "Value"),
+                                                                             "　",
+                                                                             new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col-xs-2 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Remarks, new { @class = "control-label" })<br />
+            @Html.DropDownListFor(model => model.RemarksList,
+                                   Model.RemarksList,
+                                     "　",
+                                       new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col-xs-2 col-sm-1">
+        <div class="form-group">
+            <br /><input type="button" value="検索" id="serach" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+<font color="#FFCCFF">背景ピンク■</font>は更新1週間以内のデータです。
+<table id="SerachResult" class="display cell-border compact dt-body-center nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>航空会社</th>
+            <th>機種</th>
+            <th>機体記号</th>
+            <th>製造番号</th>
+            <th>登録年月日</th>
+            <th>運用</th>
+            <th>Wi-Fi</th>
+            <th>備考（特別塗装など）</th>
+        </tr>
+    </thead>
+</table>
+@section ScriptsPartial{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
+    <script tyep="text/javascript">
 var isLoading = true;
 var table;
 $(document).ready(function() {
@@ -207,5 +207,5 @@ function GetOperationCode(){
     var operation = $('#OperationCode').val().toString();
     return operation.replace(/,/g,'|');
 }
-        </script>
-        }
+    </script>
+}
