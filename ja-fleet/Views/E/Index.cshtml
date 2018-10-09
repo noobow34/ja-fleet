@@ -33,18 +33,18 @@ else
             <div class="form-group">
                 @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })
                 @Html.DropDownListFor(model => model.Aircraft.Airline,
-                                                                                          new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
-                                                                                          "　",
-                                                                                          new { @class = "form-control" })
+                                                                                           new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
+                                                                                           "　",
+                                                                                           new { @class = "form-control" })
             </div>
         </div>
         <div class="row">
             <div class="form-group">
                 @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })
                 @Html.DropDownListFor(model => model.Aircraft.TypeCode,
-                                                                                               new SelectList(Model.TypeList, "TypeCode", "TypeName"),
-                                                                                               "　",
-                                                                                               new { @class = "form-control" })
+                                                                                                new SelectList(Model.TypeList, "TypeCode", "TypeName"),
+                                                                                                "　",
+                                                                                                new { @class = "form-control" })
             </div>
         </div>
         <div class="row">
@@ -63,18 +63,18 @@ else
             <div class="form-group">
                 @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })
                 @Html.DropDownListFor(model => model.Aircraft.OperationCode,
-                                                                                             new SelectList(Model.OperationList, "Key", "Value"),
-                                                                                             "　",
-                                                                                             new { @class = "form-control" })
+                                                                                              new SelectList(Model.OperationList, "Key", "Value"),
+                                                                                              "　",
+                                                                                              new { @class = "form-control" })
             </div>
         </div>
         <div class="row">
             <div class="form-group">
                 @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })
                 @Html.DropDownListFor(model => model.Aircraft.WifiCode,
-                                                                                                              new SelectList(Model.WiFiList, "Key", "Value"),
-                                                                                                              "　",
-                                                                                                              new { @class = "form-control" })
+                                                                                                               new SelectList(Model.WiFiList, "Key", "Value"),
+                                                                                                               "　",
+                                                                                                               new { @class = "form-control" })
             </div>
         </div>
         <div class="row">
@@ -86,15 +86,18 @@ else
         <div class="row">
             <div class="form-group">
                 @Html.LabelFor(model => model.Aircraft.CreationTime, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.CreationTime, new { @class = "form-control" ,@readonly = "readonly" })
+                @Html.TextBoxFor(model => model.Aircraft.CreationTime, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="row">
             <div class="form-group">
                 @Html.LabelFor(model => model.Aircraft.UpdateTime, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.UpdateTime, new { @class = "form-control" ,@readonly = "readonly"})
+                @Html.TextBoxFor(model => model.Aircraft.UpdateTime, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
+        @if (Model.IsAdmin)
+    {
         <input type="submit" value="登録" class="btn btn-primary" />
+}
         @Html.HiddenFor(model => model.IsNew)
     </form>

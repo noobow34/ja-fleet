@@ -22,6 +22,8 @@ namespace jafleet.Models
         [Display(Name = "WiFi")]
         public Code[] WiFiList { get; set; }
 
+        public Boolean IsAdmin { get; set; } = false;
+
         public Exception ex { get; set; }
     }
 }

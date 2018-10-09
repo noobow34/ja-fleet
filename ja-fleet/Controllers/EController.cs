@@ -11,6 +11,10 @@ namespace jafleet.Controllers
     {
         public IActionResult Index(String id,EditModel model)
         {
+            string isAdminString = HttpContext.Request.Cookies["IsAdmin"];
+            Boolean.TryParse(isAdminString, out bool isAdminTemp);
+            model.IsAdmin = isAdminTemp;
+
             using (var context = new jafleetContext())
             {
                 model.AirlineList = MasterManager.AllAirline;
