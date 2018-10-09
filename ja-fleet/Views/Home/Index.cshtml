@@ -1,5 +1,6 @@
 @using jafleet.Manager
 @using jafleet.EF
+@using jafleet.Util
 @{
     ViewData["Title"] = "JA-Fleet【本邦航空会社機材一覧サイト】";
 }
@@ -106,5 +107,8 @@
 <hr />
 管理者：<a href="https://twitter.com/noobow">ぬーぼー（@@noobow）</a><br />
 更新情報アカウント：<a href="https://twitter.com/ja_fleet">@@ja_fleet</a><br />
-<a class="twitter-timeline" href="https://twitter.com/ja_fleet?ref_src=twsrc%5Etfw" width="320px" height="400px">Tweets by ja_fleet</a>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+@if (!CookieUtil.IsAdmin(Context))
+{
+    <a class="twitter-timeline" href="https://twitter.com/ja_fleet?ref_src=twsrc%5Etfw" width="320px" height="400px">Tweets by ja_fleet</a>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+}
