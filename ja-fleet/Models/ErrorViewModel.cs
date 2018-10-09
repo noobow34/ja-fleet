@@ -8,6 +8,8 @@ namespace jafleet.Models
 
         public Exception Ex { get; set; }
 
+        public Boolean IsAdmin { get; set; }
+
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
 }

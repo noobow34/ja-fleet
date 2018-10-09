@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using Microsoft.Extensions.Hosting.Internal;
+using jafleet.Util;
 
 namespace jafleet.Controllers
 {
@@ -28,9 +29,8 @@ namespace jafleet.Controllers
         {
             var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>().Error;
             ErrorViewModel model = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
-            if (_hostingEnvironment.IsDevelopment()){
-                model.Ex = ex;
-            }
+            model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
+            model.Ex = ex;
             exlogger.Fatal(ex.ToString());
 
             return View(model);

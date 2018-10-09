@@ -8,7 +8,7 @@
 
 <input type="button" value="前のページに戻る" class="btn btn-primary" onclick="history.back()" />
 <br />
-@if(Model.Ex != null)
+@if(Model.IsAdmin)
 {
     @Model.Ex.ToString()
 }
