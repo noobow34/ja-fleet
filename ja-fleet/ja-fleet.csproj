@@ -26,13 +26,4 @@
     <Folder Include="Views\Sandbox\" />
     <Folder Include="Util\" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="NLog.Config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Controllers\EditListController.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="Views\EditList\Index.cshtml" />
-  </ItemGroup>
 </Project>
