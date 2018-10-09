@@ -86,10 +86,10 @@ namespace jafleet.Controllers
                 }
 
                 if(model.Remarks == "1"){
-                    query = query.Where(p => p.Remarks == null);
+                    query = query.Where(p => String.IsNullOrEmpty(p.Remarks));
                 }else if (model.Remarks == "2")
                 {
-                    query = query.Where(p => p.Remarks != null);
+                    query = query.Where(p => !String.IsNullOrEmpty(p.Remarks));
                 }
 
                 searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
