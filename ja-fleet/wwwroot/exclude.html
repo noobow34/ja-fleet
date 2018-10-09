@@ -2,22 +2,25 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>ローカルストレージ設定</title>
+    <title>管理者設定設定</title>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"></script>
-    <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script tyep="text/javascript">
     $(document).ready(function() {
-        $('#ga_local').val(localStorage['ga_exclude']);
+        $('#IsAdmin').val($.cookie('IsAdmin'));
     });
-    $('#setbutton').click(function() {
-        localStorage['ga_exclude']=$('#ga_local').val();
-        $('#ga_local').val(localStorage['ga_exclude']);
-        alert('設定しました');
+    $(function() {
+        $('#setbutton').click(function() {
+            $.cookie('IsAdmin',$('#IsAdmin').val(),{expires:1000});
+            $('#IsAdmin').val($.cookie('IsAdmin'));
+            alert('設定しました');
+        });
     });
     </script>
 </head>
     <body>
-        1ならanalytics除外<br />
-        <input type="text" id="ga_local"><br />
+        trueなら管理者<br />
+        <input type="text" id="IsAdmin"><br />
         <input id="setbutton" type="button" value="セット"><br />
     </body>
 </html>
