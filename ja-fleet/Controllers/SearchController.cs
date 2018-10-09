@@ -41,7 +41,9 @@ namespace jafleet.Controllers
             String wifi;
             String registrationDate;
 
-            infologger.Info(model.ToString());
+            if(!CookieUtil.IsAdmin(HttpContext)){
+                infologger.Info(model.ToString());
+            }
 
             if (model.RegistrationNumber == null){
                 reg = "*";
