@@ -6,6 +6,7 @@ using jafleet.Models;
 using jafleet.EF;
 using System.Text.RegularExpressions;
 using jafleet.Manager;
+using jafleet.Util;
 
 namespace jafleet.Controllers
 {
@@ -15,6 +16,8 @@ namespace jafleet.Controllers
 
         public IActionResult Index(SearchModel model)
         {
+            model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
+
             using (var context = new jafleetContext())
             {
                 model.AirlineList = MasterManager.AllAirline;

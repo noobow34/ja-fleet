@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using jafleet.Manager;
 using jafleet.Models;
 using jafleet.EF;
+using jafleet.Util;
 
 namespace jafleet.Controllers
 {
@@ -11,9 +12,7 @@ namespace jafleet.Controllers
     {
         public IActionResult Index(String id,EditModel model)
         {
-            string isAdminString = HttpContext.Request.Cookies["IsAdmin"];
-            Boolean.TryParse(isAdminString, out bool isAdminTemp);
-            model.IsAdmin = isAdminTemp;
+            model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
             using (var context = new jafleetContext())
             {

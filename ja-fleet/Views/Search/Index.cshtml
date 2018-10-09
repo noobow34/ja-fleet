@@ -138,7 +138,16 @@ $(document).ready(function() {
         columns: [
             {data: 'airlineNameJpShort',className: 'dt-center'},
             {data: 'typeName',className: 'dt-center'},
-            {data: 'registrationNumber',className: 'dt-center'},
+            @if (Model.IsAdmin)
+            {
+                @:{data: 'registrationNumber',render: function ( data, type, row, meta ) {
+                   @:return '<a href="/E/'+data+'">' + data + '</a>';
+                    @:},className: 'dt-center'},
+            }
+            else
+            {
+                @:{data: 'registrationNumber',className: 'dt-center'},
+            }
             {data: 'serialNumber',className: 'dt-center'},
             {data: 'registerDate',className: 'dt-center'},
             {data: 'operation',className: 'dt-center'},
