@@ -23,7 +23,7 @@
     <Folder Include="Views\Search\" />
     <Folder Include="wwwroot\lib\bootstrap\locales\" />
     <Folder Include="Views\EditList\" />
-    <Folder Include="Views\Edit\" />
+    <Folder Include="Views\E\" />
     <Folder Include="Views\Sandbox\" />
   </ItemGroup>
   <ItemGroup>

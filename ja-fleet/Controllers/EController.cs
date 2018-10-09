@@ -7,7 +7,7 @@ using jafleet.EF;
 
 namespace jafleet.Controllers
 {
-    public class EditController : Controller
+    public class E : Controller
     {
         public IActionResult Index(String id,EditModel model)
         {
@@ -28,6 +28,11 @@ namespace jafleet.Controllers
                     model.Aircraft = context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
                 }
 
+            }
+            if(model.Aircraft == null){
+                model.Aircraft = new Aircraft();
+                model.Aircraft.RegistrationNumber = id.ToUpper();
+                model.IsNew = true;
             }
             return View(model);
         }
@@ -56,8 +61,7 @@ namespace jafleet.Controllers
             model.TypeList = MasterManager.Type;
             model.OperationList = MasterManager.Operation;
             model.WiFiList = MasterManager.Wifi;
-            return View("Index", model);
-            //return Redirect("/Edit/" + model.Aircraft.RegistrationNumber);
+            return Redirect("/Edit/" + model.Aircraft.RegistrationNumber);
         }
     }
 }
