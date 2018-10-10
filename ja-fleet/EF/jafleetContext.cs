@@ -25,19 +25,20 @@ namespace jafleet.EF
         public virtual DbSet<Maker> Maker { get; set; }
         public virtual DbSet<Type> Type { get; set; }
 
-        /*public static readonly LoggerFactory MyLoggerFactory
-= new LoggerFactory(new[]
-{
+        public static readonly LoggerFactory MyLoggerFactory
+            = new LoggerFactory(new[]
+            {
             new ConsoleLoggerProvider((category, level)
                 => category == DbLoggerCategory.Database.Command.Name
                 && level == LogLevel.Information, true)
-});*/
+            });
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("Data Source='../ja-fleet_db/ja-fleet.sqlite3'");
+                optionsBuilder.UseLoggerFactory(MyLoggerFactory).UseSqlite("Data Source='../ja-fleet_db/ja-fleet.sqlite3'");
             }
         }
 
