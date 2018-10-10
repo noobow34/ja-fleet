@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.EF;
+using jafleet.Constants;
 
 namespace jafleet.Controllers
 {
@@ -33,7 +34,7 @@ namespace jafleet.Controllers
                 var q = context.AircraftView.Where(p => ids.Contains(p.Airline));
                 if (!includeRetire)
                 {
-                    q = q.Where(p => p.OperationCode != "8");
+                    q = q.Where(p => p.OperationCode != OperationCode.RETIRE_UNREGISTERED);
                 }
                 list = q.OrderBy(p => p.DisplayOrder).ToList();
             }

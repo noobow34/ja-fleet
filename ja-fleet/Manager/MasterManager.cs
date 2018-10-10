@@ -17,8 +17,8 @@ namespace jafleet.Manager
                 _lcc = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToArray();
                 _other = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToArray();
                 _type = context.Type.OrderBy(p => p.DisplayOrder).ToArray();
-                _operation = context.Code.Where(p => p.CodeType == "OPE").OrderBy(p => p.Key).ToArray();
-                _wifi = context.Code.Where(p => p.CodeType == "WIFI").OrderBy(p => p.Key).ToArray();
+                _operation = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToArray();
+                _wifi = context.Code.Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
             }
         }
 
@@ -31,7 +31,7 @@ namespace jafleet.Manager
                 {
                     using (var context = new jafleetContext())
                     {
-                        _wifi = context.Code.Where(p => p.CodeType == "WIFI").OrderBy(p => p.Key).ToArray();
+                        _wifi = context.Code.Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
                     }
                 }
                 return _wifi;
@@ -51,7 +51,7 @@ namespace jafleet.Manager
                 {
                     using (var context = new jafleetContext())
                     {
-                        _operation = context.Code.Where(p => p.CodeType == "OPE").OrderBy(p => p.Key).ToArray();
+                        _operation = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToArray();
                     }
                 }
                 return _operation;
