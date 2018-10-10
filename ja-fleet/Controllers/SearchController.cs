@@ -98,7 +98,10 @@ namespace jafleet.Controllers
                 }
 
                 searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
-                infologger.Info("件数：" + searchResult.Length.ToString());
+                if (!CookieUtil.IsAdmin(HttpContext))
+                {
+                    infologger.Info("件数：" + searchResult.Length.ToString());
+                }
             }
             return Json(searchResult);
         }
