@@ -64,7 +64,7 @@ namespace jafleet.Controllers
             model.TypeList = MasterManager.Type;
             model.OperationList = MasterManager.Operation;
             model.WiFiList = MasterManager.Wifi;
-            return Redirect("/Edit/" + model.Aircraft.RegistrationNumber);
+            return Redirect("/E/" + model.Aircraft.RegistrationNumber);
         }
     }
 }
