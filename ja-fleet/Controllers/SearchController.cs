@@ -41,10 +41,6 @@ namespace jafleet.Controllers
             String wifi;
             String registrationDate;
 
-            if(!CookieUtil.IsAdmin(HttpContext)){
-                infologger.Info(model.ToString());
-            }
-
             if (model.RegistrationNumber == null){
                 reg = "*";
             }else{
@@ -100,7 +96,7 @@ namespace jafleet.Controllers
                 searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
                 if (!CookieUtil.IsAdmin(HttpContext))
                 {
-                    infologger.Info("件数：" + searchResult.Length.ToString());
+                    infologger.Info(model.ToString() + ",件数：" + searchResult.Length.ToString());
                 }
             }
             return Json(searchResult);
