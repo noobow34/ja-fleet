@@ -107,6 +107,10 @@ namespace jafleet.EF
 
                 entity.Property(e => e.TypeName).HasColumnName("TYPE_NAME");
 
+                entity.Property(e => e.TypeDetailCode).HasColumnName("TYPE_DETAIL_CODE");
+
+                entity.Property(e => e.TypeDetailName).HasColumnName("TYPE_DETAIL_NAME");
+
                 entity.Property(e => e.UpdateTime).HasColumnName("UPDATE_TIME");
 
                 entity.Property(e => e.Wifi).HasColumnName("WIFI");

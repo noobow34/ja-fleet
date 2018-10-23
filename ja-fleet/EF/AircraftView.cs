@@ -11,6 +11,8 @@ namespace jafleet.EF
         public string AirlineNameJpShort { get; set; }
         public string TypeCode { get; set; }
         public string TypeName { get; set; }
+        public string TypeDetailCode { get; set; }
+        public string TypeDetailName { get; set; }
         public string RegistrationNumber { get; set; }
         public string SerialNumber { get; set; }
         public string RegisterDate { get; set; }

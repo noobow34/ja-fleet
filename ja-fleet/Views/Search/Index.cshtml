@@ -129,7 +129,15 @@ $(document).ready(function() {
         },
         columns: [
             {data: 'airlineNameJpShort',className: 'dt-center'},
-            {data: 'typeName',className: 'dt-center'},
+            {data: null
+            ,render: function ( data, type, row ) {
+                        if(row.typeDetailName != null){
+                            return row.typeDetailName;
+                        }else{
+                            return row.typeName;
+                        }
+                    }
+            ,className: 'dt-center'},
             @if (Model.IsAdmin)
             {
                 @:{data: 'registrationNumber',render: function ( data, type, row, meta ) {
