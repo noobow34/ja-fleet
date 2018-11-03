@@ -29,6 +29,7 @@ namespace jafleet.Controllers
         {
             List<AircraftView> list;
             String[] ids = id.ToUpper().Split(",");
+            id2 = id2?.ToUpper();
             using (var context = new jafleetContext())
             {
                 var q = context.AircraftView.Where(p => ids.Contains(p.AirlineGroupCode));
