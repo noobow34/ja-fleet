@@ -24,14 +24,18 @@ namespace jafleet.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(string id, [FromQuery]Boolean includeRetire)
+        [HttpGet("{id}/{id2?}")]
+        public ActionResult<string> Get(string id, string id2, [FromQuery]Boolean includeRetire)
         {
             List<AircraftView> list;
             String[] ids = id.ToUpper().Split(",");
             using (var context = new jafleetContext())
             {
                 var q = context.AircraftView.Where(p => ids.Contains(p.Airline));
+                if (!string.IsNullOrEmpty(id2))
+                {
+                    q = q.Where(p => p.TypeCode == id2);
+                }
                 if (!includeRetire)
                 {
                     q = q.Where(p => p.OperationCode != OperationCode.RETIRE_UNREGISTERED);
