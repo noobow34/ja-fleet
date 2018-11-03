@@ -96,8 +96,15 @@ else
             </div>
         </div>
         @if (Model.IsAdmin)
-    {
-        <input type="submit" value="登録" class="btn btn-primary" />
-}
+        {
+            <div class="row">
+                <div class="form-group">
+
+                    <input type="button" value="前のページに戻る" class="btn btn-default" onclick="history.back()" />
+                    <input type="submit" value="登録" class="btn btn-primary" />
+                </div>
+            </div>
+        }
+
         @Html.HiddenFor(model => model.IsNew)
     </form>
