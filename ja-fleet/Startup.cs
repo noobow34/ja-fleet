@@ -52,7 +52,9 @@ namespace jafleet
             {
                 routes.MapRoute("EditStore", "E/Store",
                     defaults: new { controller = "E", action = "Store" });
-                routes.MapRoute("Edit", "E/{id?}",
+                routes.MapRoute("Edit1", "e/{id?}",
+                    defaults: new { controller = "E", action = "Index" });
+                routes.MapRoute("Edit2", "E/{id?}",
                     defaults: new { controller = "E", action = "Index" });
                 routes.MapRoute(
                     name: "default",
