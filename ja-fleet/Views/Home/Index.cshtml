@@ -4,6 +4,9 @@
 @{
     ViewData["Title"] = "JA-Fleet【本邦航空会社機材一覧サイト】";
 }
+@section HeadPartial{
+    <meta name="description" content="JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。">
+}
 <h1></h1>
 <img src="~/images/JA-Fleet_1.png" alt="JA-Fleet【本邦航空会社機材一覧サイト】" class="img-responsive" />
 <div style="width:50%">
@@ -105,8 +108,8 @@
     </div>
 </div>
 <hr />
-管理者：<a href="https://twitter.com/noobow">ぬーぼー（@@noobow）</a><br />
-更新情報アカウント：<a href="https://twitter.com/ja_fleet">@@ja_fleet</a><br />
+    管理者：<a href="https://twitter.com/noobow">ぬーぼー（@@noobow）</a><br />
+    更新情報アカウント：<a href="https://twitter.com/ja_fleet">@@ja_fleet</a><br />
 @if (!CookieUtil.IsAdmin(Context))
 {
     <a class="twitter-timeline" href="https://twitter.com/ja_fleet?ref_src=twsrc%5Etfw" width="320px" height="400px">Tweets by ja_fleet</a>
