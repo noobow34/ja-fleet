@@ -1,8 +1,11 @@
 ﻿@model AircraftModel
-<h2>@ViewData["Title"]</h2>        
+@section HeadPartial{
+    <meta name="description" content="@ViewData["Title"]の機材（飛行機）一覧ページです。">
+}
+<h2>@ViewData["Title"]</h2>
 <div class="form-group">
-@Html.CheckBoxFor(model => model.IncludeRetire)
-@Html.LabelFor(model => model.IncludeRetire, new { @class = "control-label" })
+    @Html.CheckBoxFor(model => model.IncludeRetire)
+    @Html.LabelFor(model => model.IncludeRetire, new { @class = "control-label" })
 </div>
 <font color="#FFCCFF">背景ピンク■</font>は更新1週間以内のデータです。
 <table id="@ViewData["TableId"]" class="display cell-border compact dt-body-center nowrap" style="width:100%">
@@ -20,7 +23,7 @@
     </thead>
 </table>
 @section ScriptsPartial{
-<script>
+    <script>
 var table;
 $(document).ready(function() {
     $.extend( $.fn.dataTable.defaults, {
@@ -74,5 +77,5 @@ $('#IncludeRetire').change(function() {
 function getIncludeRetire(){
     return $('#IncludeRetire').prop('checked');
 }
-</script>
+    </script>
 }
