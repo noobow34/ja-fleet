@@ -34,7 +34,7 @@ namespace jafleet.Controllers
                 return Json(new List<AircraftView>());
             }
             AircraftView[] searchResult = null;
-            String reg;
+            String reg = string.Empty;
             String[] airline;
             String[] type;
             String[] operation;
@@ -44,7 +44,11 @@ namespace jafleet.Controllers
             if (model.RegistrationNumber == null){
                 reg = "*";
             }else{
-                reg = model.RegistrationNumber.ToUpper().Replace("*", ".*").Replace("_", ".");
+                if (!model.RegistrationNumber.ToUpper().StartsWith("JA"))
+                {
+                    reg = "JA";
+                }
+                reg = reg += model.RegistrationNumber.ToUpper().Replace("*", ".*").Replace("_", ".");
             }
             using (var context = new jafleetContext())
             {
