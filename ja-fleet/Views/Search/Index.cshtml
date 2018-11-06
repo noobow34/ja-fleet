@@ -59,8 +59,7 @@
             @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })<br />
             @Html.DropDownListFor(model => model.WiFiCode,
                                                                              new SelectList(Model.WiFiList, "Key", "Value"),
-                                                                             "　",
-                                                                             new { @class = "form-control" })
+                                                                             new { @multiple = "multiple" })
         </div>
     </div>
     <div class="col-xs-2 col-sm-1">
@@ -104,7 +103,7 @@ $(document).ready(function() {
     $('#Type').multiselect({maxHeight:400,nonSelectedText: '（未選択）'});
     $('#OperationCode').multiselect({nonSelectedText: '（未選択）'});
     $('#RegistrationSelection').multiselect();
-    $('#WiFiCode').multiselect();
+    $('#WiFiCode').multiselect({ nonSelectedText: '' });
     $('#RemarksList').multiselect();
     $('#RegistrationNumber').tooltip();
 
@@ -207,8 +206,9 @@ function GetRegistrationSelection(){
     return $('#RegistrationSelection').val();
 }
 
-function GetWiFiCode(){
-    return $('#WiFiCode').val();
+function GetWiFiCode() {
+    var type = $('#WiFiCode').val() .toString();
+    return type.replace(/,/g,'|');
 }
 
 function GetRemarks(){

@@ -38,7 +38,7 @@ namespace jafleet.Controllers
             String[] airline;
             String[] type;
             String[] operation;
-            String wifi;
+            String[] wifi;
             String registrationDate;
 
             if (model.RegistrationNumber == null){
@@ -62,8 +62,8 @@ namespace jafleet.Controllers
                 }
 
                 if(!String.IsNullOrEmpty(model.WiFiCode)){
-                    wifi = model.WiFiCode;
-                    query = query.Where(p => p.WifiCode == wifi);
+                    wifi = model.WiFiCode.Split("|");
+                    query = query.Where(p => wifi.Contains(p.WifiCode));
                 }
 
                 if(!String.IsNullOrEmpty(model.RegistrationDate)){
