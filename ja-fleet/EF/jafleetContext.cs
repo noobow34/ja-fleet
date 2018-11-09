@@ -71,6 +71,8 @@ namespace jafleet.EF
                 entity.Property(e => e.UpdateTime).HasColumnName("UPDATE_TIME");
 
                 entity.Property(e => e.WifiCode).HasColumnName("WIFI_CODE");
+
+                entity.Property(e => e.LinkUrl).HasColumnName("LINK_URL");
             });
 
             modelBuilder.Entity<AircraftView>(entity =>
@@ -116,6 +118,8 @@ namespace jafleet.EF
                 entity.Property(e => e.Wifi).HasColumnName("WIFI");
 
                 entity.Property(e => e.WifiCode).HasColumnName("WIFI_CODE");
+
+                entity.Property(e => e.LinkUrl).HasColumnName("LINK_URL");
             });
 
             modelBuilder.Entity<Airline>(entity =>

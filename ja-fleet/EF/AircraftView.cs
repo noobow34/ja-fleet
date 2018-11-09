@@ -23,5 +23,6 @@ namespace jafleet.EF
         public string Remarks { get; set; }
         public string CreationTime { get; set; }
         public string UpdateTime { get; set; }
+        public string LinkUrl { get; set; }
     }
 }

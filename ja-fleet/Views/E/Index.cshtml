@@ -85,6 +85,12 @@ else
         </div>
         <div class="row">
             <div class="form-group">
+                @Html.LabelFor(model => model.Aircraft.LinkUrl, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Aircraft.LinkUrl, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
                 @Html.LabelFor(model => model.Aircraft.CreationTime, new { @class = "control-label" })
                 @Html.TextBoxFor(model => model.Aircraft.CreationTime, new { @class = "form-control", @readonly = "readonly" })
             </div>

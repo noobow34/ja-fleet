@@ -1,6 +1,10 @@
 ﻿@model AircraftModel
 @section HeadPartial{
     <meta name="description" content="@ViewData["Title"]の機材（飛行機）一覧ページです。">
+    <meta name="referrer" content="no-referrer" />
+}
+@section CssPartial{
+    <link rel="stylesheet" href="~/lib/colorbox/css/colorbox.css" />
 }
 <h2>@ViewData["Title"]</h2>
 <div class="form-group">
@@ -23,9 +27,10 @@
     </thead>
 </table>
 @section ScriptsPartial{
+    <script src="~/lib/colorbox/js/jquery.colorbox-min.js"></script>
     <script>
 var table;
-$(document).ready(function() {
+$(document).ready(function () {
     $.extend( $.fn.dataTable.defaults, {
         language: {
             url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
@@ -45,7 +50,14 @@ $(document).ready(function() {
                         }
                     }
             ,className: 'dt-center'},
-            {data: 'registrationNumber',className: 'dt-center'},
+            {
+                data: 'registrationNumber', render: function (data, type, row, meta) {
+                    if (row.linkUrl != null) {
+                        return '<a href="' + row.linkUrl + '">' + data + '</a>';
+                    } else {
+                        return data;
+                    }
+                },className: 'dt-center'},
             {data: 'serialNumber',className: 'dt-center'},
             {data: 'registerDate',className: 'dt-center'},
             {data: 'operation',className: 'dt-center'},
@@ -70,9 +82,15 @@ $(document).ready(function() {
         scrollCollapse: true
     });
 });
-$('#IncludeRetire').change(function() {
+
+$('#IncludeRetire').change(function () {
     table.ajax.url('@ViewData["api"]?includeRetire=' + getIncludeRetire()).load();
     table.ajax.reload();
+});
+
+$("#@ViewData["TableId"]").on("click", "a", function (event) {
+    event.preventDefault();
+    $(this).colorbox({ iframe: true, width: "80%", height: "90%" });
 });
 function getIncludeRetire(){
     return $('#IncludeRetire').prop('checked');
