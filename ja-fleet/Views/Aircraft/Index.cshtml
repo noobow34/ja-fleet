@@ -52,11 +52,7 @@ $(document).ready(function () {
             ,className: 'dt-center'},
             {
                 data: 'registrationNumber', render: function (data, type, row, meta) {
-                    if (row.linkUrl != null) {
-                        return '<a href="' + row.linkUrl + '">' + data + '</a>';
-                    } else {
-                        return data;
-                    }
+                        return '<a href="/Aircraft/Photo/' + data + '">' + data + '</a>';
                 },className: 'dt-center'},
             {data: 'serialNumber',className: 'dt-center'},
             {data: 'registerDate',className: 'dt-center'},

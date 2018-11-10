@@ -141,24 +141,24 @@ $(document).ready(function() {
                             return row.typeName;
                         }
                     }
-            ,className: 'dt-center'},
+                , className: 'dt-center'
+            },
+            {data: 'registrationNumber', render: function (data, type, row, meta) {
+                    return '<a href="/Aircraft/Photo/' + data + '">' + data + '</a>';
+                }, className: 'dt-center'
+            },
             @if (Model.IsAdmin)
             {
-                @:{data: 'registrationNumber',render: function ( data, type, row, meta ) {
-                   @:return '<a href="/E/'+data+'">' + data + '</a>';
+                @:{data: 'serialNumber', render: function (data, type, row, meta) {
+                   @:return '<a href="/E/' + row.registrationNumber + '">' + data + '</a>';
                     @:},className: 'dt-center'},
             }
             else
             {
-                @:{data: 'registrationNumber', render: function (data, type, row, meta) {
-                        @:if (row.linkUrl != null) {
-                            @:return '<a href="' + row.linkUrl + '">' + data + '</a>';
-                        @:} else {
-                            @:return data;
-                       @:}
+                @:{data: 'serialNumber', render: function (data, type, row, meta) {
+                    @:return data;
                     @:},className: 'dt-center'},
             }
-            {data: 'serialNumber',className: 'dt-center'},
             {data: 'registerDate',className: 'dt-center'},
             {data: 'operation',className: 'dt-center'},
             {data: 'wifi',className: 'dt-center'},
