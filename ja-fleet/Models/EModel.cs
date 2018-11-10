@@ -24,6 +24,9 @@ namespace jafleet.Models
 
         public Boolean IsAdmin { get; set; } = false;
 
+        [Display(Name = "更新日付を更新しない")]
+        public Boolean NotUpdateDate { get; set; } = false;
+
         public Exception ex { get; set; }
     }
 }

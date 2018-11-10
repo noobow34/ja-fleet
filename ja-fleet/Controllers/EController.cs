@@ -44,7 +44,9 @@ namespace jafleet.Controllers
         public IActionResult Store( EditModel model){
             try{
                 String reg = model.Aircraft.RegistrationNumber;
-                model.Aircraft.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); //2018-09-20 00:52:36
+                if (!model.NotUpdateDate){
+                    model.Aircraft.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); //2018-09-20 00:52:36
+                }
                 using (var context = new jafleetContext())
                 {
                     if (model.IsNew)

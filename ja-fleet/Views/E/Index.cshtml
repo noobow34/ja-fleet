@@ -101,6 +101,12 @@ else
                 @Html.TextBoxFor(model => model.Aircraft.UpdateTime, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.NotUpdateDate, new { @class = "control-label" })
+                @Html.CheckBoxFor(model => model.NotUpdateDate, new { @class = "form-control"})
+            </div>
+        </div>
         @if (Model.IsAdmin)
         {
             <div class="row">
