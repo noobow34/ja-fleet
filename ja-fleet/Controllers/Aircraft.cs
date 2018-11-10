@@ -8,11 +8,13 @@ using AngleSharp.Dom.Html;
 using System.Net.Http;
 using AngleSharp.Parser.Html;
 using System;
+using jafleet.Util;
 
 namespace jafleet.Controllers
 {
     public class AircraftController : Controller
     {
+        private static NLog.Logger infologger = NLog.LogManager.GetLogger("infologger");
         public IActionResult Index()
         {
             return View();
@@ -82,6 +84,11 @@ namespace jafleet.Controllers
         {
             string jetphotoUrl = string.Format("https://www.jetphotos.com/showphotos.php?keywords-type=reg&keywords={0}&search-type=Advanced&keywords-contain=0&sort-order=2", id);
             string redirectUrl = string.Empty;
+
+            if (!CookieUtil.IsAdmin(HttpContext))
+            {
+                infologger.Info("写真クリック：" + id);
+            }
 
             using (var context = new jafleetContext())
             {
