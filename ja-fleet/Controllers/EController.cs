@@ -20,6 +20,7 @@ namespace jafleet.Controllers
                 model.TypeList = MasterManager.Type;
                 model.OperationList = MasterManager.Operation;
                 model.WiFiList = MasterManager.Wifi;
+                model.NotUpdateDate = true;
 
                 if (string.IsNullOrEmpty(id))
                 {
@@ -45,8 +46,9 @@ namespace jafleet.Controllers
             try{
                 String reg = model.Aircraft.RegistrationNumber;
                 if (!model.NotUpdateDate){
-                    model.Aircraft.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); //2018-09-20 00:52:36
+                    model.Aircraft.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 }
+                model.Aircraft.ActualUpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 using (var context = new jafleetContext())
                 {
                     if (model.IsNew)

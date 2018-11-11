@@ -98,13 +98,19 @@ else
         <div class="row">
             <div class="form-group">
                 @Html.LabelFor(model => model.Aircraft.UpdateTime, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.UpdateTime, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(model => model.Aircraft.UpdateTime, new { @class = "form-control"})
             </div>
         </div>
         <div class="row">
             <div class="form-group">
                 @Html.LabelFor(model => model.NotUpdateDate, new { @class = "control-label" })
-                @Html.CheckBoxFor(model => model.NotUpdateDate, new { @class = "form-control"})
+                @Html.CheckBoxFor(model => model.NotUpdateDate, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Aircraft.ActualUpdateTime, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Aircraft.ActualUpdateTime, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         @if (Model.IsAdmin)

@@ -24,5 +24,6 @@ namespace jafleet.EF
         public string CreationTime { get; set; }
         public string UpdateTime { get; set; }
         public string LinkUrl { get; set; }
+        public string ActualUpdateTime { get; set; }
     }
 }

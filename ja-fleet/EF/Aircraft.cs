@@ -26,5 +26,7 @@ namespace jafleet.EF
         public string CreationTime { get; set; }
         [Display(Name = "リンクURL")]
         public string LinkUrl { get; set; }
+        [Display(Name = "実更新日時")]
+        public string ActualUpdateTime { get; set; }
     }
 }
