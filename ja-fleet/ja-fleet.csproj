@@ -18,7 +18,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EF\" />
-    <Folder Include="Constants\" />
     <Folder Include="Views\Aircraft\" />
     <Folder Include="Manager\" />
     <Folder Include="Views\Search\" />

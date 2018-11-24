@@ -9,6 +9,7 @@ using System.Net.Http;
 using AngleSharp.Parser.Html;
 using System;
 using jafleet.Util;
+using jafleet.Constants;
 
 namespace jafleet.Controllers
 {
@@ -89,9 +90,18 @@ namespace jafleet.Controllers
             {
                 infologger.Info("写真クリック：" + id);
             }
+            Log log = new Log
+            {
+                LogDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                , LogType = LogType.PHOTO
+                , LogDetail = id
+                , UserId = CookieUtil.IsAdmin(HttpContext).ToString()
+            };
 
             using (var context = new jafleetContext())
             {
+                context.Log.Add(log);
+                context.SaveChanges();
                 redirectUrl = context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault()?.LinkUrl;
             }
 

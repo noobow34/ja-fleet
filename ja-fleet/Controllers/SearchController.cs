@@ -7,6 +7,7 @@ using jafleet.EF;
 using System.Text.RegularExpressions;
 using jafleet.Manager;
 using jafleet.Util;
+using jafleet.Constants;
 
 namespace jafleet.Controllers
 {
@@ -98,10 +99,22 @@ namespace jafleet.Controllers
                 }
 
                 searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
+                string logDetail = model.ToString() + ",件数：" + searchResult.Length.ToString();
                 if (!CookieUtil.IsAdmin(HttpContext))
                 {
-                    infologger.Info(model.ToString() + ",件数：" + searchResult.Length.ToString());
+                    infologger.Info(logDetail);
                 }
+
+                Log log = new Log
+                {
+                    LogDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    ,LogType = LogType.SEARCH
+                    ,LogDetail = logDetail
+                    ,UserId = CookieUtil.IsAdmin(HttpContext).ToString()
+                };
+                context.Log.Add(log);
+                context.SaveChanges();
+
             }
             return Json(searchResult);
         }

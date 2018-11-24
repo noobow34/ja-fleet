@@ -24,6 +24,7 @@ namespace jafleet.EF
         public virtual DbSet<Code> Code { get; set; }
         public virtual DbSet<Maker> Maker { get; set; }
         public virtual DbSet<Type> Type { get; set; }
+        public virtual DbSet<Log> Log { get; set; }
 
         public static readonly LoggerFactory MyLoggerFactory
             = new LoggerFactory(new[]
@@ -206,6 +207,26 @@ namespace jafleet.EF
 
                 entity.Property(e => e.TypeName).HasColumnName("TYPE_NAME");
             });
+
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.HasKey(e => e.LogId);
+
+                entity.ToTable("log");
+
+                entity.Property(e => e.LogId)
+                .HasColumnName("LOG_ID")
+                .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.LogDate).HasColumnName("LOG_DATE");
+
+                entity.Property(e => e.LogType).HasColumnName("LOG_TYPE");
+
+                entity.Property(e => e.LogDetail).HasColumnName("LOG_DETAIL");
+
+                entity.Property(e => e.UserId).HasColumnName("USER_ID");
+            });
+
         }
     }
 }

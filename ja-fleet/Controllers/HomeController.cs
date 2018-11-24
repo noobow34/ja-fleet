@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using System;
 using Microsoft.Extensions.Hosting.Internal;
 using jafleet.Util;
+using jafleet.EF;
+using jafleet.Constants;
 
 namespace jafleet.Controllers
 {
@@ -33,6 +35,18 @@ namespace jafleet.Controllers
             model.Ex = ex;
             exlogger.Fatal(ex.ToString());
 
+            Log log = new Log
+            {
+                LogDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                ,LogType = LogType.EXCEPTION
+                ,LogDetail = ex.ToString()
+                ,UserId = CookieUtil.IsAdmin(HttpContext).ToString()
+            };
+            using (var context = new jafleetContext())
+            {
+                context.Log.Add(log);
+                context.SaveChanges();
+            }
             return View(model);
         }
     }

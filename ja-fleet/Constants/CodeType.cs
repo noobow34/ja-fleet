@@ -3,8 +3,7 @@ namespace jafleet.Constants
 {
     public static class CodeType
     {
-
-        public static string OPERATION_CODE = "OPE";
-        public static string WIFI = "WIFI";
+        public const string OPERATION_CODE = "OPE";
+        public const string WIFI = "WIFI";
     }
 }
