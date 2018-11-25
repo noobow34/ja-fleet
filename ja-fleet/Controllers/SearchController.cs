@@ -107,7 +107,7 @@ namespace jafleet.Controllers
 
                 Log log = new Log
                 {
-                    LogDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    LogDate = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME)
                     ,LogType = LogType.SEARCH
                     ,LogDetail = logDetail
                     ,UserId = CookieUtil.IsAdmin(HttpContext).ToString()

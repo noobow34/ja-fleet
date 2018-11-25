@@ -10,6 +10,7 @@ using AngleSharp.Parser.Html;
 using System;
 using jafleet.Util;
 using jafleet.Constants;
+using jafleet.Commons.Constants;
 
 namespace jafleet.Controllers
 {
@@ -92,7 +93,7 @@ namespace jafleet.Controllers
             }
             Log log = new Log
             {
-                LogDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                LogDate = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME)
                 , LogType = LogType.PHOTO
                 , LogDetail = id
                 , UserId = CookieUtil.IsAdmin(HttpContext).ToString()

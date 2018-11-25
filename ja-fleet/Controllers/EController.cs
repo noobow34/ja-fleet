@@ -5,6 +5,8 @@ using jafleet.Manager;
 using jafleet.Models;
 using jafleet.EF;
 using jafleet.Util;
+using jafleet.Commons.Constants;
+using jafleet.Constants;
 
 namespace jafleet.Controllers
 {
@@ -46,14 +48,14 @@ namespace jafleet.Controllers
             try{
                 String reg = model.Aircraft.RegistrationNumber;
                 if (!model.NotUpdateDate){
-                    model.Aircraft.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    model.Aircraft.UpdateTime = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME);
                 }
-                model.Aircraft.ActualUpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                model.Aircraft.ActualUpdateTime = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME);
                 using (var context = new jafleetContext())
                 {
                     if (model.IsNew)
                     {
-                        model.Aircraft.CreationTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        model.Aircraft.CreationTime = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME);
                         context.Aircraft.Add(model.Aircraft);
                     }
                     else

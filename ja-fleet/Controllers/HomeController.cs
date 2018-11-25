@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting.Internal;
 using jafleet.Util;
 using jafleet.EF;
 using jafleet.Constants;
+using jafleet.Commons.Constants;
 
 namespace jafleet.Controllers
 {
@@ -37,7 +38,7 @@ namespace jafleet.Controllers
 
             Log log = new Log
             {
-                LogDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                LogDate = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME)
                 ,LogType = LogType.EXCEPTION
                 ,LogDetail = ex.ToString()
                 ,UserId = CookieUtil.IsAdmin(HttpContext).ToString()
