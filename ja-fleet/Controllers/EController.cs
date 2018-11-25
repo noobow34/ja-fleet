@@ -5,7 +5,6 @@ using jafleet.Manager;
 using jafleet.Models;
 using jafleet.EF;
 using jafleet.Util;
-using jafleet.Commons.Constants;
 using jafleet.Constants;
 
 namespace jafleet.Controllers

@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using jafleet.EF;
 using jafleet.Manager;
-using AngleSharp.Dom.Html;
 using System.Net.Http;
 using AngleSharp.Parser.Html;
 using System;
 using jafleet.Util;
 using jafleet.Constants;
-using jafleet.Commons.Constants;
 
 namespace jafleet.Controllers
 {

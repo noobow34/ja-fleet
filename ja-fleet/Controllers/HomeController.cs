@@ -2,13 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Hosting;
 using System;
-using Microsoft.Extensions.Hosting.Internal;
 using jafleet.Util;
 using jafleet.EF;
 using jafleet.Constants;
-using jafleet.Commons.Constants;
 
 namespace jafleet.Controllers
 {
