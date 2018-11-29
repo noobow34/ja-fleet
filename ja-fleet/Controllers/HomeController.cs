@@ -12,7 +12,6 @@ namespace jafleet.Controllers
     public class HomeController : Controller
     {
         private Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment = null;
-        private static NLog.Logger exlogger = NLog.LogManager.GetLogger("exlogger");
 
         public HomeController(Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment)
         {
@@ -31,7 +30,6 @@ namespace jafleet.Controllers
             ErrorViewModel model = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
             model.Ex = ex;
-            exlogger.Fatal(ex.ToString());
 
             Log log = new Log
             {

@@ -13,7 +13,6 @@ namespace jafleet.Controllers
 {
     public class SearchController : Controller
     {
-        private static NLog.Logger infologger = NLog.LogManager.GetLogger("infologger");
 
         public IActionResult Index(SearchModel model)
         {
@@ -100,10 +99,6 @@ namespace jafleet.Controllers
 
                 searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
                 string logDetail = model.ToString() + ",件数：" + searchResult.Length.ToString();
-                if (!CookieUtil.IsAdmin(HttpContext))
-                {
-                    infologger.Info(logDetail);
-                }
 
                 Log log = new Log
                 {
