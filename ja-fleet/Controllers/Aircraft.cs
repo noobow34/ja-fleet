@@ -19,7 +19,7 @@ namespace jafleet.Controllers
             return View();
         }
 
-        public IActionResult AirlineGroup(string id, string id2)
+        public IActionResult AirlineGroup(string id, string id2, [FromQuery]Boolean includeRetire, AircraftModel model)
         {
             id = id.ToUpper();
             id2 = id2?.ToUpper();
@@ -38,10 +38,13 @@ namespace jafleet.Controllers
                 ViewData["Title"] += ("・" + MasterManager.Type.Where(p => p.TypeCode == id2).First()?.TypeName);
                 ViewData["api"] += ("/" + id2);
             }
-            return View("~/Views/Aircraft/index.cshtml");
+
+            model.IncludeRetire = includeRetire;
+
+            return View("~/Views/Aircraft/index.cshtml",model);
         }
 
-        public IActionResult Airline(string id, string id2)
+        public IActionResult Airline(string id, string id2, [FromQuery]Boolean includeRetire,AircraftModel model)
         {
             id = id.ToUpper();
             id2 = id2?.ToUpper();
@@ -60,10 +63,13 @@ namespace jafleet.Controllers
                 ViewData["Title"] += ("・" + MasterManager.Type.Where(p => p.TypeCode == id2).First()?.TypeName);
                 ViewData["api"] += ("/" + id2);
             }
-            return View("~/Views/Aircraft/index.cshtml");
+
+            model.IncludeRetire = includeRetire;
+
+            return View("~/Views/Aircraft/index.cshtml",model);
         }
 
-        public IActionResult Type(string id)
+        public IActionResult Type(string id, [FromQuery]Boolean includeRetire, AircraftModel model)
         {
             id = id.ToUpper();
 
@@ -76,7 +82,10 @@ namespace jafleet.Controllers
             ViewData["Title"] = typeName;
             ViewData["TableId"] = id;
             ViewData["api"] = "/api/type/" + id;
-            return View("~/Views/Aircraft/index.cshtml");
+
+            model.IncludeRetire = includeRetire;
+
+            return View("~/Views/Aircraft/index.cshtml",model);
         }
 
         public async System.Threading.Tasks.Task<IActionResult> Photo(string id)
