@@ -31,6 +31,12 @@
     <script>
 var table;
 $(document).ready(function () {
+    var gridheight;
+    if (window.innerHeight < 800) {
+        gridheight = '60vh';
+    } else {
+        gridheight = '68vh';
+    }
     $.extend( $.fn.dataTable.defaults, {
         language: {
             url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
@@ -73,7 +79,8 @@ $(document).ready(function () {
         ordering: false,
         fixedHeader: true,
         searching: false,
-        scrollY: '68vh',
+        scrollY: gridheight,
+        pageResize: true,
         scrollX: true,
         scrollCollapse: true
     });
