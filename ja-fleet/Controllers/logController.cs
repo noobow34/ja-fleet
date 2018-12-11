@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using jafleet.Constants;
 using jafleet.EF;
+using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ja_fleet.Controllers
@@ -13,6 +14,11 @@ namespace ja_fleet.Controllers
     {
         public String Index(string id)
         {
+            if (!CookieUtil.IsAdmin(HttpContext))
+            {
+                return string.Empty;
+            }
+
             if (string.IsNullOrEmpty(id))
             {
                 id = DateTime.Now.ToString("yyyy-MM-dd");
