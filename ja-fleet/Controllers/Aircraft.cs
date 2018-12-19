@@ -110,8 +110,7 @@ namespace jafleet.Controllers
 
             if(redirectUrl == null){
                 var parser = new HtmlParser();
-                HttpClient client = new HttpClient();
-                var htmlDocument = parser.Parse(await client.GetStringAsync(jetphotoUrl));
+                var htmlDocument = parser.Parse(await HttpClientManager.GetInstance().GetStringAsync(jetphotoUrl));
                 var photos = htmlDocument.GetElementsByClassName("result__photoLink");
                 if (photos.Length != 0)
                 {

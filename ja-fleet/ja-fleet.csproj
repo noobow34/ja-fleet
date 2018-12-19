@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Aircraft\" />
-    <Folder Include="Manager\" />
     <Folder Include="Views\Search\" />
     <Folder Include="wwwroot\lib\bootstrap\locales\" />
     <Folder Include="Views\E\" />
