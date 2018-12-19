@@ -95,7 +95,7 @@ namespace jafleet.Controllers
 
             Log log = new Log
             {
-                LogDate = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME)
+                LogDate = DateTime.Now
                 , LogType = LogType.PHOTO
                 , LogDetail = id
                 , UserId = CookieUtil.IsAdmin(HttpContext).ToString()

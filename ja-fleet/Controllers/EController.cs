@@ -47,14 +47,14 @@ namespace jafleet.Controllers
             try{
                 String reg = model.Aircraft.RegistrationNumber;
                 if (!model.NotUpdateDate){
-                    model.Aircraft.UpdateTime = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME);
+                    model.Aircraft.UpdateTime = DateTime.Now;
                 }
-                model.Aircraft.ActualUpdateTime = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME);
+                model.Aircraft.ActualUpdateTime = DateTime.Now;
                 using (var context = new jafleetContext())
                 {
                     if (model.IsNew)
                     {
-                        model.Aircraft.CreationTime = DateTime.Now.ToString(DBConstant.SQLITE_DATETIME);
+                        model.Aircraft.CreationTime = DateTime.Now;
                         context.Aircraft.Add(model.Aircraft);
                     }
                     else
