@@ -14,6 +14,7 @@ namespace ja_fleet.Controllers
     {
         public String Index(string id)
         {
+            DateTime? targetDate = null;
             if (!CookieUtil.IsAdmin(HttpContext))
             {
                 return string.Empty;
@@ -21,17 +22,22 @@ namespace ja_fleet.Controllers
 
             if (string.IsNullOrEmpty(id))
             {
-                id = DateTime.Now.ToString("yyyy-MM-dd");
+                targetDate = DateTime.Now;
             }
             else
             {
+                DateTime outDate;
                 id = "20" + id.Substring(0, 2) + "-" + id.Substring(2, 2) + "-" + id.Substring(4, 2);
+                DateTime.TryParseExact(id, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out outDate);
+                targetDate = outDate;
             }
+
+            DateTime target2 = targetDate.Value.AddDays(1);
 
             List<Log> logs = null;
             using (var context = new jafleetContext())
             {
-                logs = context.Log.Where(q => q.LogDate.StartsWith(id)).Where(q => q.UserId != "True").Where(q => q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).ToList();
+                logs = context.Log.Where(q => q.LogDate.Value >= targetDate && q.LogDate.Value < target2 && q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).ToList();
             }
 
             var retsb = new StringBuilder();
