@@ -22,7 +22,7 @@ namespace ja_fleet.Controllers
 
             if (string.IsNullOrEmpty(id))
             {
-                targetDate = DateTime.Now;
+                targetDate = DateTime.Now.Date;
             }
             else
             {
