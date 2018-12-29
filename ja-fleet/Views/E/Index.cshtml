@@ -133,8 +133,8 @@ else
 </form>
 @section ScriptsPartial{
     <script>
-        $("#LinkPage").focus(function () {
-            $(this).select();
+        $("#LinkPage").focus(function (e) {
+            e.target.setSelectionRange(0, e.target.value.length);
         });
     </script>
 }
