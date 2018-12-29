@@ -21,108 +21,163 @@ else
 {
     @Model.ex.ToString()
 }
-    <form asp-action="Store" method="post" class="form-inline">
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Aircraft.RegistrationNumber, new { @class = "control-label" })
+<form asp-action="Store" method="post" class="form-inline">
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.RegistrationNumber, new { @class = "control-label" })
 
-                @Html.TextBoxFor(model => model.Aircraft.RegistrationNumber, new { @class = "form-control" })
-            </div>
+            @Html.TextBoxFor(model => model.Aircraft.RegistrationNumber, new { @class = "form-control" })
         </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.Aircraft.Airline,
+                                                                                       new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
+                                                                                       "　",
+                                                                                       new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.Aircraft.TypeCode,
+                                                                                            new SelectList(Model.TypeList, "TypeCode", "TypeName"),
+                                                                                            "　",
+                                                                                            new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.SerialNumber, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Aircraft.SerialNumber, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.RegisterDate, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Aircraft.RegisterDate, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.Aircraft.OperationCode,
+                                                                                          new SelectList(Model.OperationList, "Key", "Value"),
+                                                                                          "　",
+                                                                                          new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.Aircraft.WifiCode,
+                                                                                                           new SelectList(Model.WiFiList, "Key", "Value"),
+                                                                                                           "　",
+                                                                                                           new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.Remarks, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Aircraft.Remarks, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.LinkUrl, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Aircraft.LinkUrl, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.CreationTime, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Aircraft.CreationTime, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.UpdateTime, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Aircraft.UpdateTime, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.NotUpdateDate, new { @class = "control-label" })
+            @Html.CheckBoxFor(model => model.NotUpdateDate, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.ActualUpdateTime, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Aircraft.ActualUpdateTime, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.TextBoxFor(model => model.LinkPage, new { @class = "form-control" })
+        </div>
+    </div>
+    @if (Model.IsAdmin)
+    {
         <div class="row">
             <div class="form-group">
-                @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })
-                @Html.DropDownListFor(model => model.Aircraft.Airline,
-                                                                                           new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
-                                                                                           "　",
-                                                                                           new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })
-                @Html.DropDownListFor(model => model.Aircraft.TypeCode,
-                                                                                                new SelectList(Model.TypeList, "TypeCode", "TypeName"),
-                                                                                                "　",
-                                                                                                new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Aircraft.SerialNumber, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.SerialNumber, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Aircraft.RegisterDate, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.RegisterDate, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })
-                @Html.DropDownListFor(model => model.Aircraft.OperationCode,
-                                                                                              new SelectList(Model.OperationList, "Key", "Value"),
-                                                                                              "　",
-                                                                                              new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.WiFiList, new { @class = "control-label" })
-                @Html.DropDownListFor(model => model.Aircraft.WifiCode,
-                                                                                                               new SelectList(Model.WiFiList, "Key", "Value"),
-                                                                                                               "　",
-                                                                                                               new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Aircraft.Remarks, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.Remarks, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Aircraft.LinkUrl, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.LinkUrl, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Aircraft.CreationTime, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.CreationTime, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Aircraft.UpdateTime, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.UpdateTime, new { @class = "form-control"})
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.NotUpdateDate, new { @class = "control-label" })
-                @Html.CheckBoxFor(model => model.NotUpdateDate, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Aircraft.ActualUpdateTime, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Aircraft.ActualUpdateTime, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        @if (Model.IsAdmin)
-        {
-            <div class="row">
-                <div class="form-group">
 
-                    <input type="button" value="前のページに戻る" class="btn btn-default" onclick="history.back()" />
-                    <input type="submit" value="登録" class="btn btn-primary" />
-                </div>
+                <input type="button" value="前のページに戻る" class="btn btn-default" onclick="history.back()" />
+                <input type="submit" value="登録" class="btn btn-primary" />
             </div>
+        </div>
+    }
+
+    @Html.HiddenFor(model => model.IsNew)
+</form>
+@section ScriptsPartial{
+    <script>
+        $('#LinkPage').click(function () {
+            var input = document.createElement('textarea');
+            input.setAttribute('id', 'copyinput');
+            document.body.appendChild(input);
+            input.value = this.innerText;
+            copyToClipboard(input);
+            document.body.removeChild(input);
+            alert('copied!');
+        });
+        function copyToClipboard(el) {
+
+            // resolve the element
+            el = (typeof el === 'string') ? document.querySelector(el) : el;
+
+            // handle iOS as a special case
+            if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+
+                // save current contentEditable/readOnly status
+                var editable = el.contentEditable;
+                var readOnly = el.readOnly;
+
+                // convert to editable with readonly to stop iOS keyboard opening
+                el.contentEditable = true;
+                el.readOnly = true;
+
+                // create a selectable range
+                var range = document.createRange();
+                range.selectNodeContents(el);
+
+                // select the range
+                var selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                el.setSelectionRange(0, 999999);
+
+                // restore contentEditable/readOnly to original state
+                el.contentEditable = editable;
+                el.readOnly = readOnly;
+            }
+            else {
+                el.select();
+            }
+
+            // execute copy command
+            document.execCommand('copy');
         }
-
-        @Html.HiddenFor(model => model.IsNew)
-    </form>
+    </script>
+}
