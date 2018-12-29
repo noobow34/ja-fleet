@@ -133,7 +133,7 @@ else
 </form>
 @section ScriptsPartial{
     <script>
-        $("#LinkPage").focus(function (e) {
+        $("#LinkPage").on('click', function (e) {
             e.target.setSelectionRange(0, e.target.value.length);
         });
     </script>
