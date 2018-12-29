@@ -133,51 +133,8 @@ else
 </form>
 @section ScriptsPartial{
     <script>
-        $('#LinkPage').click(function () {
-            var input = document.createElement('textarea');
-            input.setAttribute('id', 'copyinput');
-            document.body.appendChild(input);
-            input.value = this.innerText;
-            copyToClipboard(input);
-            document.body.removeChild(input);
-            alert('copied!');
+        $("#LinkPage").focus(function () {
+            $(this).select();
         });
-        function copyToClipboard(el) {
-
-            // resolve the element
-            el = (typeof el === 'string') ? document.querySelector(el) : el;
-
-            // handle iOS as a special case
-            if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
-
-                // save current contentEditable/readOnly status
-                var editable = el.contentEditable;
-                var readOnly = el.readOnly;
-
-                // convert to editable with readonly to stop iOS keyboard opening
-                el.contentEditable = true;
-                el.readOnly = true;
-
-                // create a selectable range
-                var range = document.createRange();
-                range.selectNodeContents(el);
-
-                // select the range
-                var selection = window.getSelection();
-                selection.removeAllRanges();
-                selection.addRange(range);
-                el.setSelectionRange(0, 999999);
-
-                // restore contentEditable/readOnly to original state
-                el.contentEditable = editable;
-                el.readOnly = readOnly;
-            }
-            else {
-                el.select();
-            }
-
-            // execute copy command
-            document.execCommand('copy');
-        }
     </script>
 }
