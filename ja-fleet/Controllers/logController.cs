@@ -24,12 +24,15 @@ namespace ja_fleet.Controllers
             {
                 targetDate = DateTime.Now.Date;
             }
-            else
+            else if(id.Length == 6)
             {
                 DateTime outDate;
                 id = "20" + id.Substring(0, 2) + "-" + id.Substring(2, 2) + "-" + id.Substring(4, 2);
                 DateTime.TryParseExact(id, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out outDate);
                 targetDate = outDate;
+            }else if(id == "y")
+            {
+                targetDate = DateTime.Now.AddDays(-1).Date;
             }
 
             DateTime target2 = targetDate.Value.AddDays(1);
