@@ -1,7 +1,15 @@
 ﻿@model AircraftModel
 @section HeadPartial{
-    <meta name="description" content="@ViewData["Title"]の機材（飛行機）一覧ページです。">
+    <meta name="description" content="@ViewData["Title"]の機材（飛行機）一覧ページです。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。">
     <meta name="referrer" content="no-referrer" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="@ViewData["Title"]の機材（飛行機）一覧ページです。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。" />
+    <meta property="og:image" content="https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png" />
+    <meta property="og:url" content="https://ja-fleet.noobow.me/@Context.Request.Path" />
+    <meta property="og:site_name" content="JA-Fleet【本邦航空会社機材一覧サイト】" />
+    <meta content="summary" name="twitter:card" />
+    <meta content="@@ja_fleet" name="twitter:site" />
 }
 @section CssPartial{
     <link rel="stylesheet" href="~/lib/colorbox/css/colorbox.css" />
