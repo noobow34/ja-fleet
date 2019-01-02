@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @RenderSection("HeadPartial", required: false)
     <title>@ViewData["Title"] - JA-Fleet【本邦航空会社機材一覧サイト】</title>
+    <meta content="@ViewData["Title"] - JA-Fleet【本邦航空会社機材一覧サイト】" name="title">
+    <meta property="og:title" content="@ViewData["Title"] - JA-Fleet【本邦航空会社機材一覧サイト】" />
 
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
