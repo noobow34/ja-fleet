@@ -19,6 +19,7 @@ namespace jafleet.Controllers
             {
                 model.AirlineList = MasterManager.AllAirline;
                 model.TypeList = MasterManager.Type;
+                model.TypeDetailList = context.TypeDetail.ToArray();
                 model.OperationList = MasterManager.Operation;
                 model.WiFiList = MasterManager.Wifi;
                 model.NotUpdateDate = true;

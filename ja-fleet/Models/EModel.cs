@@ -18,6 +18,9 @@ namespace jafleet.Models
         [Display(Name = "型式")]
         public jafleet.EF.Type[] TypeList { get; set; }
 
+        [Display(Name = "詳細型式")]
+        public jafleet.EF.TypeDetail[] TypeDetailList { get; set; }
+
         [Display(Name = "運用状況")]
         public Code[] OperationList { get; set; }
 
