@@ -34,7 +34,7 @@ namespace jafleet.Controllers
                 return Json(new List<AircraftView>());
             }
             AircraftView[] searchResult = null;
-            String reg = string.Empty;
+            var regList = new List<string>();
             String[] airline;
             String[] type;
             String[] operation;
@@ -42,20 +42,32 @@ namespace jafleet.Controllers
             String registrationDate;
 
             if (model.RegistrationNumber == null){
-                reg = "*";
+                regList.Add("*");
             }else{
-                if (!model.RegistrationNumber.ToUpper().StartsWith("JA"))
-                {
-                    reg = "JA";
+                foreach(string r in model.RegistrationNumber.ToUpper().Split("|")){
+                    string reg = string.Empty;
+                    if (!r.StartsWith("JA"))
+                    {
+                        reg = "JA";
+                    }
+                    reg = reg += r.ToUpper().Replace("*", ".*").Replace("_", ".");
+                    regList.Add(reg);
                 }
-                reg = reg += model.RegistrationNumber.ToUpper().Replace("*", ".*").Replace("_", ".");
             }
             using (var context = new jafleetContext())
             {
-                var regex = new Regex("^" + reg + "$");
-                var query = context.AircraftView.Where(p => regex.IsMatch(p.RegistrationNumber));
+                IQueryable<AircraftView> query;
+                if(regList.Count == 1)
+                {
+                    var regex = new Regex("^" + regList[0] + "$");
+                    query = context.AircraftView.Where(p => regex.IsMatch(p.RegistrationNumber));
+                }
+                else
+                {
+                    query = context.AircraftView.Where(p => regList.Contains(p.RegistrationNumber));
+                }
 
-                if(!String.IsNullOrEmpty(model.Airline)){
+                if (!String.IsNullOrEmpty(model.Airline)){
                     airline = model.Airline.Split("|");
                     query = query.Where(p => airline.Contains(p.Airline));
                 }
