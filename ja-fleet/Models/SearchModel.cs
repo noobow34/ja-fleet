@@ -49,7 +49,7 @@ namespace jafleet.Models
                                         , new SelectListItem { Value = "2", Text = "あり" } };
 
         [IgnoreDuringToString]
-        public Boolean IsLoading { get; set; }
+        public Boolean IsLoading { get; set; } = true;
 
         [IgnoreDuringToString]
         public Boolean IsAdmin { get; set; } = false;
