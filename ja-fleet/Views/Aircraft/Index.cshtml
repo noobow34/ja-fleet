@@ -95,6 +95,7 @@ $(document).ready(function () {
 });
 
 $('#IncludeRetire').change(function () {
+    history.pushState(null, null, "?includeRetire=" + getIncludeRetire());
     table.ajax.url('@ViewData["api"]?includeRetire=' + getIncludeRetire()).load();
     table.ajax.reload();
 });
