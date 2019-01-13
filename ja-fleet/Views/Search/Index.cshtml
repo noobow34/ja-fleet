@@ -233,6 +233,10 @@
         $(this).colorbox({ iframe: true, width: "80%", height: "90%" });
     });
 
+    $(window).on('popstate', function (e) {
+        location.reload();
+    });
+
     function GetRegistrationNumber(){
         return $('#RegistrationNumber').val();
     }
