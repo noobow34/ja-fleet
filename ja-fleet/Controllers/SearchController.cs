@@ -30,7 +30,8 @@ namespace jafleet.Controllers
 
         public IActionResult DoSearch(SearchModel model)
         {
-            if(model.IsLoading){
+            if(model.IsLoading && !model.IsDirect){
+                //初回ロードかつダイレクト指定ではない場合は空リストを返す
                 return Json(new List<AircraftView>());
             }
             AircraftView[] searchResult = null;
@@ -42,14 +43,18 @@ namespace jafleet.Controllers
             String registrationDate;
 
             if (model.RegistrationNumber == null){
+                //指定されていない場合は全県
                 regList.Add("*");
             }else{
+                //|区切りで複数件を処理
                 foreach(string r in model.RegistrationNumber.ToUpper().Split("|")){
                     string reg = string.Empty;
                     if (!r.StartsWith("JA"))
                     {
+                        //JAがついていなければ付加
                         reg = "JA";
                     }
+                    //画面のワイルドカード仕様から.NETのワイルドカード仕様に変換
                     reg = reg += r.ToUpper().Replace("*", ".*").Replace("_", ".");
                     regList.Add(reg);
                 }
@@ -59,11 +64,13 @@ namespace jafleet.Controllers
                 IQueryable<AircraftView> query;
                 if(regList.Count == 1)
                 {
+                    //1件の場合はワイルドカードで検索
                     var regex = new Regex("^" + regList[0] + "$");
                     query = context.AircraftView.Where(p => regex.IsMatch(p.RegistrationNumber));
                 }
                 else
                 {
+                    //2件以上の場合はワイルドカード無効でIN検索
                     query = context.AircraftView.Where(p => regList.Contains(p.RegistrationNumber));
                 }
 

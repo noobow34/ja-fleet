@@ -98,7 +98,8 @@
     <script src="~/lib/colorbox/js/jquery.colorbox-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js" integrity="sha256-qoj3D1oB1r2TAdqKTYuWObh01rIVC1Gmw9vWp1+q5xw=" crossorigin="anonymous"></script>
     <script>
-var isLoading = "@Model.IsLoading.ToString().ToLower()";
+var isLoading = true;
+var isDirect = "@Model.IsDirect.ToString().ToLower()";
 var table;
 $(document).ready(function() {
     $('#Airline').multiselect({maxHeight:400,nonSelectedText: '（未選択）'});
@@ -121,6 +122,7 @@ $(document).ready(function() {
                 data : function(d){
                             d.RegistrationNumber = GetRegistrationNumber();
                             d.IsLoading = GetIsLoading();
+                            d.isDirect = GetIsDirect();
                             d.Airline = GetAirline();
                             d.Type = GetType();
                             d.OperationCode = GetOperationCode();
@@ -203,6 +205,10 @@ function GetRegistrationNumber(){
 
 function GetIsLoading(){
     return isLoading;
+}
+
+function GetIsDirect() {
+    return isDirect;
 }
 
 function GetAirline(){

@@ -53,5 +53,7 @@ namespace jafleet.Models
 
         [IgnoreDuringToString]
         public Boolean IsAdmin { get; set; } = false;
+
+        public Boolean IsDirect { get; set; } = false;
     }
 }
