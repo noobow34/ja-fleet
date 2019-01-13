@@ -46,7 +46,7 @@ namespace ja_fleet.Controllers
             var retsb = new StringBuilder();
             foreach(var log in logs)
             {
-                retsb.Append($"【{log.LogDate.Value.ToString("yyyy-MM-dd HH:mm:ss")}】【{LogType.GetLogTypeName(log.LogType)}】{log.LogDetail}{Environment.NewLine}");
+                retsb.Append($"[{log.LogDate.Value.ToString("HH:mm:ss")}][{LogType.GetLogTypeName(log.LogType)}]{log.LogDetail}{Environment.NewLine}");
             }
 
             if(retsb.Length == 0)
@@ -54,7 +54,7 @@ namespace ja_fleet.Controllers
                 retsb.Append($"{id} no log!");
             }
 
-            return retsb.ToString();
+            return retsb.ToString().Replace(", ",Environment.NewLine);
 
         }
     }
