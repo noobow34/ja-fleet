@@ -186,6 +186,16 @@ $(document).ready(function() {
 } );
 
 $('#serach').click(function () {
+    var searchQuery = "?RegistrationNumber=" + GetRegistrationNumber()
+        + "&Airline=" + GetAirline()
+        + "&Type=" + GetType()
+        + "&OperationCode=" + GetOperationCode()
+        + "&WiFiCode=" + GetWiFiCode()
+        + "&RegistrationDate=" + GetRegistrationDate()
+        + "&RegistrationSelection=" + GetRegistrationSelection()
+        + "&Remarks=" + GetRemarks()
+        + "&IsDirect=true";
+    history.pushState(null, null, searchQuery);
     isLoading = false;
     table.ajax.reload();
 })
@@ -226,7 +236,7 @@ function GetRegistrationSelection(){
 }
 
 function GetWiFiCode() {
-    var type = $('#WiFiCode').val() .toString();
+    var type = $('#WiFiCode').val().toString();
     return type.replace(/,/g,'|');
 }
 
