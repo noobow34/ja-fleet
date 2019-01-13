@@ -109,6 +109,34 @@
         $('#WiFiCode').multiselect({ nonSelectedText: '' });
         $('#RemarksList').multiselect();
         $('#RegistrationNumber').tooltip();
+        @if (!string.IsNullOrEmpty(Model.Type))
+        {
+            @:$('#Type').multiselect('select', "@Model.Type".split("|"));
+        }
+        @if (!string.IsNullOrEmpty(Model.Airline))
+        {
+            @:$('#Airline').multiselect('select', "@Model.Airline".split("|"));
+        }
+        @if (!string.IsNullOrEmpty(Model.OperationCode))
+        {
+            @:$('#OperationCode').multiselect('select', "@Model.OperationCode".split("|"));
+        }
+        @if (!string.IsNullOrEmpty(Model.RegistrationSelection))
+        {
+            @:$('#RegistrationSelection').multiselect('select', "@Model.RegistrationSelection".split("|"));
+        }
+        @if (!string.IsNullOrEmpty(Model.WiFiCode))
+        {
+            @:$('#WiFiCode').multiselect('select', "@Model.WiFiCode".split("|"));
+        }
+        @if (!string.IsNullOrEmpty(Model.Remarks))
+        {
+            @:$('#RemarksList').multiselect('select', "@Model.Remarks".split("|"));
+        }
+        @if (!string.IsNullOrEmpty(Model.RegistrationDate))
+        {
+            @:$('#RegistrationDate').val("@Model.RegistrationDate.Replace("/","-")");
+        }
 
         $.extend( $.fn.dataTable.defaults, {
             language: {
