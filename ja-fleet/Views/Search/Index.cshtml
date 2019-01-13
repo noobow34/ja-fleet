@@ -98,155 +98,155 @@
     <script src="~/lib/colorbox/js/jquery.colorbox-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js" integrity="sha256-qoj3D1oB1r2TAdqKTYuWObh01rIVC1Gmw9vWp1+q5xw=" crossorigin="anonymous"></script>
     <script>
-var isLoading = true;
-var isDirect = "@Model.IsDirect.ToString().ToLower()";
-var table;
-$(document).ready(function() {
-    $('#Airline').multiselect({maxHeight:400,nonSelectedText: '（未選択）'});
-    $('#Type').multiselect({maxHeight:400,nonSelectedText: '（未選択）'});
-    $('#OperationCode').multiselect({nonSelectedText: '（未選択）'});
-    $('#RegistrationSelection').multiselect();
-    $('#WiFiCode').multiselect({ nonSelectedText: '' });
-    $('#RemarksList').multiselect();
-    $('#RegistrationNumber').tooltip();
+    var isLoading = true;
+    var isDirect = "@Model.IsDirect.ToString().ToLower()";
+    var table;
+    $(document).ready(function() {
+        $('#Airline').multiselect({ maxHeight: 400, nonSelectedText: '（未選択）' });
+        $('#Type').multiselect({ maxHeight: 400, nonSelectedText: '（未選択）' });
+        $('#OperationCode').multiselect({ nonSelectedText: '（未選択）' });
+        $('#RegistrationSelection').multiselect();
+        $('#WiFiCode').multiselect({ nonSelectedText: '' });
+        $('#RemarksList').multiselect();
+        $('#RegistrationNumber').tooltip();
 
-    $.extend( $.fn.dataTable.defaults, {
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
-        }
-    });
-    table = $('#SerachResult').DataTable({
-        ajax: {url:'/Search/DoSearch',
-                type:'POST',
-                dataType: 'json',
-                data : function(d){
-                            d.RegistrationNumber = GetRegistrationNumber();
-                            d.IsLoading = GetIsLoading();
-                            d.isDirect = GetIsDirect();
-                            d.Airline = GetAirline();
-                            d.Type = GetType();
-                            d.OperationCode = GetOperationCode();
-                            d.RegistrationDate = GetRegistrationDate();
-                            d.RegistrationSelection = GetRegistrationSelection();
-                            d.WiFiCode = GetWiFiCode();
-                            d.Remarks = GetRemarks();
-                        },
-                dataSrc: ''
-        },
-        columns: [
-            {data: 'airlineNameJpShort',className: 'dt-center'},
-            {data: null
-            ,render: function ( data, type, row ) {
-                        if(row.typeDetailName != null){
-                            return row.typeDetailName;
-                        }else{
-                            return row.typeName;
+        $.extend( $.fn.dataTable.defaults, {
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
+            }
+        });
+        table = $('#SerachResult').DataTable({
+            ajax: {url:'/Search/DoSearch',
+                    type:'POST',
+                    dataType: 'json',
+                    data : function(d){
+                                d.RegistrationNumber = GetRegistrationNumber();
+                                d.IsLoading = GetIsLoading();
+                                d.isDirect = GetIsDirect();
+                                d.Airline = GetAirline();
+                                d.Type = GetType();
+                                d.OperationCode = GetOperationCode();
+                                d.RegistrationDate = GetRegistrationDate();
+                                d.RegistrationSelection = GetRegistrationSelection();
+                                d.WiFiCode = GetWiFiCode();
+                                d.Remarks = GetRemarks();
+                            },
+                    dataSrc: ''
+            },
+            columns: [
+                {data: 'airlineNameJpShort',className: 'dt-center'},
+                {data: null
+                ,render: function ( data, type, row ) {
+                            if(row.typeDetailName != null){
+                                return row.typeDetailName;
+                            }else{
+                                return row.typeName;
+                            }
                         }
-                    }
-                , className: 'dt-center'
-            },
-            {data: 'registrationNumber', render: function (data, type, row, meta) {
-                    return '<a href="/Aircraft/Photo/' + data + '">' + data + '</a>';
-                }, className: 'dt-center'
-            },
-            @if (Model.IsAdmin)
-            {
-                @:{data: 'serialNumber', render: function (data, type, row, meta) {
-                   @:return '<a href="/E/' + row.registrationNumber + '">' + data + '</a>';
-                    @:},className: 'dt-center'},
-            }
-            else
-            {
-                @:{data: 'serialNumber', render: function (data, type, row, meta) {
-                    @:return data;
-                    @:},className: 'dt-center'},
-            }
-            {data: 'registerDate',className: 'dt-center'},
-            {data: 'operation',className: 'dt-center'},
-            {data: 'wifi',className: 'dt-center'},
-            {data: 'remarks',className: 'dt-left'}
-        ],
-        createdRow: function( row, data, dataIndex){
-            if(data['updateTime'] != null){
-                var updateTime = moment(data['updateTime']);
-                var today = moment();
-                if(today.diff(updateTime, 'days', true) <= 7){
-                    $(row).css({"background-color":"#FFCCFF"});
+                    , className: 'dt-center'
+                },
+                {data: 'registrationNumber', render: function (data, type, row, meta) {
+                        return '<a href="/Aircraft/Photo/' + data + '">' + data + '</a>';
+                    }, className: 'dt-center'
+                },
+                @if (Model.IsAdmin)
+                {
+                    @:{data: 'serialNumber', render: function (data, type, row, meta) {
+                       @:return '<a href="/E/' + row.registrationNumber + '">' + data + '</a>';
+                        @:},className: 'dt-center'},
                 }
-            }
-        },
-        paging:   false,
-        ordering: false,
-        fixedHeader: true,
-        scrollY: '50vh',
-        scrollX: true,
-        scrollCollapse: true,
-        searching: false
+                else
+                {
+                    @:{data: 'serialNumber', render: function (data, type, row, meta) {
+                        @:return data;
+                        @:},className: 'dt-center'},
+                }
+                {data: 'registerDate',className: 'dt-center'},
+                {data: 'operation',className: 'dt-center'},
+                {data: 'wifi',className: 'dt-center'},
+                {data: 'remarks',className: 'dt-left'}
+            ],
+            createdRow: function( row, data, dataIndex){
+                if(data['updateTime'] != null){
+                    var updateTime = moment(data['updateTime']);
+                    var today = moment();
+                    if(today.diff(updateTime, 'days', true) <= 7){
+                        $(row).css({"background-color":"#FFCCFF"});
+                    }
+                }
+            },
+            paging:   false,
+            ordering: false,
+            fixedHeader: true,
+            scrollY: '50vh',
+            scrollX: true,
+            scrollCollapse: true,
+            searching: false
+        });
+    } );
+
+    $('#serach').click(function () {
+        var searchQuery = "?RegistrationNumber=" + GetRegistrationNumber()
+            + "&Airline=" + GetAirline()
+            + "&Type=" + GetType()
+            + "&OperationCode=" + GetOperationCode()
+            + "&WiFiCode=" + GetWiFiCode()
+            + "&RegistrationDate=" + GetRegistrationDate()
+            + "&RegistrationSelection=" + GetRegistrationSelection()
+            + "&Remarks=" + GetRemarks()
+            + "&IsDirect=true";
+        history.pushState(null, null, searchQuery);
+        isLoading = false;
+        table.ajax.reload();
+    })
+
+    $("#SerachResult").on("click", "a", function (event) {
+        event.preventDefault();
+        $(this).colorbox({ iframe: true, width: "80%", height: "90%" });
     });
-} );
 
-$('#serach').click(function () {
-    var searchQuery = "?RegistrationNumber=" + GetRegistrationNumber()
-        + "&Airline=" + GetAirline()
-        + "&Type=" + GetType()
-        + "&OperationCode=" + GetOperationCode()
-        + "&WiFiCode=" + GetWiFiCode()
-        + "&RegistrationDate=" + GetRegistrationDate()
-        + "&RegistrationSelection=" + GetRegistrationSelection()
-        + "&Remarks=" + GetRemarks()
-        + "&IsDirect=true";
-    history.pushState(null, null, searchQuery);
-    isLoading = false;
-    table.ajax.reload();
-})
+    function GetRegistrationNumber(){
+        return $('#RegistrationNumber').val();
+    }
 
-$("#SerachResult").on("click", "a", function (event) {
-    event.preventDefault();
-    $(this).colorbox({ iframe: true, width: "80%", height: "90%" });
-});
+    function GetIsLoading(){
+        return isLoading;
+    }
 
-function GetRegistrationNumber(){
-    return $('#RegistrationNumber').val();
-}
+    function GetIsDirect() {
+        return isDirect;
+    }
 
-function GetIsLoading(){
-    return isLoading;
-}
+    function GetAirline(){
+        var airline = $('#Airline').val().toString();
+        return airline.replace(/,/g,'|');
+    }
 
-function GetIsDirect() {
-    return isDirect;
-}
+    function GetType(){
+        var type = $('#Type').val() .toString();
+        return type.replace(/,/g,'|');
+    }
 
-function GetAirline(){
-    var airline = $('#Airline').val().toString();
-    return airline.replace(/,/g,'|');
-}
+    function GetRegistrationDate(){
+        return $('#RegistrationDate').val().toString().replace('-','/');
+    }
 
-function GetType(){
-    var type = $('#Type').val() .toString();
-    return type.replace(/,/g,'|');
-}
+    function GetRegistrationSelection(){
+        return $('#RegistrationSelection').val();
+    }
 
-function GetRegistrationDate(){
-    return $('#RegistrationDate').val().toString().replace('-','/');
-}
+    function GetWiFiCode() {
+        var type = $('#WiFiCode').val().toString();
+        return type.replace(/,/g,'|');
+    }
 
-function GetRegistrationSelection(){
-    return $('#RegistrationSelection').val();
-}
+    function GetRemarks(){
+        return $('#RemarksList').val();
+    }
 
-function GetWiFiCode() {
-    var type = $('#WiFiCode').val().toString();
-    return type.replace(/,/g,'|');
-}
-
-function GetRemarks(){
-    return $('#RemarksList').val();
-}
-
-function GetOperationCode(){
-    var operation = $('#OperationCode').val().toString();
-    return operation.replace(/,/g,'|');
-}
+    function GetOperationCode(){
+        var operation = $('#OperationCode').val().toString();
+        return operation.replace(/,/g,'|');
+    }
     </script>
 }
