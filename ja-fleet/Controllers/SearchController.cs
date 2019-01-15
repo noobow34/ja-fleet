@@ -130,7 +130,7 @@ namespace jafleet.Controllers
                 context.SaveChanges();
 
             }
-            return Json(searchResult);
+            return Json(new SearchResult { ResultList = searchResult });
         }
     }
 }
