@@ -136,10 +136,6 @@ namespace jafleet.Controllers
 
                 //検索条件保持用クラスにコピー
                 var sc = new SearchCondition();
-                Mapper.Initialize(cfg =>
-                {
-                    cfg.CreateMap<SearchModel, SearchCondition>();
-                });
                 Mapper.Map(model, sc);
 
                 //検索条件保持用クラスをJsonにシリアライズ
