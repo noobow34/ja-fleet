@@ -5,9 +5,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.9.10" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="ToString.Fody" Version="1.10.2" />
   </ItemGroup>
   <ItemGroup>
@@ -16,7 +18,6 @@
     <Folder Include="wwwroot\lib\bootstrap\locales\" />
     <Folder Include="Views\E\" />
     <Folder Include="Views\Sandbox\" />
-    <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ja-fleet.Commons\ja-fleet.Commons\ja-fleet.Commons.csproj" />

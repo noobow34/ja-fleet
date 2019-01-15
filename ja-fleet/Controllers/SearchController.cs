@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using jafleet.Manager;
 using jafleet.Util;
 using jafleet.Constants;
+using AutoMapper;
 
 namespace jafleet.Controllers
 {
@@ -41,6 +42,7 @@ namespace jafleet.Controllers
             String[] operation;
             String[] wifi;
             String registrationDate;
+            string schash;
 
             if (model.RegistrationNumber == null){
                 //指定されていない場合は全県
@@ -61,6 +63,7 @@ namespace jafleet.Controllers
             }
             using (var context = new jafleetContext())
             {
+                //検索
                 IQueryable<AircraftView> query;
                 if(regList.Count == 1)
                 {
@@ -117,8 +120,9 @@ namespace jafleet.Controllers
                 }
 
                 searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
-                string logDetail = model.ToString() + ",件数：" + searchResult.Length.ToString();
 
+                //ログ
+                string logDetail = model.ToString() + ",件数：" + searchResult.Length.ToString();
                 Log log = new Log
                 {
                     LogDate = DateTime.Now
@@ -127,10 +131,25 @@ namespace jafleet.Controllers
                     ,UserId = CookieUtil.IsAdmin(HttpContext).ToString()
                 };
                 context.Log.Add(log);
+
+                //検索条件保存
+
+                //検索条件保持用クラスにコピー
+                var sc = new SearchCondition();
+                Mapper.Initialize(cfg =>
+                {
+                    cfg.CreateMap<SearchModel, SearchCondition>();
+                });
+                Mapper.Map(model, sc);
+
+                //検索条件保持用クラスをJsonにシリアライズ
+                string scjson = Newtonsoft.Json.JsonConvert.SerializeObject(sc);
+                schash = HashUtil.CalcCRC32(scjson);
+
                 context.SaveChanges();
 
             }
-            return Json(new SearchResult { ResultList = searchResult });
+            return Json(new SearchResult { ResultList = searchResult,SearchConditionKey = schash });
         }
     }
 }
