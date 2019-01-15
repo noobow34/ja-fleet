@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using jafleet.Manager;
 using AutoMapper;
+using jafleet.Models;
 
 namespace jafleet
 {
