@@ -157,6 +157,8 @@ namespace jafleet.Controllers
             //検索条件保持用クラスをJsonにシリアライズ
             string scjson = Newtonsoft.Json.JsonConvert.SerializeObject(scm);
             schash = HashUtil.CalcCRC32(scjson);
+            Boolean isAdmin = CookieUtil.IsAdmin(HttpContext);
+
 
             //検索結果を速く返すためにログと検索条件のDB書き込みは非同期で行う
             Task.Run(() =>
@@ -169,7 +171,7 @@ namespace jafleet.Controllers
                         LogDate = DateTime.Now,
                         LogType = LogType.SEARCH,
                         LogDetail = logDetail,
-                        UserId = CookieUtil.IsAdmin(HttpContext).ToString()
+                        UserId = isAdmin.ToString()
                     };
                     context.Log.Add(log);
 
@@ -185,7 +187,7 @@ namespace jafleet.Controllers
                         };
 
                         //検索回数、検索日時は管理者じゃないい場合のみ
-                        if (!CookieUtil.IsAdmin(HttpContext))
+                        if (isAdmin)
                         {
                             sc.SearchCount = 1;
                             sc.FirstSearchDate = DateTime.Now;
@@ -193,7 +195,7 @@ namespace jafleet.Controllers
                         }
                         context.SearchCondition.Add(sc);
                     }
-                    else if (!CookieUtil.IsAdmin(HttpContext))
+                    else if (isAdmin)
                     {
                         //管理者じゃない場合のみ検索回数、検索日時を更新
                         sc.SearchCount++;
