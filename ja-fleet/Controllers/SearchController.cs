@@ -10,6 +10,7 @@ using jafleet.Util;
 using jafleet.Constants;
 using AutoMapper;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace jafleet.Controllers
 {
@@ -82,7 +83,7 @@ namespace jafleet.Controllers
             {
                 //検索
                 IQueryable<AircraftView> query;
-                if(regList.Count == 1)
+                if (regList.Count == 1)
                 {
                     //1件の場合はワイルドカードで検索
                     var regex = new Regex("^" + regList[0] + "$");
@@ -94,29 +95,37 @@ namespace jafleet.Controllers
                     query = context.AircraftView.Where(p => regList.Contains(p.RegistrationNumber));
                 }
 
-                if (!String.IsNullOrEmpty(model.Airline)){
+                if (!String.IsNullOrEmpty(model.Airline))
+                {
                     airline = model.Airline.Split("|");
                     query = query.Where(p => airline.Contains(p.Airline));
                 }
 
-                if(!String.IsNullOrEmpty(model.Type)){
+                if (!String.IsNullOrEmpty(model.Type))
+                {
                     type = model.Type.Split("|");
                     query = query.Where(p => type.Contains(p.TypeCode));
                 }
 
-                if(!String.IsNullOrEmpty(model.WiFiCode)){
+                if (!String.IsNullOrEmpty(model.WiFiCode))
+                {
                     wifi = model.WiFiCode.Split("|");
                     query = query.Where(p => wifi.Contains(p.WifiCode));
                 }
 
-                if(!String.IsNullOrEmpty(model.RegistrationDate)){
+                if (!String.IsNullOrEmpty(model.RegistrationDate))
+                {
                     registrationDate = model.RegistrationDate;
-                    if(model.RegistrationSelection == "0"){
+                    if (model.RegistrationSelection == "0")
+                    {
                         query = query.Where(p => p.RegisterDate.StartsWith(registrationDate));
-                    }else if(model.RegistrationSelection == "1"){
+                    }
+                    else if (model.RegistrationSelection == "1")
+                    {
                         registrationDate += "zzz";
                         query = query.Where(p => p.RegisterDate.CompareTo(registrationDate) <= 0);
-                    }else if (model.RegistrationSelection == "2")
+                    }
+                    else if (model.RegistrationSelection == "2")
                     {
                         registrationDate += "zzz";
                         query = query.Where(p => p.RegisterDate.CompareTo(registrationDate) >= 0);
@@ -124,71 +133,78 @@ namespace jafleet.Controllers
 
                 }
 
-                if(!String.IsNullOrEmpty(model.OperationCode)){
+                if (!String.IsNullOrEmpty(model.OperationCode))
+                {
                     operation = model.OperationCode.Split("|");
                     query = query.Where(p => operation.Contains(p.OperationCode));
                 }
 
-                if(model.Remarks == "1"){
+                if (model.Remarks == "1")
+                {
                     query = query.Where(p => String.IsNullOrEmpty(p.Remarks));
-                }else if (model.Remarks == "2")
+                }
+                else if (model.Remarks == "2")
                 {
                     query = query.Where(p => !String.IsNullOrEmpty(p.Remarks));
                 }
 
                 searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
-
-                //ログ
-                string logDetail = model.ToString() + ",件数：" + searchResult.Length.ToString();
-                Log log = new Log
-                {
-                    LogDate = DateTime.Now
-                    ,LogType = LogType.SEARCH
-                    ,LogDetail = logDetail
-                    ,UserId = CookieUtil.IsAdmin(HttpContext).ToString()
-                };
-                context.Log.Add(log);
-
-                //検索条件保存
-
-                //検索条件保持用クラスにコピー
-                var scm = new SearchConditionInModel();
-                Mapper.Map(model, scm);
-
-                //検索条件保持用クラスをJsonにシリアライズ
-                string scjson = Newtonsoft.Json.JsonConvert.SerializeObject(scm);
-                schash = HashUtil.CalcCRC32(scjson);
-
-                var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
-                if(sc == null)
-                {
-                    sc = new SearchCondition
-                    {
-                        SearchConditionKey = schash,
-                        SearchConditionJson = scjson,
-                        SearchCount = 0
-                    };
-
-                    //検索回数、検索日時は管理者じゃないい場合のみ
-                    if (!CookieUtil.IsAdmin(HttpContext))
-                    {
-                        sc.SearchCount = 1;
-                        sc.FirstSearchDate = DateTime.Now;
-                        sc.LastSearchDate = sc.FirstSearchDate;
-                    }
-                    context.SearchCondition.Add(sc);
-                }
-                else　if(!CookieUtil.IsAdmin(HttpContext))
-                {
-                    //管理者じゃない場合のみ検索回数、検索日時を更新
-                    sc.SearchCount++;
-                    sc.LastSearchDate = sc.FirstSearchDate;
-
-                }
-
-                context.SaveChanges();
-
             }
+            //検索条件保持用クラスにコピー
+            var scm = new SearchConditionInModel();
+            Mapper.Map(model, scm);
+
+            //検索条件保持用クラスをJsonにシリアライズ
+            string scjson = Newtonsoft.Json.JsonConvert.SerializeObject(scm);
+            schash = HashUtil.CalcCRC32(scjson);
+
+            //検索結果を速く返すためにログと検索条件のDB書き込みは非同期で行う
+            Task.Run(() =>
+            {
+                using (var context = new jafleetContext()) {
+                    //ログ
+                    string logDetail = model.ToString() + ",件数：" + searchResult.Length.ToString();
+                    Log log = new Log
+                    {
+                        LogDate = DateTime.Now,
+                        LogType = LogType.SEARCH,
+                        LogDetail = logDetail,
+                        UserId = CookieUtil.IsAdmin(HttpContext).ToString()
+                    };
+                    context.Log.Add(log);
+
+                    //検索条件保存
+                    var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
+                    if (sc == null)
+                    {
+                        sc = new SearchCondition
+                        {
+                            SearchConditionKey = schash,
+                            SearchConditionJson = scjson,
+                            SearchCount = 0
+                        };
+
+                        //検索回数、検索日時は管理者じゃないい場合のみ
+                        if (!CookieUtil.IsAdmin(HttpContext))
+                        {
+                            sc.SearchCount = 1;
+                            sc.FirstSearchDate = DateTime.Now;
+                            sc.LastSearchDate = sc.FirstSearchDate;
+                        }
+                        context.SearchCondition.Add(sc);
+                    }
+                    else if (!CookieUtil.IsAdmin(HttpContext))
+                    {
+                        //管理者じゃない場合のみ検索回数、検索日時を更新
+                        sc.SearchCount++;
+                        sc.LastSearchDate = sc.FirstSearchDate;
+
+                    }
+
+                    context.SaveChanges();
+                }
+            });
+
             return Json(new SearchResult { ResultList = searchResult,SearchConditionKey = schash });
         }
     }
