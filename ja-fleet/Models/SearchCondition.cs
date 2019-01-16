@@ -2,7 +2,6 @@
 
 namespace jafleet.Models
 {
-    [ToString]
     public class SearchCondition
     {
         public String RegistrationNumber { get; set; }
