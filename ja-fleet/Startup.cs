@@ -18,7 +18,8 @@ namespace jafleet
             MasterManager.ReadAll();
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<SearchModel, SearchCondition>();
+                cfg.CreateMap<SearchModel, SearchConditionInModel>();
+                cfg.CreateMap<SearchConditionInModel, SearchModel>();
             });
 
         }

@@ -159,7 +159,16 @@
                                 d.WiFiCode = GetWiFiCode();
                                 d.Remarks = GetRemarks();
                             },
-                    dataSrc: 'resultList'
+                dataSrc: function (d) {
+                    if (d.resultList == null) {
+                        return [];
+                    } else {
+                        if (d.searchConditionKey != null && GetIsDirect() == "false") {
+                            history.pushState(null, null, "?sc=" + d.searchConditionKey);
+                        }
+                        return d.resultList;
+                    }
+                    }
             },
             columns: [
                 {data: 'airlineNameJpShort',className: 'dt-center'},
@@ -214,16 +223,6 @@
     } );
 
     $('#serach').click(function () {
-        var searchQuery = "?RegistrationNumber=" + GetRegistrationNumber()
-            + "&Airline=" + GetAirline()
-            + "&Type=" + GetType()
-            + "&OperationCode=" + GetOperationCode()
-            + "&WiFiCode=" + GetWiFiCode()
-            + "&RegistrationDate=" + GetRegistrationDate()
-            + "&RegistrationSelection=" + GetRegistrationSelection()
-            + "&Remarks=" + GetRemarks()
-            + "&IsDirect=true";
-        history.pushState(null, null, searchQuery);
         isLoading = false;
         table.ajax.reload();
     })

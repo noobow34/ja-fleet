@@ -9,13 +9,14 @@ using jafleet.Manager;
 using jafleet.Util;
 using jafleet.Constants;
 using AutoMapper;
+using Newtonsoft.Json;
 
 namespace jafleet.Controllers
 {
     public class SearchController : Controller
     {
 
-        public IActionResult Index(SearchModel model)
+        public IActionResult Index(SearchModel model,[FromQuery]string sc)
         {
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
@@ -25,7 +26,23 @@ namespace jafleet.Controllers
                 model.TypeList = MasterManager.Type;
                 model.OperationList = MasterManager.Operation;
                 model.WiFiList = MasterManager.Wifi;
+
+                if (!string.IsNullOrEmpty(sc))
+                {
+                    //GETパラメーターで検索条件キーが指定されたら
+                    //保存されている検索条件を取得
+                    var sce = context.SearchCondition.Where(e => e.SearchConditionKey == sc).FirstOrDefault();
+                    if (sce != null)
+                    {
+                        //取得したjsonから復元
+                        var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(sce.SearchConditionJson);
+                        //modelにコピー
+                        Mapper.Map(scm, model);
+                        model.IsDirect = true;
+                    }
+                }
             }
+
             return View(model);
         }
 
@@ -135,12 +152,40 @@ namespace jafleet.Controllers
                 //検索条件保存
 
                 //検索条件保持用クラスにコピー
-                var sc = new SearchCondition();
-                Mapper.Map(model, sc);
+                var scm = new SearchConditionInModel();
+                Mapper.Map(model, scm);
 
                 //検索条件保持用クラスをJsonにシリアライズ
-                string scjson = Newtonsoft.Json.JsonConvert.SerializeObject(sc);
+                string scjson = Newtonsoft.Json.JsonConvert.SerializeObject(scm);
                 schash = HashUtil.CalcCRC32(scjson);
+
+                var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
+                if(sc == null)
+                {
+                    sc = new SearchCondition
+                    {
+                        SearchConditionKey = schash,
+                        SearchConditionJson = scjson,
+                        SearchCount = 0
+                    };
+
+                    //検索回数、検索日時は管理者じゃないい場合のみ
+                    if (!CookieUtil.IsAdmin(HttpContext))
+                    {
+                        sc.SearchCount = 1;
+                        sc.FirstSearchDate = DateTime.Now;
+                        sc.LastSearchDate = sc.FirstSearchDate;
+                    }
+                    context.SearchCondition.Add(sc);
+                }
+                else　if(!CookieUtil.IsAdmin(HttpContext))
+                {
+                    //管理者じゃない場合のみ検索回数、検索日時を更新
+                    sc.SearchCount++;
+                    sc.FirstSearchDate = DateTime.Now;
+                    sc.LastSearchDate = sc.FirstSearchDate;
+
+                }
 
                 context.SaveChanges();
 
