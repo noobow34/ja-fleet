@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Force.Crc32;
+using System;
 using System.Text;
 
 namespace jafleet.Util
@@ -13,7 +14,7 @@ namespace jafleet.Util
         public static string CalcCRC32(string srcStr)
         {
             byte[] bytes = new UTF8Encoding().GetBytes(srcStr);
-            uint crc32 = new CRC32().Calc(bytes);
+            uint crc32 = Crc32CAlgorithm.Compute(bytes);
 
             return Convert.ToString(crc32, 16);
         }
