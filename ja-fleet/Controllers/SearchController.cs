@@ -187,7 +187,7 @@ namespace jafleet.Controllers
                         };
 
                         //検索回数、検索日時は管理者じゃないい場合のみ
-                        if (isAdmin)
+                        if (!isAdmin)
                         {
                             sc.SearchCount = 1;
                             sc.FirstSearchDate = DateTime.Now;
@@ -195,7 +195,7 @@ namespace jafleet.Controllers
                         }
                         context.SearchCondition.Add(sc);
                     }
-                    else if (isAdmin)
+                    else if (!isAdmin)
                     {
                         //管理者じゃない場合のみ検索回数、検索日時を更新
                         sc.SearchCount++;
