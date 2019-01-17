@@ -199,7 +199,7 @@ namespace jafleet.Controllers
                     {
                         //管理者じゃない場合のみ検索回数、検索日時を更新
                         sc.SearchCount++;
-                        sc.LastSearchDate = sc.FirstSearchDate;
+                        sc.LastSearchDate = DateTime.Now;
 
                     }
 
