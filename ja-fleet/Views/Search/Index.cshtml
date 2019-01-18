@@ -160,17 +160,11 @@
                                 d.Remarks = GetRemarks();
                             },
                 dataSrc: function (d) {
-                    var ret;
-                    if (d.resultList == null) {
-                        ret = [];
-                    } else {
-                        if (d.searchConditionKey != null && !GetIsDirect()) {
-                            history.pushState(null, null, "?sc=" + d.searchConditionKey);
-                        }
-                        ret = d.resultList;
+                    if (d.searchConditionKey != "" && !GetIsDirect()) {
+                        history.pushState(null, null, "?sc=" + d.searchConditionKey);
                     }
                     isDirect = false;
-                    return ret;
+                    return d.resultList;
                     }
             },
             columns: [
