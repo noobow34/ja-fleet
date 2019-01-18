@@ -36,7 +36,7 @@ namespace jafleet.Controllers
                     if (sce != null)
                     {
                         //取得したjsonから復元
-                        var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(sce.SearchConditionJson);
+                        var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(sce.SearchConditionJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
                         //modelにコピー
                         Mapper.Map(scm, model);
                         model.IsDirect = true;
