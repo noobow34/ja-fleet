@@ -99,7 +99,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js" integrity="sha256-qoj3D1oB1r2TAdqKTYuWObh01rIVC1Gmw9vWp1+q5xw=" crossorigin="anonymous"></script>
     <script>
     var isLoading = true;
-    var isDirect = "@Model.IsDirect.ToString().ToLower()";
+    var isDirect = @Model.IsDirect.ToString().ToLower();
     var table;
     $(document).ready(function() {
         $('#Airline').multiselect({ maxHeight: 400, nonSelectedText: '（未選択）' });
@@ -160,14 +160,17 @@
                                 d.Remarks = GetRemarks();
                             },
                 dataSrc: function (d) {
+                    var ret;
                     if (d.resultList == null) {
-                        return [];
+                        ret = [];
                     } else {
-                        if (d.searchConditionKey != null && GetIsDirect() == "false") {
+                        if (d.searchConditionKey != null && !GetIsDirect()) {
                             history.pushState(null, null, "?sc=" + d.searchConditionKey);
                         }
-                        return d.resultList;
+                        ret = d.resultList;
                     }
+                    isDirect = false;
+                    return ret;
                     }
             },
             columns: [
