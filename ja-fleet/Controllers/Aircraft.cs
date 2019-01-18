@@ -5,7 +5,7 @@ using jafleet.Models;
 using jafleet.EF;
 using jafleet.Manager;
 using System.Net.Http;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using System;
 using jafleet.Util;
 using jafleet.Constants;
@@ -110,7 +110,7 @@ namespace jafleet.Controllers
 
             if(redirectUrl == null){
                 var parser = new HtmlParser();
-                var htmlDocument = parser.Parse(await HttpClientManager.GetInstance().GetStringAsync(jetphotoUrl));
+                var htmlDocument = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(jetphotoUrl));
                 var photos = htmlDocument.GetElementsByClassName("result__photoLink");
                 if (photos.Length != 0)
                 {
