@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using jafleet.EF;
-using jafleet.Constants;
+using jafleet.Commons.EF;
+using jafleet.Commons.Constants;
 
 namespace jafleet.Controllers
 {

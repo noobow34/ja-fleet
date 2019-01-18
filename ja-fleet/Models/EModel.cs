@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using jafleet.EF;
+using jafleet.Commons.EF;
 using System.Dynamic;
-using jafleet.Constants;
+using jafleet.Commons.Constants;
 
 namespace jafleet.Models
 {
@@ -16,10 +16,10 @@ namespace jafleet.Models
         public Airline[] AirlineList { get; set; }
 
         [Display(Name = "型式")]
-        public jafleet.EF.Type[] TypeList { get; set; }
+        public jafleet.Commons.EF.Type[] TypeList { get; set; }
 
         [Display(Name = "詳細型式")]
-        public jafleet.EF.TypeDetail[] TypeDetailList { get; set; }
+        public jafleet.Commons.EF.TypeDetail[] TypeDetailList { get; set; }
 
         [Display(Name = "運用状況")]
         public Code[] OperationList { get; set; }

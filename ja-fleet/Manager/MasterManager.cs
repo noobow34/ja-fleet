@@ -1,6 +1,6 @@
 ﻿using System;
-using jafleet.EF;
-using jafleet.Constants;
+using jafleet.Commons.EF;
+using jafleet.Commons.Constants;
 using System.Linq;
 
 namespace jafleet.Manager
@@ -163,8 +163,8 @@ namespace jafleet.Manager
             }
         }
 
-        private static jafleet.EF.Type[] _type = null;
-        public static jafleet.EF.Type[] Type
+        private static jafleet.Commons.EF.Type[] _type = null;
+        public static jafleet.Commons.EF.Type[] Type
         {
             get
             {

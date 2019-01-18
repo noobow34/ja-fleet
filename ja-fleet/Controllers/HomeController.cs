@@ -4,8 +4,8 @@ using jafleet.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using System;
 using jafleet.Util;
-using jafleet.EF;
-using jafleet.Constants;
+using jafleet.Commons.EF;
+using jafleet.Commons.Constants;
 
 namespace jafleet.Controllers
 {

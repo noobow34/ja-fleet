@@ -3,9 +3,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Manager;
 using jafleet.Models;
-using jafleet.EF;
+using jafleet.Commons.EF;
 using jafleet.Util;
-using jafleet.Constants;
+using jafleet.Commons.Constants;
 
 namespace jafleet.Controllers
 {

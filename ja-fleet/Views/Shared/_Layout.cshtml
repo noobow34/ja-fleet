@@ -1,5 +1,5 @@
 ﻿@using jafleet.Manager;
-@using jafleet.EF;
+@using jafleet.Commons.EF;
 @using jafleet.Util;
 
 <!DOCTYPE html>
@@ -83,7 +83,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">型式別<span class="caret"></span></a>
                             <ul class="dropdown-menu scrollable-menu">
-                                @foreach (jafleet.EF.Type a in MasterManager.Type)
+                                @foreach (jafleet.Commons.EF.Type a in MasterManager.Type)
                                 {
                                     <li><a asp-area="" asp-controller="Aircraft" asp-action="Type" asp-route-id="@a.TypeCode">@a.TypeName</a></li>
                                 }

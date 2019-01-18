@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using jafleet.EF;
+using jafleet.Commons.EF;
 
 namespace jafleet.Models
 {
@@ -16,7 +16,7 @@ namespace jafleet.Models
         public String Airline { get; set; } = String.Empty;
 
         [Display(Name = "型式")]
-        public jafleet.EF.Type[] TypeList { get; set; }
+        public jafleet.Commons.EF.Type[] TypeList { get; set; }
         public String Type { get; set; } = String.Empty;
 
         [Display(Name = "運用状況")]

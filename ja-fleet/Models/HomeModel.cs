@@ -1,4 +1,4 @@
-﻿using jafleet.EF;
+﻿using jafleet.Commons.EF;
 using System.Collections.Generic;
 
 namespace jafleet.Models

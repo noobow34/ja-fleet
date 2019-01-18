@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using jafleet.EF;
+using jafleet.Commons.EF;
 
 namespace jafleet.Controllers
 {
