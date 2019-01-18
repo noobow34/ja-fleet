@@ -155,7 +155,7 @@ namespace jafleet.Controllers
             Mapper.Map(model, scm);
 
             //検索条件保持用クラスをJsonにシリアライズ
-            string scjson = Newtonsoft.Json.JsonConvert.SerializeObject(scm);
+            string scjson = scm.ToString();
             schash = HashUtil.CalcCRC32(scjson);
             Boolean isAdmin = CookieUtil.IsAdmin(HttpContext);
 
@@ -165,7 +165,7 @@ namespace jafleet.Controllers
             {
                 using (var context = new jafleetContext()) {
                     //ログ
-                    string logDetail = model.ToString() + ",件数：" + searchResult.Length.ToString();
+                    string logDetail = scjson + $"{model.IsDirect},件数：" + searchResult.Length.ToString();
                     Log log = new Log
                     {
                         LogDate = DateTime.Now,

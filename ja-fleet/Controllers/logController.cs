@@ -54,7 +54,7 @@ namespace ja_fleet.Controllers
                 retsb.Append($"{id} no log!");
             }
 
-            return retsb.ToString().Replace(", ",Environment.NewLine);
+            return retsb.ToString();
 
         }
     }
