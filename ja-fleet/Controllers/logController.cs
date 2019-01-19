@@ -35,8 +35,6 @@ namespace ja_fleet.Controllers
                 targetDate = DateTime.Now.AddDays(-1).Date;
             }
 
-            DateTime target2 = targetDate.Value.AddDays(1);
-
             List<Log> logs = null;
             using (var context = new jafleetContext())
             {
