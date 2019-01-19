@@ -40,7 +40,7 @@ namespace ja_fleet.Controllers
             List<Log> logs = null;
             using (var context = new jafleetContext())
             {
-                logs = context.Log.Where(q => q.LogDate.Value >= targetDate && q.LogDate.Value < target2 && q.UserId != "True" && q.UserId != "U68e05e69b6acbaaf565bc616fdef695d").OrderByDescending(q => q.LogDate).ToList();
+                logs = context.Log.Where(q => q.LogDateYyyyMmDd == targetDate.Value.ToString("yyyyMMdd") && q.IsAdmin == "0").OrderByDescending(q => q.LogId).ToList();
             }
 
             var retsb = new StringBuilder();
