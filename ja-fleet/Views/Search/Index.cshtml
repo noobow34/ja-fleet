@@ -94,6 +94,17 @@
         </tr>
     </thead>
 </table>
+<div class="modal fade" id="emptyresult" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                検索結果は0件です。
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section ScriptsPartial{
     <script src="~/lib/colorbox/js/jquery.colorbox-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js" integrity="sha256-qoj3D1oB1r2TAdqKTYuWObh01rIVC1Gmw9vWp1+q5xw=" crossorigin="anonymous"></script>
@@ -164,6 +175,9 @@
                         history.pushState(null, null, "?sc=" + d.searchConditionKey);
                     }
                     isDirect = false;
+                    if (d.resultList.length == 0 && !isLoading) {
+                        $("#emptyresult").modal();
+                    }
                     return d.resultList;
                     }
             },
