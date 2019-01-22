@@ -59,8 +59,7 @@ namespace jafleet.Controllers
             String[] type;
             String[] operation;
             String[] wifi;
-            String registrationDate;
-            string schash;
+            String registrationDate;;
 
             if (model.RegistrationNumber == null){
                 //指定されていない場合は全県
@@ -156,9 +155,9 @@ namespace jafleet.Controllers
 
             //検索条件保持用クラスをJsonにシリアライズ
             string scjson = scm.ToString();
-            schash = HashUtil.CalcCRC32(scjson);
+            string schash = HashUtil.CalcCRC32(scjson);
+            //Cookieの値はここで退避しておかないと、↓のTask.Runではちゃんと取れなくなる
             Boolean isAdmin = CookieUtil.IsAdmin(HttpContext);
-
 
             //検索結果を速く返すためにログと検索条件のDB書き込みは非同期で行う
             Task.Run(() =>
