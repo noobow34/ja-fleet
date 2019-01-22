@@ -200,7 +200,11 @@ namespace jafleet.Controllers
                         //管理者じゃない場合のみ検索回数、検索日時を更新
                         sc.SearchCount++;
                         sc.LastSearchDate = DateTime.Now;
-
+                        if(sc.FirstSearchDate == null)
+                        {
+                            //初回の検索が管理者だった場合に初回検索日時がセットされてないのでここでセット
+                            sc.FirstSearchDate = sc.LastSearchDate;
+                        }
                     }
 
                     context.SaveChanges();
