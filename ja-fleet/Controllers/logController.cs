@@ -46,6 +46,7 @@ namespace ja_fleet.Controllers
             logs = _context.Log.Where(q => q.LogDateYyyyMmDd == targetDate.Value.ToString("yyyyMMdd") && q.IsAdmin == "0").OrderByDescending(q => q.LogId).ToList();
 
             var retsb = new StringBuilder();
+            retsb.Append(DateTime.Now.ToString($"--HH:mm:ss--{Environment.NewLine}"));
             foreach(var log in logs)
             {
                 retsb.Append($"[{log.LogDate.Value.ToString("HH:mm:ss")}][{LogType.GetLogTypeName(log.LogType)}]{log.LogDetail}{Environment.NewLine}");
