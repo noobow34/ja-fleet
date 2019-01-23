@@ -4,14 +4,15 @@ using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace ja_fleet.Controllers
 {
     public class lineController : Controller
     {
+
         public IActionResult Index()
         {
+            //速くリダイレクトするため、ログの書き込みは非同期
             Task.Run(() => {
                 var lineLinklog = new Log
                 {
@@ -19,7 +20,7 @@ namespace ja_fleet.Controllers
                     UserId = CookieUtil.IsAdmin(HttpContext).ToString(),
                     LogDate = DateTime.Now
                 };
-                using (var context = new jafleetContext())
+                using(var context = new jafleetContext())
                 {
                     context.Log.Add(lineLinklog);
                     context.SaveChanges();

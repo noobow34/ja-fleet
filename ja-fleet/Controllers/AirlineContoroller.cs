@@ -11,15 +11,21 @@ namespace jafleet.Controllers
     [ApiController]
     public class AirlineController : Controller
     {
+
+        private readonly jafleetContext _context;
+
+        public AirlineController(jafleetContext context)
+        {
+            _context = context;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
             List<AircraftView> list;
-            using (var context = new jafleetContext())
-            {
-                list = context.AircraftView.ToList();
-            }
+            list = _context.AircraftView.ToList();
+
             return Json(list);
         }
 
@@ -30,19 +36,17 @@ namespace jafleet.Controllers
             List<AircraftView> list;
             String[] ids = id.ToUpper().Split(",");
             id2 = id2?.ToUpper();
-            using (var context = new jafleetContext())
+            var q = _context.AircraftView.Where(p => ids.Contains(p.Airline));
+            if (!string.IsNullOrEmpty(id2))
             {
-                var q = context.AircraftView.Where(p => ids.Contains(p.Airline));
-                if (!string.IsNullOrEmpty(id2))
-                {
-                    q = q.Where(p => p.TypeCode == id2);
-                }
-                if (!includeRetire)
-                {
-                    q = q.Where(p => p.OperationCode != OperationCode.RETIRE_UNREGISTERED);
-                }
-                list = q.OrderBy(p => p.DisplayOrder).ToList();
+                q = q.Where(p => p.TypeCode == id2);
             }
+            if (!includeRetire)
+            {
+                q = q.Where(p => p.OperationCode != OperationCode.RETIRE_UNREGISTERED);
+            }
+            list = q.OrderBy(p => p.DisplayOrder).ToList();
+
             return Json(list);
         }
 

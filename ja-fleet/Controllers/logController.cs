@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Util;
@@ -12,6 +11,14 @@ namespace ja_fleet.Controllers
 {
     public class logController : Controller
     {
+
+        private readonly jafleetContext _context;
+
+        public logController(jafleetContext context)
+        {
+            _context = context;
+        }
+
         public String Index(string id)
         {
             DateTime? targetDate = null;
@@ -36,10 +43,7 @@ namespace ja_fleet.Controllers
             }
 
             List<Log> logs = null;
-            using (var context = new jafleetContext())
-            {
-                logs = context.Log.Where(q => q.LogDateYyyyMmDd == targetDate.Value.ToString("yyyyMMdd") && q.IsAdmin == "0").OrderByDescending(q => q.LogId).ToList();
-            }
+            logs = _context.Log.Where(q => q.LogDateYyyyMmDd == targetDate.Value.ToString("yyyyMMdd") && q.IsAdmin == "0").OrderByDescending(q => q.LogId).ToList();
 
             var retsb = new StringBuilder();
             foreach(var log in logs)

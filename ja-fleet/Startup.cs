@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using jafleet.Manager;
 using AutoMapper;
 using jafleet.Models;
+using jafleet.Commons.EF;
 
 namespace jafleet
 {
@@ -36,6 +37,7 @@ namespace jafleet
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDbContext<jafleetContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

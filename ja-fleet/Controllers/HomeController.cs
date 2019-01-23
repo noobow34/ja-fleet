@@ -11,11 +11,12 @@ namespace jafleet.Controllers
 {
     public class HomeController : Controller
     {
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment = null;
 
-        public HomeController(Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment)
+        private readonly jafleetContext _context;
+
+        public HomeController(jafleetContext context)
         {
-            this._hostingEnvironment = hostingEnvironment;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -38,11 +39,9 @@ namespace jafleet.Controllers
                 ,LogDetail = ex.ToString()
                 ,UserId = CookieUtil.IsAdmin(HttpContext).ToString()
             };
-            using (var context = new jafleetContext())
-            {
-                context.Log.Add(log);
-                context.SaveChanges();
-            }
+            _context.Log.Add(log);
+            _context.SaveChanges();
+
             return View(model);
         }
     }
