@@ -21,7 +21,10 @@ namespace jafleet.Controllers
 
         public IActionResult Index(String id,EditModel model)
         {
-            model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
+            if (!CookieUtil.IsAdmin(HttpContext))
+            {
+                return NotFound();
+            }
 
             model.AirlineList = MasterManager.AllAirline;
             model.TypeList = MasterManager.Type;

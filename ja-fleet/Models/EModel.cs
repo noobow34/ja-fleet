@@ -27,8 +27,6 @@ namespace jafleet.Models
         [Display(Name = "WiFi")]
         public Code[] WiFiList { get; set; }
 
-        public Boolean IsAdmin { get; set; } = false;
-
         [Display(Name = "更新日付を更新しない")]
         public Boolean NotUpdateDate { get; set; } = false;
 
