@@ -2,6 +2,7 @@
 using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace jafleet.Manager
 {
@@ -19,6 +20,7 @@ namespace jafleet.Manager
                 _type = context.Type.OrderBy(p => p.DisplayOrder).ToArray();
                 _operation = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToArray();
                 _wifi = context.Code.Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
+                _adminUser = context.AdminUser.Select(e => e.UserId).ToList();
             }
         }
 
@@ -180,6 +182,26 @@ namespace jafleet.Manager
             set
             {
                 _type = value;
+            }
+        }
+
+        private static List<string> _adminUser = null;
+        public static List<string> AdminUser
+        {
+            get
+            {
+                if (_adminUser == null)
+                {
+                    using (var context = new jafleetContext())
+                    {
+                        _adminUser = context.AdminUser.Select(e => e.UserId).ToList();
+                    }
+                }
+                return _adminUser;
+            }
+            set
+            {
+                _adminUser = value;
             }
         }
     }
