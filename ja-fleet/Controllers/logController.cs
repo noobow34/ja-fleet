@@ -19,14 +19,14 @@ namespace ja_fleet.Controllers
             _context = context;
         }
 
-        public String Index(string id)
+        public IActionResult Index(string id)
         {
-            DateTime? targetDate = null;
             if (!CookieUtil.IsAdmin(HttpContext))
             {
-                return string.Empty;
+                return NotFound();
             }
 
+            DateTime? targetDate = null;
             if (string.IsNullOrEmpty(id))
             {
                 targetDate = DateTime.Now.Date;
@@ -57,7 +57,7 @@ namespace ja_fleet.Controllers
                 retsb.Append($"{id} no log!");
             }
 
-            return retsb.ToString();
+            return Content(retsb.ToString());
 
         }
     }
