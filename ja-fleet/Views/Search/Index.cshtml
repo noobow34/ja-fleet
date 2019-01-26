@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "検索";
+    ViewData["TableId"] = "SerachResult";
 }
 @model SearchModel
 @section HeadPartial{
@@ -78,22 +79,7 @@
         </div>
     </div>
 </div>
-<font color="#FFCCFF">背景ピンク■</font>は更新1週間以内のデータです。<br />
-「退役（抹消）」のデータは2018/09以降に抹消されたもののみ対応しています。
-<table id="SerachResult" class="display cell-border compact dt-body-center nowrap" style="width:100%">
-    <thead>
-        <tr>
-            <th>航空会社</th>
-            <th>機種</th>
-            <th>機体記号</th>
-            <th>製造番号</th>
-            <th>登録年月日</th>
-            <th>運用</th>
-            <th>Wi-Fi</th>
-            <th>備考（特別塗装など）</th>
-        </tr>
-    </thead>
-</table>
+@await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml", ViewData)
 <div class="modal fade" id="emptyresult" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -106,7 +92,6 @@
         </div>
     </div>
 </div>
-@await Html.PartialAsync("/Views/Shared/PhotoMessages.cshtml")
 @section ScriptsPartial{
     <script src="~/lib/colorbox/js/jquery.colorbox-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js" integrity="sha256-qoj3D1oB1r2TAdqKTYuWObh01rIVC1Gmw9vWp1+q5xw=" crossorigin="anonymous"></script>
@@ -114,6 +99,7 @@
     var isLoading = true;
     var isDirect = @Model.IsDirect.ToString().ToLower();
     var table;
+    var gridheight = '50vh';
     $(document).ready(function() {
         $('#Airline').multiselect({ maxHeight: 400, nonSelectedText: '（未選択）' });
         $('#Type').multiselect({ maxHeight: 400, nonSelectedText: '（未選択）' });
@@ -151,11 +137,8 @@
             @:$('#RegistrationDate').val("@Model.RegistrationDate.Replace("/","-")");
         }
 
-        $.extend( $.fn.dataTable.defaults, {
-            language: {
-                url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
-            }
-        });
+        datatablesLangInit();
+
         table = $('#SerachResult').DataTable({
             ajax: {url:'/Search/DoSearch',
                     type:'POST',
@@ -183,59 +166,7 @@
                     return d.resultList;
                     }
             },
-            columns: [
-                {data: 'airlineNameJpShort',className: 'dt-center'},
-                {data: null
-                ,render: function ( data, type, row ) {
-                            if(row.typeDetailName != null){
-                                return row.typeDetailName;
-                            }else{
-                                return row.typeName;
-                            }
-                        }
-                    , className: 'dt-center'
-                },
-                {data: 'registrationNumber', render: function (data, type, row, meta) {
-                    if (row.operationCode == "0") {
-                        return data;
-                    } else {
-                        return "<a href=\"javascript:linkJetphotos('" + data + "')\">" + data + "</a>";
-                    }
-                    }, className: 'dt-center'
-                },
-                @if (Model.IsAdmin)
-                {
-                    @:{data: 'serialNumber', render: function (data, type, row, meta) {
-                       @:return '<a href="/E/' + row.registrationNumber + '">' + data + '</a>';
-                        @:},className: 'dt-center'},
-                }
-                else
-                {
-                    @:{data: 'serialNumber', render: function (data, type, row, meta) {
-                        @:return data;
-                        @:},className: 'dt-center'},
-                }
-                {data: 'registerDate',className: 'dt-center'},
-                {data: 'operation',className: 'dt-center'},
-                {data: 'wifi',className: 'dt-center'},
-                {data: 'remarks',className: 'dt-left'}
-            ],
-            createdRow: function( row, data, dataIndex){
-                if(data['updateTime'] != null){
-                    var updateTime = moment(data['updateTime']);
-                    var today = moment();
-                    if(today.diff(updateTime, 'days', true) <= 7){
-                        $(row).css({"background-color":"#FFCCFF"});
-                    }
-                }
-            },
-            paging:   false,
-            ordering: false,
-            fixedHeader: true,
-            scrollY: '50vh',
-            scrollX: true,
-            scrollCollapse: true,
-            searching: false
+            @await Html.PartialAsync("/Views/Shared/ResultDatatableColumn.cshtml", Model)
         });
     } );
 

@@ -19,22 +19,7 @@
     @Html.CheckBoxFor(model => model.IncludeRetire)
     @Html.LabelFor(model => model.IncludeRetire, new { @class = "control-label" })
 </div>
-@await Html.PartialAsync("/Views/Shared/PhotoMessages.cshtml")
-<font color="#FFCCFF">背景ピンク■</font>は更新1週間以内のデータです。
-<table id="@ViewData["TableId"]" class="display cell-border compact dt-body-center nowrap" style="width:100%">
-    <thead>
-        <tr>
-            <th>航空会社</th>
-            <th>機種</th>
-            <th>機体記号</th>
-            <th>製造番号</th>
-            <th>登録年月日</th>
-            <th>運用</th>
-            <th>Wi-Fi</th>
-            <th>備考（特別塗装など）</th>
-        </tr>
-    </thead>
-</table>
+@await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml", ViewData)
 @section ScriptsPartial{
     <script src="~/lib/colorbox/js/jquery.colorbox-min.js"></script>
     <script>
@@ -46,56 +31,14 @@
             } else {
                 gridheight = '68vh';
             }
-            $.extend( $.fn.dataTable.defaults, {
-                language: {
-                    url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
-                }
-            });
+
+            datatablesLangInit();
+
             table = $('#' + '@ViewData["TableId"]').DataTable({
                 ajax: {url:'@ViewData["api"]?includeRetire=' + getIncludeRetire(),
-                        dataSrc: ''},
-                columns: [
-                    {data: 'airlineNameJpShort',className: 'dt-center'},
-                    {data: null
-                    ,render: function ( data, type, row ) {
-                                if(row.typeDetailName != null){
-                                    return row.typeDetailName;
-                                }else{
-                                    return row.typeName;
-                                }
-                            }
-                    ,className: 'dt-center'},
-                    {
-                        data: 'registrationNumber', render: function (data, type, row, meta) {
-                            if (row.operationCode == "@jafleet.Commons.Constants.OperationCode.RESERVED") {
-                                return data;
-                            } else {
-                                return "<a href=\"javascript:linkJetphotos('" + data + "')\">" + data + "</a>";
-                            }
-                        },className: 'dt-center'},
-                    {data: 'serialNumber',className: 'dt-center'},
-                    {data: 'registerDate',className: 'dt-center'},
-                    {data: 'operation',className: 'dt-center'},
-                    {data: 'wifi',className: 'dt-center'},
-                    {data: 'remarks',className: 'dt-left'}
-                ],
-                createdRow: function( row, data, dataIndex){
-                                if(data['updateTime'] != null){
-                                    var updateTime = moment(data['updateTime']);
-                                    var today = moment();
-                                    if(today.diff(updateTime, 'days', true) <= 7){
-                                        $(row).css({"background-color":"#FFCCFF"});
-                                    }
-                                }
-                    },
-                paging:   false,
-                ordering: false,
-                fixedHeader: true,
-                searching: false,
-                scrollY: gridheight,
-                pageResize: true,
-                scrollX: true,
-                scrollCollapse: true
+                    dataSrc: ''
+                },
+                @await Html.PartialAsync("/Views/Shared/ResultDatatableColumn.cshtml", Model)
             });
         });
 

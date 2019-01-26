@@ -7,5 +7,6 @@ namespace jafleet.Models
     {
         [Display(Name = "2018/09以降の退役（抹消済）も表示")]
         public Boolean IncludeRetire { get; set; }
+        public Boolean IsAdmin { get; set; }
     }
 }

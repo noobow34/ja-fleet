@@ -1,0 +1,53 @@
+﻿columns: [
+    {data: 'airlineNameJpShort',className: 'dt-center'},
+    {data: null
+    ,render: function ( data, type, row ) {
+                if(row.typeDetailName != null){
+                    return row.typeDetailName;
+                }else{
+                    return row.typeName;
+                }
+            }
+        , className: 'dt-center'
+    },
+    {data: 'registrationNumber', render: function (data, type, row, meta) {
+        if (row.operationCode == "0") {
+            return data;
+        } else {
+            return "<a href=\"javascript:linkJetphotos('" + data + "')\">" + data + "</a>";
+        }
+        }, className: 'dt-center'
+    },
+@if (Model.IsAdmin)
+{
+    @:{data: 'serialNumber', render: function (data, type, row, meta) {
+    @:return '<a href="/E/' + row.registrationNumber + '">' + data + '</a>';
+    @:},className: 'dt-center'},
+}
+else
+{
+    @:{data: 'serialNumber', render: function (data, type, row, meta) {
+    @:return data;
+    @:},className: 'dt-center'},
+}
+    {data: 'registerDate',className: 'dt-center'},
+    {data: 'operation',className: 'dt-center'},
+    {data: 'wifi',className: 'dt-center'},
+    {data: 'remarks',className: 'dt-left'}
+],
+    createdRow: function( row, data, dataIndex){
+        if(data['updateTime'] != null){
+            var updateTime = moment(data['updateTime']);
+            var today = moment();
+            if(today.diff(updateTime, 'days', true) <= 7){
+                $(row).css({"background-color":"#FFCCFF"});
+            }
+        }
+    },
+    paging:   false,
+    ordering: false,
+    fixedHeader: true,
+    scrollY: gridheight,
+    scrollX: true,
+    scrollCollapse: true,
+    searching: false

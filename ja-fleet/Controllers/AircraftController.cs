@@ -45,6 +45,7 @@ namespace jafleet.Controllers
             }
 
             model.IncludeRetire = includeRetire;
+            model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
             return View("~/Views/Aircraft/index.cshtml",model);
         }
@@ -67,6 +68,7 @@ namespace jafleet.Controllers
             }
 
             model.IncludeRetire = includeRetire;
+            model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
             return View("~/Views/Aircraft/index.cshtml",model);
         }
@@ -83,6 +85,7 @@ namespace jafleet.Controllers
             ViewData["api"] = "/api/type/" + id;
 
             model.IncludeRetire = includeRetire;
+            model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
             return View("~/Views/Aircraft/index.cshtml",model);
         }
