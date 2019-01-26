@@ -105,23 +105,27 @@ namespace jafleet.Controllers
             redirectUrl = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault()?.LinkUrl;
 
             if(redirectUrl == null){
+                //DBでリンク先が指定されていない場合
                 var parser = new HtmlParser();
                 var htmlDocument = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(jetphotoUrl));
                 var photos = htmlDocument.GetElementsByClassName("result__photoLink");
                 if (photos.Length != 0)
                 {
+                    //Jetphotosに写真があった場合
                     string newestPhotoLink = photos[0].GetAttribute("href");
                     redirectUrl = "https://www.jetphotos.com" + newestPhotoLink;
-                    return Redirect(redirectUrl);
+                    return Content(redirectUrl);
                 }
                 else
                 {
-                    return Redirect(jetphotoUrl);
+                    //Jetphotosに写真がなかった場合
+                    return Content(string.Empty);
                 }
             }
             else
             {
-                return Redirect(redirectUrl);
+                //DBでリンク先が指定されていない場合
+                return Content(redirectUrl);
             }
 
         }

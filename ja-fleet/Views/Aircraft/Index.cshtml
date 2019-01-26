@@ -19,6 +19,7 @@
     @Html.CheckBoxFor(model => model.IncludeRetire)
     @Html.LabelFor(model => model.IncludeRetire, new { @class = "control-label" })
 </div>
+@await Html.PartialAsync("/Views/Shared/PhotoMessages.cshtml")
 <font color="#FFCCFF">背景ピンク■</font>は更新1週間以内のデータです。
 <table id="@ViewData["TableId"]" class="display cell-border compact dt-body-center nowrap" style="width:100%">
     <thead>
@@ -37,75 +38,76 @@
 @section ScriptsPartial{
     <script src="~/lib/colorbox/js/jquery.colorbox-min.js"></script>
     <script>
-var table;
-$(document).ready(function () {
-    var gridheight;
-    if (window.innerHeight < 800) {
-        gridheight = '60vh';
-    } else {
-        gridheight = '68vh';
-    }
-    $.extend( $.fn.dataTable.defaults, {
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
-        }
-    });
-    table = $('#' + '@ViewData["TableId"]').DataTable({
-        ajax: {url:'@ViewData["api"]?includeRetire=' + getIncludeRetire(),
-                dataSrc: ''},
-        columns: [
-            {data: 'airlineNameJpShort',className: 'dt-center'},
-            {data: null
-            ,render: function ( data, type, row ) {
-                        if(row.typeDetailName != null){
-                            return row.typeDetailName;
-                        }else{
-                            return row.typeName;
-                        }
-                    }
-            ,className: 'dt-center'},
-            {
-                data: 'registrationNumber', render: function (data, type, row, meta) {
-                        return '<a href="/Aircraft/Photo/' + data + '">' + data + '</a>';
-                },className: 'dt-center'},
-            {data: 'serialNumber',className: 'dt-center'},
-            {data: 'registerDate',className: 'dt-center'},
-            {data: 'operation',className: 'dt-center'},
-            {data: 'wifi',className: 'dt-center'},
-            {data: 'remarks',className: 'dt-left'}
-        ],
-        createdRow: function( row, data, dataIndex){
-                        if(data['updateTime'] != null){
-                            var updateTime = moment(data['updateTime']);
-                            var today = moment();
-                            if(today.diff(updateTime, 'days', true) <= 7){
-                                $(row).css({"background-color":"#FFCCFF"});
+        var table;
+        $(document).ready(function () {
+            var gridheight;
+            if (window.innerHeight < 800) {
+                gridheight = '60vh';
+            } else {
+                gridheight = '68vh';
+            }
+            $.extend( $.fn.dataTable.defaults, {
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
+                }
+            });
+            table = $('#' + '@ViewData["TableId"]').DataTable({
+                ajax: {url:'@ViewData["api"]?includeRetire=' + getIncludeRetire(),
+                        dataSrc: ''},
+                columns: [
+                    {data: 'airlineNameJpShort',className: 'dt-center'},
+                    {data: null
+                    ,render: function ( data, type, row ) {
+                                if(row.typeDetailName != null){
+                                    return row.typeDetailName;
+                                }else{
+                                    return row.typeName;
+                                }
                             }
-                        }
-            },
-        paging:   false,
-        ordering: false,
-        fixedHeader: true,
-        searching: false,
-        scrollY: gridheight,
-        pageResize: true,
-        scrollX: true,
-        scrollCollapse: true
-    });
-});
+                    ,className: 'dt-center'},
+                    {
+                        data: 'registrationNumber', render: function (data, type, row, meta) {
+                            if (row.operationCode == "@jafleet.Commons.Constants.OperationCode.RESERVED") {
+                                return data;
+                            } else {
+                                return "<a href=\"javascript:linkJetphotos('" + data + "')\">" + data + "</a>";
+                            }
+                        },className: 'dt-center'},
+                    {data: 'serialNumber',className: 'dt-center'},
+                    {data: 'registerDate',className: 'dt-center'},
+                    {data: 'operation',className: 'dt-center'},
+                    {data: 'wifi',className: 'dt-center'},
+                    {data: 'remarks',className: 'dt-left'}
+                ],
+                createdRow: function( row, data, dataIndex){
+                                if(data['updateTime'] != null){
+                                    var updateTime = moment(data['updateTime']);
+                                    var today = moment();
+                                    if(today.diff(updateTime, 'days', true) <= 7){
+                                        $(row).css({"background-color":"#FFCCFF"});
+                                    }
+                                }
+                    },
+                paging:   false,
+                ordering: false,
+                fixedHeader: true,
+                searching: false,
+                scrollY: gridheight,
+                pageResize: true,
+                scrollX: true,
+                scrollCollapse: true
+            });
+        });
 
-$('#IncludeRetire').change(function () {
-    history.pushState(null, null, "?includeRetire=" + getIncludeRetire());
-    table.ajax.url('@ViewData["api"]?includeRetire=' + getIncludeRetire()).load();
-    table.ajax.reload();
-});
+        $('#IncludeRetire').change(function () {
+            history.pushState(null, null, "?includeRetire=" + getIncludeRetire());
+            table.ajax.url('@ViewData["api"]?includeRetire=' + getIncludeRetire()).load();
+            table.ajax.reload();
+        });
 
-$("#@ViewData["TableId"]").on("click", "a", function (event) {
-    event.preventDefault();
-    $(this).colorbox({ iframe: true, width: "80%", height: "90%" });
-});
-function getIncludeRetire(){
-    return $('#IncludeRetire').prop('checked');
-}
+        function getIncludeRetire(){
+            return $('#IncludeRetire').prop('checked');
+        }
+
     </script>
 }
