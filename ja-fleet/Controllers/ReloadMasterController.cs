@@ -6,14 +6,14 @@ namespace jafleet.Controllers
 {
     public class ReloadMasterController : Controller
     {
-        public String Index()
+        public IActionResult Index()
         {
             try{
                 MasterManager.ReadAll();
-                return "Success";
+                return Content("Success");
             }
             catch(Exception ex){
-                return ex.ToString();
+                return Content(ex.ToString());
             }
         }
     }
