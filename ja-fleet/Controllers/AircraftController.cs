@@ -22,21 +22,28 @@ namespace jafleet.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(AircraftModel model)
         {
-            return View();
+
+            ViewData["Title"] = "all";
+            ViewData["TableId"] = "all";
+            ViewData["api"] = "/api/airlinegroup/";
+
+            model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
+
+            return View("~/Views/Aircraft/index.cshtml", model);
         }
 
         public IActionResult AirlineGroup(string id, string id2, [FromQuery]Boolean includeRetire, AircraftModel model)
         {
-            id = id.ToUpper();
+            id = id?.ToUpper();
             id2 = id2?.ToUpper();
 
             string groupName;
             groupName = _context.AirlineGroup.FirstOrDefault(p => p.AirlineGroupCode == id)?.AirlineGroupName;
 
-            ViewData["Title"] = groupName;
-            ViewData["TableId"] = id;
+            ViewData["Title"] = groupName ?? "all";
+            ViewData["TableId"] = id ?? "all";
             ViewData["api"] = "/api/airlinegroup/" + id;
             if (!string.IsNullOrEmpty(id2))
             {
@@ -52,14 +59,14 @@ namespace jafleet.Controllers
 
         public IActionResult Airline(string id, string id2, [FromQuery]Boolean includeRetire,AircraftModel model)
         {
-            id = id.ToUpper();
+            id = id?.ToUpper();
             id2 = id2?.ToUpper();
 
             string airlineName;
             airlineName = _context.Airline.FirstOrDefault(p => p.AirlineCode == id)?.AirlineNameJpShort;
 
-            ViewData["Title"] = airlineName;
-            ViewData["TableId"] = id;
+            ViewData["Title"] = airlineName ?? "all";
+            ViewData["TableId"] = id ?? "all";
             ViewData["api"] = "/api/airline/" + id;
             if (!string.IsNullOrEmpty(id2))
             {
@@ -75,13 +82,13 @@ namespace jafleet.Controllers
 
         public IActionResult Type(string id, [FromQuery]Boolean includeRetire, AircraftModel model)
         {
-            id = id.ToUpper();
+            id = id?.ToUpper();
 
             string typeName;
             typeName = _context.Type.FirstOrDefault(p => p.TypeCode == id)?.TypeName;
 
-            ViewData["Title"] = typeName;
-            ViewData["TableId"] = id;
+            ViewData["Title"] = typeName ?? "all";
+            ViewData["TableId"] = id ?? "all";
             ViewData["api"] = "/api/type/" + id;
 
             model.IncludeRetire = includeRetire;

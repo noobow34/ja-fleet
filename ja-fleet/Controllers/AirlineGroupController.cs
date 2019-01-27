@@ -24,7 +24,7 @@ namespace jafleet.Controllers
         public ActionResult<IEnumerable<string>> Get()
         {
             List<AircraftView> list;
-            list = _context.AircraftView.ToList();
+            list = _context.AircraftView.OrderBy(p => p.DisplayOrder).ToList();
 
             return Json(list);
         }
