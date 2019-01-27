@@ -12,7 +12,7 @@
         if (data == null || data == "") {
             $("#notexistphoto").modal();
         } else {
-            $.colorbox({ href: data, iframe: true, width: "90%", height: "90%" });
+            $.colorbox({ href: data, iframe: true, width: "95%", height: "90%" });
         }
     });
 }
