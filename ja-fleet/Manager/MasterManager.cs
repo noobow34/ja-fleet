@@ -41,10 +41,6 @@ namespace jafleet.Manager
                 }
                 return _wifi;
             }
-            set
-            {
-                _wifi = value;
-            }
         }
 
         private static Code[] _operation = null;
@@ -61,10 +57,6 @@ namespace jafleet.Manager
                 }
                 return _operation;
             }
-            set
-            {
-                _operation = value;
-            }
         }
 
         private static Airline[] _allAirline = null;
@@ -80,10 +72,6 @@ namespace jafleet.Manager
                     }
                 }
                 return _allAirline;
-            }
-            set
-            {
-                _allAirline = value;
             }
         }
 
@@ -102,10 +90,6 @@ namespace jafleet.Manager
                 }
                 return _ana;
             }
-            set
-            {
-                _ana = value;
-            }
         }
 
         private static Airline[] _jal = null;
@@ -121,10 +105,6 @@ namespace jafleet.Manager
                     }
                 }
                 return _jal;
-            }
-            set
-            {
-                _jal = value;
             }
         }
 
@@ -142,10 +122,6 @@ namespace jafleet.Manager
                 }
                 return _lcc;
             }
-            set
-            {
-                _lcc = value;
-            }
         }
 
         private static Airline[] _other = null;
@@ -161,10 +137,6 @@ namespace jafleet.Manager
                     }
                 }
                 return _other;
-            }
-            set
-            {
-                _other = value;
             }
         }
 
@@ -182,10 +154,6 @@ namespace jafleet.Manager
                 }
                 return _type;
             }
-            set
-            {
-                _type = value;
-            }
         }
 
         public static TypeDetailView[] _typeDetailGroup = null;
@@ -202,10 +170,6 @@ namespace jafleet.Manager
                 }
                 return _typeDetailGroup;
             }
-            set
-            {
-                _typeDetailGroup = value;
-            }
         }
 
         private static List<string> _adminUser = null;
@@ -221,10 +185,6 @@ namespace jafleet.Manager
                     }
                 }
                 return _adminUser;
-            }
-            set
-            {
-                _adminUser = value;
             }
         }
     }
