@@ -48,6 +48,17 @@ namespace jafleet.Controllers
                 model.Aircraft.RegistrationNumber = id.ToUpper();
                 model.IsNew = true;
             }
+            else
+            {
+                var av = _context.AircraftView.Find(id.ToUpper());
+                string additional = string.Empty;
+                if (av.OperationCode == OperationCode.RETIRE_UNREGISTERED)
+                {
+                    additional = "?includeRetire=true";
+                }
+                model.LinkPage = $"https://ja-fleet.noobow.me/Aircraft/Airline/{av.Airline}/{av.TypeCode}{additional}";
+            }
+
             return View(model);
         }
 

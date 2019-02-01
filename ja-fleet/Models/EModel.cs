@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using jafleet.Commons.EF;
-using System.Dynamic;
 using jafleet.Commons.Constants;
 
 namespace jafleet.Models
@@ -32,22 +31,6 @@ namespace jafleet.Models
 
         public Exception ex { get; set; }
 
-        public string LinkPage {
-            get {
-                if (Aircraft != null)
-                {
-                    string additional = string.Empty;
-                    if(Aircraft.OperationCode == OperationCode.RETIRE_UNREGISTERED)
-                    {
-                        additional = "?includeRetire=true";
-                    }
-                    return $"https://ja-fleet.noobow.me/Aircraft/Airline/{Aircraft.Airline}/{Aircraft.TypeCode}{additional}";
-                }
-                else
-                {
-                    return string.Empty;
-                }
-            }
-        }
+        public string LinkPage { get; set; }
     }
 }
