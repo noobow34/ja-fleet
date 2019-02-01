@@ -11,6 +11,7 @@ using jafleet.Commons.Constants;
 using AutoMapper;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace jafleet.Controllers
 {
@@ -29,7 +30,7 @@ namespace jafleet.Controllers
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
             model.AirlineList = MasterManager.AllAirline;
-            model.TypeList = MasterManager.Type;
+            model.TypeDetailList = new SelectList(MasterManager.TypeDetailGroup, "TypeDetailId", "TypeDetailName", null, "TypeName");
             model.OperationList = MasterManager.Operation;
             model.WiFiList = MasterManager.Wifi;
 
@@ -103,10 +104,11 @@ namespace jafleet.Controllers
                 query = query.Where(p => airline.Contains(p.Airline));
             }
 
-            if (!String.IsNullOrEmpty(model.Type))
+            if (!String.IsNullOrEmpty(model.TypeDetail))
             {
-                type = model.Type.Split("|");
-                query = query.Where(p => type.Contains(p.TypeCode));
+                type = model.TypeDetail.Split("|");
+                var typeDetailIntList = type.Select(t => Convert.ToInt32(t)).ToArray();
+                query = query.Where(p => typeDetailIntList.Contains(p.TypeDetailId));
             }
 
             if (!String.IsNullOrEmpty(model.WiFiCode))

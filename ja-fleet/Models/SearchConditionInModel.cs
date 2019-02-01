@@ -29,6 +29,8 @@ namespace jafleet.Models
         [DefaultValue(null)]
         public String Remarks { get; set; } = String.Empty;
 
+        [DefaultValue(null)]
+        public string TypeDetail { get; set; }
 
         public override string ToString()
         {

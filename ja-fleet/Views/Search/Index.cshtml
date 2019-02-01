@@ -29,9 +29,8 @@
     </div>
     <div class="col-xs-12 col-sm-4">
         <div class="form-group">
-            @Html.LabelFor(model => model.TypeList, new { @class = "control-label" })<br />
-            @Html.DropDownListFor(model => model.Type,
-                                                                          new SelectList(Model.TypeList, "TypeCode", "TypeName"),
+            @Html.LabelFor(model => model.TypeDetailList, new { @class = "control-label" })<br />
+            @Html.DropDownListFor(model => model.TypeDetail,Model.TypeDetailList,null,
                                                                           new { @multiple = "multiple" })
         </div>
     </div>
@@ -102,15 +101,19 @@
     var gridheight = '50vh';
     $(document).ready(function() {
         $('#Airline').multiselect({ maxHeight: 400, nonSelectedText: '（未選択）' });
-        $('#Type').multiselect({ maxHeight: 400, nonSelectedText: '（未選択）' });
+        $('#TypeDetail').multiselect({maxHeight: 400, nonSelectedText: '（未選択）'
+            , enableClickableOptGroups: true,
+            enableCollapsibleOptGroups: true,
+            enableFiltering: true,
+            collapseOptGroupsByDefault: true});
         $('#OperationCode').multiselect({ nonSelectedText: '（未選択）' });
         $('#RegistrationSelection').multiselect();
         $('#WiFiCode').multiselect({ nonSelectedText: '' });
         $('#RemarksList').multiselect();
         $('#RegistrationNumber').tooltip();
-        @if (!string.IsNullOrEmpty(Model.Type))
+        @if (!string.IsNullOrEmpty(Model.TypeDetail))
         {
-            @:$('#Type').multiselect('select', "@Model.Type".split("|"));
+            @:$('#Type').multiselect('select', "@Model.TypeDetail".split("|"));
         }
         @if (!string.IsNullOrEmpty(Model.Airline))
         {
@@ -148,7 +151,7 @@
                                 d.IsLoading = GetIsLoading();
                                 d.isDirect = GetIsDirect();
                                 d.Airline = GetAirline();
-                                d.Type = GetType();
+                                d.TypeDetail = GetType();
                                 d.OperationCode = GetOperationCode();
                                 d.RegistrationDate = GetRegistrationDate();
                                 d.RegistrationSelection = GetRegistrationSelection();
@@ -197,7 +200,7 @@
     }
 
     function GetType(){
-        var type = $('#Type').val() .toString();
+        var type = $('#TypeDetail').val() .toString();
         return type.replace(/,/g,'|');
     }
 

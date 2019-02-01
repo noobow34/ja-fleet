@@ -3,13 +3,15 @@ using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections;
+using Microsoft.EntityFrameworkCore.Extensions.Internal;
 
 namespace jafleet.Manager
 {
     public static class MasterManager
     {
-     
-        public static void ReadAll(){
+
+        public static void ReadAll() {
             using (var context = new jafleetContext())
             {
                 _allAirline = context.Airline.OrderBy(p => p.DisplayOrder).ToArray();
@@ -21,6 +23,7 @@ namespace jafleet.Manager
                 _operation = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToArray();
                 _wifi = context.Code.Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
                 _adminUser = context.AdminUser.Select(e => e.UserId).ToList();
+                _typeDetailGroup = context.TypeDetailView.OrderBy(p => p.DisplayOrder).OrderBy(p => p.TypeDetailName).ToArray();
             }
         }
 
@@ -182,6 +185,26 @@ namespace jafleet.Manager
             set
             {
                 _type = value;
+            }
+        }
+
+        public static TypeDetailView[] _typeDetailGroup = null;
+        public static TypeDetailView[] TypeDetailGroup
+        {
+            get
+            {
+                if(_typeDetailGroup == null)
+                {
+                    using (var context = new jafleetContext())
+                    {
+                        _typeDetailGroup = context.TypeDetailView.OrderBy(p => p.DisplayOrder).ToArray();
+                    }
+                }
+                return _typeDetailGroup;
+            }
+            set
+            {
+                _typeDetailGroup = value;
             }
         }
 

@@ -16,8 +16,8 @@ namespace jafleet.Models
         public String Airline { get; set; } = String.Empty;
 
         [Display(Name = "型式")]
-        public jafleet.Commons.EF.Type[] TypeList { get; set; }
-        public String Type { get; set; } = String.Empty;
+        public SelectList TypeDetailList { get; set; }
+        public string TypeDetail { get; set; }
 
         [Display(Name = "運用状況")]
         public Code[] OperationList { get; set; }
