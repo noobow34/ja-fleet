@@ -113,7 +113,7 @@
         $('#RegistrationNumber').tooltip();
         @if (!string.IsNullOrEmpty(Model.TypeDetail))
         {
-            @:$('#Type').multiselect('select', "@Model.TypeDetail".split("|"));
+            @:$('#TypeDetail').multiselect('select', "@Model.TypeDetail".split("|"));
         }
         @if (!string.IsNullOrEmpty(Model.Airline))
         {

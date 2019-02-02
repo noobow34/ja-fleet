@@ -23,7 +23,7 @@ namespace jafleet.Manager
                 _operation = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToArray();
                 _wifi = context.Code.Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
                 _adminUser = context.AdminUser.Select(e => e.UserId).ToList();
-                _typeDetailGroup = context.TypeDetailView.OrderBy(p => p.DisplayOrder).OrderBy(p => p.TypeDetailName).ToArray();
+                _typeDetailGroup = context.TypeDetailView.OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
             }
         }
 

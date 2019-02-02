@@ -61,7 +61,7 @@ namespace jafleet.Controllers
             AircraftView[] searchResult = null;
             var regList = new List<string>();
             String[] airline;
-            String[] type;
+            int[] typeDetail = new int[] { };
             String[] operation;
             String[] wifi;
             String registrationDate;;
@@ -106,9 +106,8 @@ namespace jafleet.Controllers
 
             if (!String.IsNullOrEmpty(model.TypeDetail))
             {
-                type = model.TypeDetail.Split("|");
-                var typeDetailIntList = type.Select(t => Convert.ToInt32(t)).ToArray();
-                query = query.Where(p => typeDetailIntList.Contains(p.TypeDetailId));
+                typeDetail = model.TypeDetail.Split("|").Select(t => Convert.ToInt32(t)).ToArray();
+                query = query.Where(p => typeDetail.Contains(p.TypeDetailId));
             }
 
             if (!String.IsNullOrEmpty(model.WiFiCode))
@@ -134,7 +133,6 @@ namespace jafleet.Controllers
                     registrationDate += "zzz";
                     query = query.Where(p => p.RegisterDate.CompareTo(registrationDate) >= 0);
                 }
-
             }
 
             if (!String.IsNullOrEmpty(model.OperationCode))
@@ -168,19 +166,8 @@ namespace jafleet.Controllers
             Task.Run(() =>
             {
                 //_contextは破棄されてしまうのでここだけnewする
-                using(var context = new jafleetContext())
+                using (var context = new jafleetContext())
                 {
-                    //ログ
-                    string logDetail = scjson + $"{model.IsDirect},件数：" + searchResult.Length.ToString();
-                    Log log = new Log
-                    {
-                        LogDate = DateTime.Now,
-                        LogType = LogType.SEARCH,
-                        LogDetail = logDetail,
-                        UserId = isAdmin.ToString()
-                    };
-                    context.Log.Add(log);
-
                     //検索条件保存
                     var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
                     if (sc == null)
@@ -212,6 +199,24 @@ namespace jafleet.Controllers
                             sc.FirstSearchDate = sc.LastSearchDate;
                         }
                     }
+
+                    //ログ用にTypeDetailをIDからNAMEに置換
+                    var scm2 = new SearchConditionInModel();
+                    Mapper.Map(model, scm2);
+                    var typeDetails = MasterManager.TypeDetailGroup.Where(td => typeDetail.Contains(td.TypeDetailId)).ToArray();
+                    scm2.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
+                    var scjson2 = scm2.ToString();
+
+                    //ログ
+                    string logDetail = scjson2 + $"{model.IsDirect},件数：" + searchResult.Length.ToString();
+                    Log log = new Log
+                    {
+                        LogDate = DateTime.Now,
+                        LogType = LogType.SEARCH,
+                        LogDetail = logDetail,
+                        UserId = isAdmin.ToString()
+                    };
+                    context.Log.Add(log);
 
                     context.SaveChanges();
                 }

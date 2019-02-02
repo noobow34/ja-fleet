@@ -13,9 +13,6 @@ namespace jafleet.Models
         public String Airline { get; set; } = String.Empty;
 
         [DefaultValue(null)]
-        public String Type { get; set; } = String.Empty;
-
-        [DefaultValue(null)]
         public String OperationCode { get; set; }
 
         [DefaultValue(null)]
