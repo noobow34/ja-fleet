@@ -20,10 +20,25 @@ namespace jafleet.Manager
                 _lcc = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToArray();
                 _other = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToArray();
                 _type = context.Type.OrderBy(p => p.DisplayOrder).ToArray();
-                _operation = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToArray();
                 _wifi = context.Code.Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
                 _adminUser = context.AdminUser.Select(e => e.UserId).ToList();
                 _typeDetailGroup = context.TypeDetailView.OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
+
+                var tempop = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
+                tempop.ForEach(o => {
+                    if(OperationCode.PRE_OPERATION.Contains(o.Key))
+                    {
+                        o.OptGroup = "運用前";
+                    }else if(OperationCode.IN_OPERATION.Contains(o.Key))
+                    {
+                        o.OptGroup = "運用中";
+                    }else if(OperationCode.RETIRE.Contains(o.Key))
+                    {
+                        o.OptGroup = "退役";
+                    }
+                });
+                _operation = tempop.ToArray();
+
             }
         }
 
@@ -52,7 +67,22 @@ namespace jafleet.Manager
                 {
                     using (var context = new jafleetContext())
                     {
-                        _operation = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToArray();
+                        var tempop = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
+                        tempop.ForEach(o => {
+                            if (OperationCode.PRE_OPERATION.Contains(o.Key))
+                            {
+                                o.OptGroup = "運用前";
+                            }
+                            else if (OperationCode.IN_OPERATION.Contains(o.Key))
+                            {
+                                o.OptGroup = "運用中";
+                            }
+                            else if (OperationCode.RETIRE.Contains(o.Key))
+                            {
+                                o.OptGroup = "退役";
+                            }
+                        });
+                        _operation = tempop.ToArray();
                     }
                 }
                 return _operation;
