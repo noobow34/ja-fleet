@@ -16,7 +16,7 @@ namespace jafleet.Models
         public String Airline { get; set; } = String.Empty;
 
         [Display(Name = "型式")]
-        public SelectList TypeDetailList { get; set; }
+        public TypeDetailView[] TypeDetailList { get; set; }
         public string TypeDetail { get; set; }
 
         [Display(Name = "運用状況")]

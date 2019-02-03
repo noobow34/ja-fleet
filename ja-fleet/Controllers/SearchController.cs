@@ -30,7 +30,7 @@ namespace jafleet.Controllers
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
             model.AirlineList = MasterManager.AllAirline;
-            model.TypeDetailList = new SelectList(MasterManager.TypeDetailGroup, "TypeDetailId", "TypeDetailName", null, "TypeName");
+            model.TypeDetailList = MasterManager.TypeDetailGroup;
             model.OperationList = MasterManager.Operation;
             model.WiFiList = MasterManager.Wifi;
 

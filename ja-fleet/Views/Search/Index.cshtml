@@ -1,4 +1,5 @@
-﻿@{
+﻿@using jafleet.Manager
+@{
     ViewData["Title"] = "検索";
     ViewData["TableId"] = "SerachResult";
 }
@@ -22,16 +23,15 @@
     <div class="col-xs-8 col-sm-3">
         <div class="form-group">
             @Html.LabelFor(model => model.AirlineList, new { @class = "control-label" })<br />
-            @Html.DropDownListFor(model => model.Airline,
-                                                                          new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort"),
+            @Html.DropDownListFor(model => model.Airline,new SelectList(Model.AirlineList, "AirlineCode", "AirlineNameJpShort",null,"AirlineGroup"),
                                                                           new { @multiple = "multiple" })
         </div>
     </div>
     <div class="col-xs-12 col-sm-4">
         <div class="form-group">
             @Html.LabelFor(model => model.TypeDetailList, new { @class = "control-label" })<br />
-            @Html.DropDownListFor(model => model.TypeDetail,Model.TypeDetailList,null,
-                                                                          new { @multiple = "multiple" })
+            @Html.DropDownListFor(model => model.TypeDetail, new SelectList(Model.TypeDetailList, "TypeDetailId", "TypeDetailName", null, "TypeName"),
+                                                                            new { @multiple = "multiple" })
         </div>
     </div>
 </div>
@@ -100,9 +100,13 @@
     var table;
     var gridheight = '50vh';
     $(document).ready(function() {
-        $('#Airline').multiselect({ maxHeight: 400, nonSelectedText: '（未選択）' });
-        $('#TypeDetail').multiselect({maxHeight: 400, nonSelectedText: '（未選択）'
-            , enableClickableOptGroups: true,
+        $('#Airline').multiselect({
+            maxHeight: 400, nonSelectedText: '（未選択）',
+            enableClickableOptGroups: true,
+            enableCollapsibleOptGroups: true,});
+        $('#TypeDetail').multiselect({
+            maxHeight: 400, nonSelectedText: '（未選択）',
+            enableClickableOptGroups: true,
             enableCollapsibleOptGroups: true,
             enableFiltering: true,
             collapseOptGroupsByDefault: true});
