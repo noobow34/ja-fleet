@@ -12,6 +12,7 @@ using AutoMapper;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Controllers
 {
@@ -79,7 +80,7 @@ namespace jafleet.Controllers
                         reg = "JA";
                     }
                     //画面のワイルドカード仕様から.NETのワイルドカード仕様に変換
-                    reg = reg += r.ToUpper().Replace("*", ".*").Replace("_", ".");
+                    reg = reg += r.ToUpper().Replace("*", "%");
                     regList.Add(reg);
                 }
             }
@@ -89,8 +90,7 @@ namespace jafleet.Controllers
             if (regList.Count == 1)
             {
                 //1件の場合はワイルドカードで検索
-                var regex = new Regex("^" + regList[0] + "$");
-                query = _context.AircraftView.Where(p => regex.IsMatch(p.RegistrationNumber));
+                query = _context.AircraftView.Where(a => EF.Functions.Like(a.RegistrationNumber, regList[0]));
             }
             else
             {
