@@ -5,62 +5,59 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
 using Microsoft.EntityFrameworkCore.Extensions.Internal;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Manager
 {
-    public static class MasterManager
+    public class MasterManager
     {
-
-        public static void ReadAll() {
-            using (var context = new jafleetContext())
+        public static void ReadAll(jafleetContext context) {
+            var tempaa = context.Airline.OrderBy(p => p.DisplayOrder).ToList();
+            tempaa.ForEach(aa =>
             {
-                var tempaa = context.Airline.OrderBy(p => p.DisplayOrder).ToList();
-                tempaa.ForEach(aa =>
+                switch (aa.AirlineGroupCode)
                 {
-                    switch (aa.AirlineGroupCode)
-                    {
-                        case AirlineGroupCode.ANAGroup:
-                            aa.AirlineGroup = "ANAグループ";
-                            break;
-                        case AirlineGroupCode.JALGroup:
-                            aa.AirlineGroup = "JALグループ";
-                            break;
-                        case AirlineGroupCode.LCC:
-                            aa.AirlineGroup = "LCC";
-                            break;
-                        case AirlineGroupCode.Other:
-                            aa.AirlineGroup = "その他";
-                            break;
+                    case AirlineGroupCode.ANAGroup:
+                        aa.AirlineGroup = "ANAグループ";
+                        break;
+                    case AirlineGroupCode.JALGroup:
+                        aa.AirlineGroup = "JALグループ";
+                        break;
+                    case AirlineGroupCode.LCC:
+                        aa.AirlineGroup = "LCC";
+                        break;
+                    case AirlineGroupCode.Other:
+                        aa.AirlineGroup = "その他";
+                        break;
 
-                    }
-                });
-                _allAirline = tempaa.ToArray();
+                }
+            });
+            _allAirline = tempaa.ToArray();
 
-                _ana = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup).OrderBy(p => p.DisplayOrder).ToArray();
-                _jal = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup).OrderBy(p => p.DisplayOrder).ToArray();
-                _lcc = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToArray();
-                _other = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToArray();
-                _type = context.Type.OrderBy(p => p.DisplayOrder).ToArray();
-                _wifi = context.Code.Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
-                _adminUser = context.AdminUser.Select(e => e.UserId).ToList();
-                _typeDetailGroup = context.TypeDetailView.OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
+            _ana = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup).OrderBy(p => p.DisplayOrder).ToArray();
+            _jal = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup).OrderBy(p => p.DisplayOrder).ToArray();
+            _lcc = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToArray();
+            _other = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToArray();
+            _type = context.Type.OrderBy(p => p.DisplayOrder).ToArray();
+            _wifi = context.Code.Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
+            _adminUser = context.AdminUser.Select(e => e.UserId).ToList();
+            _typeDetailGroup = context.TypeDetailView.OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
 
-                var tempop = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
-                tempop.ForEach(o => {
-                    if(OperationCode.PRE_OPERATION.Contains(o.Key))
-                    {
-                        o.OptGroup = "運用前";
-                    }else if(OperationCode.IN_OPERATION.Contains(o.Key))
-                    {
-                        o.OptGroup = "運用中";
-                    }else if(OperationCode.RETIRE.Contains(o.Key))
-                    {
-                        o.OptGroup = "退役";
-                    }
-                });
-                _operation = tempop.ToArray();
-
-            }
+            var tempop = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
+            tempop.ForEach(o => {
+                if(OperationCode.PRE_OPERATION.Contains(o.Key))
+                {
+                    o.OptGroup = "運用前";
+                }else if(OperationCode.IN_OPERATION.Contains(o.Key))
+                {
+                    o.OptGroup = "運用中";
+                }else if(OperationCode.RETIRE.Contains(o.Key))
+                {
+                    o.OptGroup = "退役";
+                }
+            });
+            _operation = tempop.ToArray();
         }
 
         private static Code[] _wifi = null;

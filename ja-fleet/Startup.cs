@@ -8,6 +8,10 @@ using jafleet.Manager;
 using AutoMapper;
 using jafleet.Models;
 using jafleet.Commons.EF;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System;
+using Microsoft.Extensions.Logging;
 
 namespace jafleet
 {
@@ -16,7 +20,6 @@ namespace jafleet
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            MasterManager.ReadAll();
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<SearchModel, SearchConditionInModel>();
@@ -27,23 +30,33 @@ namespace jafleet
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<jafleetContext>();
+            IServiceCollection serviceCollection = new ServiceCollection();
+            serviceCollection.AddLogging(builder => builder
+            .AddConsole()
+            .AddFilter(level => level >= LogLevel.Information)
+            );
+            var loggerFactory = serviceCollection.BuildServiceProvider().GetService<ILoggerFactory>();
+
+            services.AddDbContextPool<jafleetContext>(
+                options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+                    mySqlOptions =>
+                    {
+                        mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
+                    }
+            ));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,jafleetContext context)
         {
 
             app.UseExceptionHandler("/Home/Error");
@@ -67,6 +80,8 @@ namespace jafleet
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}/{id2?}");
             });
+
+            MasterManager.ReadAll(context);
         }
     }
 }

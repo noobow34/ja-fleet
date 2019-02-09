@@ -4,15 +4,14 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using jafleet.Commons.EF;
-using System.Text.RegularExpressions;
 using jafleet.Manager;
 using jafleet.Util;
 using jafleet.Commons.Constants;
 using AutoMapper;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace jafleet.Controllers
 {
@@ -20,10 +19,12 @@ namespace jafleet.Controllers
     {
 
         private readonly jafleetContext _context;
+        private readonly IServiceCollection _services;
 
-        public SearchController(jafleetContext context)
+        public SearchController(jafleetContext context, IServiceCollection services)
         {
             _context = context;
+            _services = services;
         }
 
         public IActionResult Index(SearchModel model,[FromQuery]string sc)
@@ -165,65 +166,67 @@ namespace jafleet.Controllers
             //検索結果を速く返すためにログと検索条件のDB書き込みは非同期で行う
             Task.Run(() =>
             {
-                //_contextは破棄されてしまうのでここだけnewする
-                using (var context = new jafleetContext())
+                using (var serviceScope = _services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    //検索条件保存
-                    var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
-                    if (sc == null)
+                    using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                     {
-                        sc = new SearchCondition
+                        //検索条件保存
+                        var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
+                        if (sc == null)
                         {
-                            SearchConditionKey = schash,
-                            SearchConditionJson = scjson,
-                            SearchCount = 0
+                            sc = new SearchCondition
+                            {
+                                SearchConditionKey = schash,
+                                SearchConditionJson = scjson,
+                                SearchCount = 0
+                            };
+
+                            //検索回数、検索日時は管理者じゃないい場合のみ
+                            if (!isAdmin)
+                            {
+                                sc.SearchCount = 1;
+                                sc.FirstSearchDate = DateTime.Now;
+                                sc.LastSearchDate = sc.FirstSearchDate;
+                            }
+                            context.SearchCondition.Add(sc);
+                        }
+                        else if (!isAdmin)
+                        {
+                            //管理者じゃない場合のみ検索回数、検索日時を更新
+                            sc.SearchCount++;
+                            sc.LastSearchDate = DateTime.Now;
+                            if (sc.FirstSearchDate == null)
+                            {
+                                //初回の検索が管理者だった場合に初回検索日時がセットされてないのでここでセット
+                                sc.FirstSearchDate = sc.LastSearchDate;
+                            }
+                        }
+
+                        //ログ用にTypeDetailをIDからNAMEに置換
+                        var scm2 = new SearchConditionInModel();
+                        Mapper.Map(model, scm2);
+                        var typeDetails = MasterManager.TypeDetailGroup.Where(td => typeDetail.Contains(td.TypeDetailId)).ToArray();
+                        if (typeDetail.Count() > 0)
+                        {
+                            scm2.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
+                        }
+                        var scjson2 = scm2.ToString();
+
+                        //ログ
+                        string logDetail = scjson2 + $"{model.IsDirect},件数：" + searchResult.Length.ToString();
+                        Log log = new Log
+                        {
+                            LogDate = DateTime.Now,
+                            LogType = LogType.SEARCH,
+                            LogDetail = logDetail,
+                            UserId = isAdmin.ToString()
                         };
+                        context.Log.Add(log);
 
-                        //検索回数、検索日時は管理者じゃないい場合のみ
-                        if (!isAdmin)
-                        {
-                            sc.SearchCount = 1;
-                            sc.FirstSearchDate = DateTime.Now;
-                            sc.LastSearchDate = sc.FirstSearchDate;
-                        }
-                        context.SearchCondition.Add(sc);
+                        context.SaveChanges();
                     }
-                    else if (!isAdmin)
-                    {
-                        //管理者じゃない場合のみ検索回数、検索日時を更新
-                        sc.SearchCount++;
-                        sc.LastSearchDate = DateTime.Now;
-                        if (sc.FirstSearchDate == null)
-                        {
-                            //初回の検索が管理者だった場合に初回検索日時がセットされてないのでここでセット
-                            sc.FirstSearchDate = sc.LastSearchDate;
-                        }
-                    }
-
-                    //ログ用にTypeDetailをIDからNAMEに置換
-                    var scm2 = new SearchConditionInModel();
-                    Mapper.Map(model, scm2);
-                    var typeDetails = MasterManager.TypeDetailGroup.Where(td => typeDetail.Contains(td.TypeDetailId)).ToArray();
-                    if (typeDetail.Count() > 0)
-                    {
-                        scm2.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
-                    }
-                    var scjson2 = scm2.ToString();
-
-                    //ログ
-                    string logDetail = scjson2 + $"{model.IsDirect},件数：" + searchResult.Length.ToString();
-                    Log log = new Log
-                    {
-                        LogDate = DateTime.Now,
-                        LogType = LogType.SEARCH,
-                        LogDetail = logDetail,
-                        UserId = isAdmin.ToString()
-                    };
-                    context.Log.Add(log);
-
-                    context.SaveChanges();
                 }
-            });
+                });
 
             return Json(new SearchResult { ResultList = searchResult,SearchConditionKey = schash });
         }
