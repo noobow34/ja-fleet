@@ -204,7 +204,10 @@ namespace jafleet.Controllers
                     var scm2 = new SearchConditionInModel();
                     Mapper.Map(model, scm2);
                     var typeDetails = MasterManager.TypeDetailGroup.Where(td => typeDetail.Contains(td.TypeDetailId)).ToArray();
-                    scm2.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
+                    if (typeDetail.Count() > 0)
+                    {
+                        scm2.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
+                    }
                     var scjson2 = scm2.ToString();
 
                     //ログ
