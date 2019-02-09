@@ -10,17 +10,17 @@ namespace ja_fleet.Controllers
 {
     public class lineController : Controller
     {
-        private readonly IServiceCollection _services;
-        public lineController(IServiceCollection services)
+        private readonly IServiceScopeFactory _services;
+        public lineController(IServiceScopeFactory serviceScopeFactory)
         {
-            _services = services;
+            _services = serviceScopeFactory;
         }
 
         public IActionResult Index()
         {
             //速くリダイレクトするため、ログの書き込みは非同期
             Task.Run(() => {
-                using (var serviceScope = _services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>().CreateScope())
+                using (var serviceScope = _services.CreateScope())
                 {
                     using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                     {

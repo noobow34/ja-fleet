@@ -19,12 +19,12 @@ namespace jafleet.Controllers
     {
 
         private readonly jafleetContext _context;
-        private readonly IServiceCollection _services;
+        private readonly IServiceScopeFactory _services;
 
-        public SearchController(jafleetContext context, IServiceCollection services)
+        public SearchController(jafleetContext context, IServiceScopeFactory serviceScopeFactory)
         {
             _context = context;
-            _services = services;
+            _services = serviceScopeFactory;
         }
 
         public IActionResult Index(SearchModel model,[FromQuery]string sc)
@@ -166,7 +166,7 @@ namespace jafleet.Controllers
             //検索結果を速く返すためにログと検索条件のDB書き込みは非同期で行う
             Task.Run(() =>
             {
-                using (var serviceScope = _services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>().CreateScope())
+                using (var serviceScope = _services.CreateScope())
                 {
                     using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                     {
@@ -226,7 +226,7 @@ namespace jafleet.Controllers
                         context.SaveChanges();
                     }
                 }
-                });
+            });
 
             return Json(new SearchResult { ResultList = searchResult,SearchConditionKey = schash });
         }
