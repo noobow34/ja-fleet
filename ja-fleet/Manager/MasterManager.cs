@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Manager
 {
-    public class MasterManager
+    public static class MasterManager
     {
         public static void ReadAll(jafleetContext context) {
             var tempaa = context.Airline.OrderBy(p => p.DisplayOrder).ToList();
