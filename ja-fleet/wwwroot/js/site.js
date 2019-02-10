@@ -17,6 +17,26 @@
     });
 }
 
+function sendMessageToMe() {
+    $.ajax({
+        type: 'POST',
+        url: '/Message/Send',
+        data: { name: $('#uname').val(), replay: $('#replayto').val(), message: $('#message').val()},
+        cache: false
+    }).fail(function (data) {
+        $('#result').text("送信しました");
+    }).done(function (data) {
+        if (data == "OK") {
+            $('#uname').val("");
+            $('#replayto').val("");
+            $('#message').val("");
+            $('#result').text("送信しました");
+        } else {
+            $('#result').text("送信に失敗しました");
+        }
+    });
+}
+
 function datatablesLangInit() {
     $.extend($.fn.dataTable.defaults, {
         language: {

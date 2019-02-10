@@ -7,9 +7,6 @@ using jafleet.Util;
 using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
 using Microsoft.Extensions.Configuration;
-using jafleet.Manager;
-using System.Net.Http;
-using System.Collections.Generic;
 
 namespace jafleet.Controllers
 {
