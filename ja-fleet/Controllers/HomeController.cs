@@ -38,7 +38,9 @@ namespace jafleet.Controllers
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
             model.Ex = ex;
 
-            LineUtil.PushMe($"{ex.ToString().Split(Environment.NewLine)[0]}\n{ex.ToString().Split(Environment.NewLine)[1]}");
+            LineUtil.PushMe($"【エラー発生】\n" +
+                            $"{ex.ToString().Split(Environment.NewLine)[0]}\n" +
+                            $"{ex.ToString().Split(Environment.NewLine)[1]}");
 
             Log log = new Log
             {
