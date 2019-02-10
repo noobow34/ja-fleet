@@ -6,6 +6,10 @@ using System;
 using jafleet.Util;
 using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
+using Microsoft.Extensions.Configuration;
+using jafleet.Manager;
+using System.Net.Http;
+using System.Collections.Generic;
 
 namespace jafleet.Controllers
 {
@@ -13,10 +17,12 @@ namespace jafleet.Controllers
     {
 
         private readonly jafleetContext _context;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(jafleetContext context)
+        public HomeController(jafleetContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
@@ -31,6 +37,8 @@ namespace jafleet.Controllers
             ErrorViewModel model = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
             model.Ex = ex;
+
+            LineUtil.PushMe($"{ex.ToString().Split(Environment.NewLine)[0]}\n{ex.ToString().Split(Environment.NewLine)[1]}");
 
             Log log = new Log
             {

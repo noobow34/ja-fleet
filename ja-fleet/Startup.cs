@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using Microsoft.Extensions.Logging;
+using jafleet.Util;
 
 namespace jafleet
 {
@@ -53,6 +54,8 @@ namespace jafleet
                     }
             ));
 
+            services.AddSingleton<IConfiguration>(Configuration);
+            LineUtil.NotifyEndpoint = Configuration.GetValue<string>("NotifyMeEndpoint");
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
