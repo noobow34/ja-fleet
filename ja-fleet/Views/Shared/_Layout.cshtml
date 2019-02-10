@@ -160,6 +160,9 @@
             $('#sendButton').on('click', function () {
                 sendMessageToMe();
             });
+            $('#sendMessage').on('hidden.bs.modal', function () {
+                $('#result').text("");
+            });
         })
     </script>
     @RenderSection("ScriptsPartial", required: false)
