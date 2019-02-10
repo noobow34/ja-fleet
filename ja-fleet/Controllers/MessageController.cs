@@ -25,8 +25,8 @@ namespace jafleet.Controllers
 
         public IActionResult Send(MessageModel model)
         {
-            LineUtil.PushMe($"{model.Name}" +
-                $"{model.Replay}" +
+            LineUtil.PushMe($"{model.Name}\n" +
+                $"{model.Replay}\n" +
                 $"{model.Message}");
             return Content("OK");
         }
