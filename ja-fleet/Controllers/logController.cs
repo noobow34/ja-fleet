@@ -19,6 +19,11 @@ namespace ja_fleet.Controllers
             _context = context;
         }
 
+        public IActionResult Yesterday()
+        {
+            return Index("y");
+        }
+
         public IActionResult Index(string id)
         {
             if (!CookieUtil.IsAdmin(HttpContext))
