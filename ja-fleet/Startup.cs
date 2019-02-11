@@ -55,7 +55,6 @@ namespace jafleet
             ));
 
             services.AddSingleton<IConfiguration>(Configuration);
-            LineUtil.NotifyEndpoint = Configuration.GetValue<string>("NotifyMeEndpoint");
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

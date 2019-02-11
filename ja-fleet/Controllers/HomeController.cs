@@ -7,6 +7,8 @@ using jafleet.Util;
 using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
 using Microsoft.Extensions.Configuration;
+using Noobow.Commons.Utils;
+using jafleet.Manager;
 
 namespace jafleet.Controllers
 {
@@ -37,7 +39,7 @@ namespace jafleet.Controllers
 
             LineUtil.PushMe($"【エラー発生】\n" +
                             $"{ex.ToString().Split(Environment.NewLine)[0]}\n" +
-                            $"{ex.ToString().Split(Environment.NewLine)[1]}");
+                            $"{ex.ToString().Split(Environment.NewLine)[1]}",HttpClientManager.GetInstance());
 
             Log log = new Log
             {
