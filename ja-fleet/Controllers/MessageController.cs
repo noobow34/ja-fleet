@@ -3,6 +3,8 @@ using jafleet.Models;
 using jafleet.Commons.EF;
 using Microsoft.Extensions.Configuration;
 using jafleet.Util;
+using Noobow.Commons.Utils;
+using jafleet.Manager;
 
 namespace jafleet.Controllers
 {
@@ -28,7 +30,7 @@ namespace jafleet.Controllers
             LineUtil.PushMe("【JA-Fleet from web】\n"+
                 $"名前：{model.Name}\n" +
                 $"返信先：{model.Replay}\n" +
-                $"{model.Message}");
+                $"{model.Message}",HttpClientManager.GetInstance());
             return Content("OK");
         }
 

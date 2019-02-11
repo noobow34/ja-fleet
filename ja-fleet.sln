@@ -6,6 +6,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ja-fleet", "ja-fleet\ja-fle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ja-fleet.Commons", "..\ja-fleet.Commons\ja-fleet.Commons\ja-fleet.Commons.csproj", "{B840C46D-88DE-4874-B39D-B767216C26AE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Noobow.Commons", "..\Noobow.Commons\Noobow.Commons\Noobow.Commons.csproj", "{606B0936-5ECB-47FF-8D26-4ED6B598B146}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{B840C46D-88DE-4874-B39D-B767216C26AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B840C46D-88DE-4874-B39D-B767216C26AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B840C46D-88DE-4874-B39D-B767216C26AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{606B0936-5ECB-47FF-8D26-4ED6B598B146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{606B0936-5ECB-47FF-8D26-4ED6B598B146}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{606B0936-5ECB-47FF-8D26-4ED6B598B146}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{606B0936-5ECB-47FF-8D26-4ED6B598B146}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
