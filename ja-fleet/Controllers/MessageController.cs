@@ -25,8 +25,9 @@ namespace jafleet.Controllers
 
         public IActionResult Send(MessageModel model)
         {
-            LineUtil.PushMe($"{model.Name}\n" +
-                $"{model.Replay}\n" +
+            LineUtil.PushMe("【JA-Fleet from web】\n"+
+                $"名前：{model.Name}\n" +
+                $"返信先：{model.Replay}\n" +
                 $"{model.Message}");
             return Content("OK");
         }
