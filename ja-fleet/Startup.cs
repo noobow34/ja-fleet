@@ -13,6 +13,9 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using Microsoft.Extensions.Logging;
 using jafleet.Util;
+using System.Text.Encodings.Web;
+using Microsoft.Extensions.WebEncoders;
+using System.Text.Unicode;
 
 namespace jafleet
 {
@@ -53,6 +56,10 @@ namespace jafleet
                         mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
                     }
             ));
+
+            services.Configure<WebEncoderOptions>(options => {
+                options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
+            });
 
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
