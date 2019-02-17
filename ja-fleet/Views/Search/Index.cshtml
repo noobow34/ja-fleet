@@ -99,7 +99,7 @@
     var isDirect = @Model.IsDirect.ToString().ToLower();
     var table;
     var gridheight = '50vh';
-    $(document).ready(function() {
+    $(document).ready(() => {
         $('#Airline').multiselect({
             maxHeight: 400, nonSelectedText: '（未選択）',
             enableClickableOptGroups: true,
@@ -154,7 +154,7 @@
             ajax: {url:'/Search/DoSearch',
                     type:'POST',
                     dataType: 'json',
-                    data : function(d){
+                    data : (d) => {
                                 d.RegistrationNumber = GetRegistrationNumber();
                                 d.IsLoading = GetIsLoading();
                                 d.isDirect = GetIsDirect();
@@ -166,7 +166,7 @@
                                 d.WiFiCode = GetWiFiCode();
                                 d.Remarks = GetRemarks();
                             },
-                dataSrc: function (d) {
+                dataSrc: (d) => {
                     if (d.searchConditionKey != "" && !GetIsDirect()) {
                         history.pushState(null, null, "?sc=" + d.searchConditionKey);
                     }
@@ -181,57 +181,57 @@
         });
     } );
 
-    $('#serach').click(function () {
-        isLoading = false;
-        table.ajax.reload();
-    })
+        $('#serach').click(() => {
+            isLoading = false;
+            table.ajax.reload();
+        })
 
-    $(window).on('popstate', function (e) {
-        location.reload();
-    });
+        $(window).on('popstate', (e) => {
+            location.reload();
+        });
 
-    function GetRegistrationNumber(){
-        return $('#RegistrationNumber').val();
-    }
+        const GetRegistrationNumber = () => {
+            return $('#RegistrationNumber').val();
+        }
 
-    function GetIsLoading(){
-        return isLoading;
-    }
+        const GetIsLoading = () => {
+            return isLoading;
+        }
 
-    function GetIsDirect() {
-        return isDirect;
-    }
+        const GetIsDirect = () => {
+            return isDirect;
+        }
 
-    function GetAirline(){
-        var airline = $('#Airline').val().toString();
-        return airline.replace(/,/g,'|');
-    }
+        const GetAirline = () => {
+            let airline = $('#Airline').val().toString();
+            return airline.replace(/,/g, '|');
+        }
 
-    function GetType(){
-        var type = $('#TypeDetail').val() .toString();
-        return type.replace(/,/g,'|');
-    }
+        const GetType = () => {
+            let type = $('#TypeDetail').val().toString();
+            return type.replace(/,/g, '|');
+        }
 
-    function GetRegistrationDate(){
-        return $('#RegistrationDate').val().toString().replace('-','/');
-    }
+        const GetRegistrationDate = () => {
+            return $('#RegistrationDate').val().toString().replace('-', '/');
+        }
 
-    function GetRegistrationSelection(){
-        return $('#RegistrationSelection').val();
-    }
+        const GetRegistrationSelection = () => {
+            return $('#RegistrationSelection').val();
+        }
 
-    function GetWiFiCode() {
-        var type = $('#WiFiCode').val().toString();
-        return type.replace(/,/g,'|');
-    }
+        const GetWiFiCode = () => {
+            let type = $('#WiFiCode').val().toString();
+            return type.replace(/,/g, '|');
+        }
 
-    function GetRemarks(){
-        return $('#RemarksList').val();
-    }
+        const GetRemarks = () => {
+            return $('#RemarksList').val();
+        }
 
-    function GetOperationCode(){
-        var operation = $('#OperationCode').val().toString();
-        return operation.replace(/,/g,'|');
-    }
+        const GetOperationCode = () => {
+            let operation = $('#OperationCode').val().toString();
+            return operation.replace(/,/g, '|');
+        }
     </script>
 }

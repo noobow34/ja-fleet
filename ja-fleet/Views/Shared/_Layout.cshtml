@@ -144,7 +144,7 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47052530-4"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
+            const gtag = () => { dataLayer.push(arguments); }
             gtag('js', new Date());
             gtag('config', 'UA-47052530-4');
         </script>
@@ -156,11 +156,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" integrity="sha256-9wRM03dUw6ABCs+AU69WbK33oktrlXamEXMvxUaF+KU=" crossorigin="anonymous"></script>
     <script src="~/js/site.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#sendButton').on('click', function () {
+        $(document).ready(() => {
+            $('#sendButton').on('click', () => {
                 sendMessageToMe();
             });
-            $('#sendMessage').on('hidden.bs.modal', function () {
+            $('#sendMessage').on('hidden.bs.modal', () => {
                 $('#result').text("");
             });
         })

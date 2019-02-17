@@ -1,5 +1,5 @@
-﻿function linkJetphotos(reg) {
-    $.blockUI({message:""});
+﻿const linkJetphotos = (reg) => {
+    $.blockUI({ message: "" });
     $.ajax({
         type: 'GET',
         url: '/Aircraft/Photo/' + reg,
@@ -17,11 +17,11 @@
     });
 }
 
-function sendMessageToMe() {
+const sendMessageToMe = () => {
     $.ajax({
         type: 'POST',
         url: '/Message/Send',
-        data: { name: $('#uname').val(), replay: $('#replayto').val(), message: $('#message').val()},
+        data: { name: $('#uname').val(), replay: $('#replayto').val(), message: $('#message').val() },
         cache: false
     }).fail(function (data) {
         $('#result').text("送信しました");
@@ -37,7 +37,7 @@ function sendMessageToMe() {
     });
 }
 
-function datatablesLangInit() {
+const datatablesLangInit = () => {
     $.extend($.fn.dataTable.defaults, {
         language: {
             url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"

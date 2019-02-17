@@ -24,8 +24,8 @@
     <script src="~/lib/colorbox/js/jquery.colorbox-min.js"></script>
     <script>
         var table;
-        $(document).ready(function () {
-            var gridheight;
+        $(document).ready(() =>  {
+            let gridheight;
             if (window.innerHeight < 800) {
                 gridheight = '60vh';
             } else {
@@ -42,13 +42,13 @@
             });
         });
 
-        $('#IncludeRetire').change(function () {
+        $('#IncludeRetire').change(() => {
             history.pushState(null, null, "?includeRetire=" + getIncludeRetire());
             table.ajax.url('@ViewData["api"]?includeRetire=' + getIncludeRetire()).load();
             table.ajax.reload();
         });
 
-        function getIncludeRetire(){
+        const getIncludeRetire = () => {
             return $('#IncludeRetire').prop('checked');
         }
 
