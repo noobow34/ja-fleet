@@ -1,4 +1,4 @@
-﻿const linkJetphotos = (reg) => {
+﻿const linkJetphotos = function(reg) {
     $.blockUI({ message: "" });
     $.ajax({
         type: 'GET',
@@ -17,7 +17,7 @@
     });
 }
 
-const sendMessageToMe = () => {
+const sendMessageToMe = function() {
     $.ajax({
         type: 'POST',
         url: '/Message/Send',
@@ -37,7 +37,7 @@ const sendMessageToMe = () => {
     });
 }
 
-const datatablesLangInit = () => {
+const datatablesLangInit = function() {
     $.extend($.fn.dataTable.defaults, {
         language: {
             url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"

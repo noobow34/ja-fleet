@@ -156,11 +156,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" integrity="sha256-9wRM03dUw6ABCs+AU69WbK33oktrlXamEXMvxUaF+KU=" crossorigin="anonymous"></script>
     <script src="~/js/site.min.js"></script>
     <script>
-        $(document).ready(() => {
-            $('#sendButton').on('click', () => {
+        $(document).ready(function ()  {
+            $('#sendButton').on('click', function ()  {
                 sendMessageToMe();
             });
-            $('#sendMessage').on('hidden.bs.modal', () => {
+            $('#sendMessage').on('hidden.bs.modal', function ()  {
                 $('#result').text("");
             });
         })

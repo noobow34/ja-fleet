@@ -99,7 +99,7 @@
     var isDirect = @Model.IsDirect.ToString().ToLower();
     var table;
     var gridheight = '50vh';
-    $(document).ready(() => {
+    $(document).ready(function ()  {
         $('#Airline').multiselect({
             maxHeight: 400, nonSelectedText: '（未選択）',
             enableClickableOptGroups: true,
@@ -154,7 +154,7 @@
             ajax: {url:'/Search/DoSearch',
                     type:'POST',
                     dataType: 'json',
-                    data : (d) => {
+                    data : function(d) {
                                 d.RegistrationNumber = GetRegistrationNumber();
                                 d.IsLoading = GetIsLoading();
                                 d.isDirect = GetIsDirect();
@@ -166,7 +166,7 @@
                                 d.WiFiCode = GetWiFiCode();
                                 d.Remarks = GetRemarks();
                             },
-                dataSrc: (d) => {
+                dataSrc: function(d) {
                     if (d.searchConditionKey != "" && !GetIsDirect()) {
                         history.pushState(null, null, "?sc=" + d.searchConditionKey);
                     }
@@ -181,55 +181,55 @@
         });
     } );
 
-        $('#serach').click(() => {
+        $('#serach').click(function ()  {
             isLoading = false;
             table.ajax.reload();
         })
 
-        $(window).on('popstate', (e) => {
+        $(window).on('popstate', function(e) {
             location.reload();
         });
 
-        const GetRegistrationNumber = () => {
+        const GetRegistrationNumber = function ()  {
             return $('#RegistrationNumber').val();
         }
 
-        const GetIsLoading = () => {
+        const GetIsLoading = function ()  {
             return isLoading;
         }
 
-        const GetIsDirect = () => {
+        const GetIsDirect = function ()  {
             return isDirect;
         }
 
-        const GetAirline = () => {
+        const GetAirline = function ()  {
             let airline = $('#Airline').val().toString();
             return airline.replace(/,/g, '|');
         }
 
-        const GetType = () => {
+        const GetType = function ()  {
             let type = $('#TypeDetail').val().toString();
             return type.replace(/,/g, '|');
         }
 
-        const GetRegistrationDate = () => {
+        const GetRegistrationDate = function ()  {
             return $('#RegistrationDate').val().toString().replace('-', '/');
         }
 
-        const GetRegistrationSelection = () => {
+        const GetRegistrationSelection = function ()  {
             return $('#RegistrationSelection').val();
         }
 
-        const GetWiFiCode = () => {
+        const GetWiFiCode = function ()  {
             let type = $('#WiFiCode').val().toString();
             return type.replace(/,/g, '|');
         }
 
-        const GetRemarks = () => {
+        const GetRemarks = function ()  {
             return $('#RemarksList').val();
         }
 
-        const GetOperationCode = () => {
+        const GetOperationCode = function ()  {
             let operation = $('#OperationCode').val().toString();
             return operation.replace(/,/g, '|');
         }
