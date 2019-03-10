@@ -93,6 +93,7 @@
                         <li><a href="#" data-toggle="modal" data-target="#lineinfo"><img src="~/images/linelogo.png" height="25" alt="LINE" /></a></li>
                         <li><a href="https://twitter.com/ja_fleet" target="_blank"><img src="~/images/twitterlogo.png" height="25" alt="Twitter" /></a></li>
                         <li><a href="#" data-toggle="modal" data-target="#sendMessage">📬</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#donate">(donate)</a></li>
                     </ul>
                 </div>
             </div>
@@ -100,39 +101,10 @@
     </header>
 
     <div class="modal fade" id="lineinfo" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    検索機能として使えるLINEアカウントもあります。<br />
-                    <img src="~/images/howtouse.jpg" width="350" alt="LINE使用方法画像" /><br />
-                    お友達追加は<a asp-area="" asp-controller="line" asp-action="Index" asp-route-id="">こちら</a><img src="~/images/lineqr.png" alt="LINEお友達追加" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-                </div>
-            </div>
-        </div>
     </div>
-
     <div class="modal fade" id="sendMessage" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    ご意見・ご感想・メッセージはこちらから<br />
-                    （名前・返信先は任意です。返信先はTwitter、メールなど。）<br />
-                    <div class="form-group">
-                        <label class="control-label" for="uname">名前</label><input type="text" id="uname" /> <br />
-                        <label class="control-label" for="replayto">返信先</label><input type="text" id="replayto" /> <br />
-                        <label class="control-label" for="message">メッセージ</label><br /><textarea id="message"></textarea><br />
-                    </div>
-                    <button type="button" id="sendButton" class="btn btn-primary">送信</button>
-                    <label class="text-primary" id="result"></label>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-                </div>
-            </div>
-        </div>
+    </div>
+    <div class="modal fade" id="donate" tabindex="-1">
     </div>
 
     <div class="container">
@@ -144,7 +116,7 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47052530-4"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
-            function gtag(){ dataLayer.push(arguments); }
+            function gtag() { dataLayer.push(arguments); }
             gtag('js', new Date());
             gtag('config', 'UA-47052530-4');
         </script>
@@ -154,16 +126,27 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.5/dayjs.min.js" integrity="sha256-cautXtuzdqnrn4ue0yo/50ZM6zI7AsxibIbJJRWLajo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" integrity="sha256-9wRM03dUw6ABCs+AU69WbK33oktrlXamEXMvxUaF+KU=" crossorigin="anonymous"></script>
-    <script src="~/js/site.min.js" asp-append-version="true" ></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script>
-        $(document).ready(function ()  {
-            $('#sendButton').on('click', function ()  {
+        $(document).ready(function () {
+            $('#sendButton').on('click', function () {
                 sendMessageToMe();
             });
-            $('#sendMessage').on('hidden.bs.modal', function ()  {
+            $('#sendMessage').on('hidden.bs.modal', function () {
                 $('#result').text("");
             });
         })
+        $(function () {
+            $('#lineinfo').on('show.bs.modal', function (e) {
+                $("#lineinfo").load("line.html");
+            });
+            $('#sendMessage').on('show.bs.modal', function (e) {
+                $("#sendMessage").load("message.html");
+            });
+            $('#donate').on('show.bs.modal', function (e) {
+                $("#donate").load("donate.html");
+            });
+        });
     </script>
     @RenderSection("ScriptsPartial", required: false)
 
