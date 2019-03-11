@@ -6,10 +6,8 @@
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script tyep="text/javascript">
-    $(document).ready(function() {
+    $(function () {
         $('#IsAdmin').val($.cookie('IsAdmin'));
-    });
-    $(function() {
         $('#setbutton').click(function() {
             $.cookie('IsAdmin',$('#IsAdmin').val(),{expires:1000});
             $('#IsAdmin').val($.cookie('IsAdmin'));

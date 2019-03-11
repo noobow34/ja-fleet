@@ -128,20 +128,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" integrity="sha256-9wRM03dUw6ABCs+AU69WbK33oktrlXamEXMvxUaF+KU=" crossorigin="anonymous"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script>
-        $(document).ready(function () {
+        $(function () {
             $('#sendButton').on('click', function () {
                 sendMessageToMe();
             });
-            $('#sendMessage').on('hidden.bs.modal', function () {
-                $('#result').text("");
-            });
-        })
-        $(function () {
             $('#lineinfo').on('show.bs.modal', function (e) {
                 $("#lineinfo").load("line.html");
             });
             $('#sendMessage').on('show.bs.modal', function (e) {
                 $("#sendMessage").load("message.html");
+                $('#result').text("");
             });
             $('#donate').on('show.bs.modal', function (e) {
                 $("#donate").load("donate.html");
