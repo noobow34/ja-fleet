@@ -47,8 +47,12 @@ namespace jafleet.Controllers
             ViewData["api"] = "/api/airlinegroup/" + id;
             if (!string.IsNullOrEmpty(id2))
             {
-                ViewData["Title"] += ("・" + MasterManager.Type.Where(p => p.TypeCode == id2).First()?.TypeName);
-                ViewData["api"] += ("/" + id2);
+                var typeName = MasterManager.Type.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
+                if (!string.IsNullOrEmpty(typeName))
+                {
+                    ViewData["Title"] += ("・" + typeName);
+                    ViewData["api"] += ("/" + id2);
+                }
             }
 
             model.IncludeRetire = includeRetire;
@@ -70,8 +74,12 @@ namespace jafleet.Controllers
             ViewData["api"] = "/api/airline/" + id;
             if (!string.IsNullOrEmpty(id2))
             {
-                ViewData["Title"] += ("・" + MasterManager.Type.Where(p => p.TypeCode == id2).First()?.TypeName);
-                ViewData["api"] += ("/" + id2);
+                var typeName = MasterManager.Type.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
+                if (!string.IsNullOrEmpty(typeName))
+                {
+                    ViewData["Title"] += ("・" + typeName);
+                    ViewData["api"] += ("/" + id2);
+                }
             }
 
             model.IncludeRetire = includeRetire;
