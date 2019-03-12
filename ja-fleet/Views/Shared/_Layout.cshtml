@@ -100,29 +100,9 @@
         </nav>
     </header>
 
-    <div class="modal fade" id="lineinfo" tabindex="-1">
-    </div>
-    <div class="modal fade" id="sendMessage" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    ご意見・ご感想・メッセージはこちらから<br />
-                    （名前・返信先は任意です。返信先はTwitter、メールなど。）<br />
-                    <div class="form-group">
-                        <label class="control-label" for="uname">名前</label><input type="text" id="uname" /> <br />
-                        <label class="control-label" for="replayto">返信先</label><input type="text" id="replayto" /> <br />
-                        <label class="control-label" for="message">メッセージ</label><br /><textarea id="message"></textarea><br />
-                    </div>
-                    <button type="button" id="sendButton" class="btn btn-primary">送信</button>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="donate" tabindex="-1">
-    </div>
+    <div class="modal fade" id="lineinfo" tabindex="-1"></div>
+    <div class="modal fade" id="sendMessage" tabindex="-1"></div>
+    <div class="modal fade" id="donate" tabindex="-1"></div>
 
     <div class="container">
         @RenderBody()
@@ -149,11 +129,13 @@
             $('#lineinfo').on('show.bs.modal', function (e) {
                 $("#lineinfo").load("line.html");
             });
-            $('#sendButton').on('click', function () {
-                sendMessageToMe();
-            });
             $('#sendMessage').on('show.bs.modal', function (e) {
-                $('#result').text("");
+                $("#sendMessage").load("message.html", function () {
+                    $('#sendButton').on('click', function () {
+                        sendMessageToMe();
+                    });
+                    $('#result').text("");
+                });
             });
             $('#donate').on('show.bs.modal', function (e) {
                 $("#donate").load("donate.html");
