@@ -127,10 +127,10 @@
     <script>
         $(function () {
             $('#lineinfo').on('show.bs.modal', function (e) {
-                $("#lineinfo").load("line.html");
+                $("#lineinfo").load("/line.html");
             });
             $('#sendMessage').on('show.bs.modal', function (e) {
-                $("#sendMessage").load("message.html", function () {
+                $("#sendMessage").load("/message.html", function () {
                     $('#sendButton').on('click', function () {
                         sendMessageToMe();
                     });
@@ -138,7 +138,7 @@
                 });
             });
             $('#donate').on('show.bs.modal', function (e) {
-                $("#donate").load("donate.html");
+                $("#donate").load("/donate.html");
             });
         });
     </script>
