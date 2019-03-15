@@ -100,9 +100,9 @@
         </nav>
     </header>
 
-    <div class="modal fade" id="lineinfo" tabindex="-1"></div>
-    <div class="modal fade" id="sendMessage" tabindex="-1"></div>
-    <div class="modal fade" id="donate" tabindex="-1"></div>
+    <div class="modal fade" id="lineinfo" tabindex="-1" data-loadtarget="@Url.Content("~/line.html")" data-loaded=""></div>
+    <div class="modal fade" id="sendMessage" tabindex="-1" data-loadtarget="@Url.Content("~/message.html")" data-loaded=""></div>
+    <div class="modal fade" id="donate" tabindex="-1" data-loadtarget="@Url.Content("~/donate.html")" data-loaded=""></div>
 
     <div class="container">
         @RenderBody()
@@ -126,19 +126,22 @@
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script>
         $(function () {
-            $('#lineinfo').on('show.bs.modal', function (e) {
-                $("#lineinfo").load("/line.html");
-            });
-            $('#sendMessage').on('show.bs.modal', function (e) {
-                $("#sendMessage").load("/message.html", function () {
-                    $('#sendButton').on('click', function () {
-                        sendMessageToMe();
+            $('.modal').on('show.bs.modal', function (e) {
+                let id = $(e.target).attr('id'); 
+                if ($(e.target).data('loaded') == "") {
+                    let loadtarget = $(e.target).data('loadtarget');
+                    $(e.target).load(loadtarget, function () {
+                        if (id == "sendMessage") {
+                            $('#sendButton').on('click', function () {
+                                sendMessageToMe();
+                            });
+                        }
+                        $(e.target).data('loaded', '1');
                     });
+                }
+                if (id == "sendMessage") {
                     $('#result').text("");
-                });
-            });
-            $('#donate').on('show.bs.modal', function (e) {
-                $("#donate").load("/donate.html");
+                }
             });
         });
     </script>
