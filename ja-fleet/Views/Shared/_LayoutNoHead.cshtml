@@ -1,0 +1,51 @@
+﻿@using jafleet.Manager;
+@using jafleet.Commons.EF;
+@using jafleet.Util;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="google-site-verification" content="gaEmZmJrwC5Ay5P-0hcqz_IteB60VIJNDlIbfsSFlxo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @RenderSection("HeadPartial", required: false)
+    <title>@ViewData["Title"] - JA-Fleet【本邦航空会社機材一覧サイト】</title>
+    <meta content="@ViewData["Title"] - JA-Fleet【本邦航空会社機材一覧サイト】" name="title">
+    <meta property="og:title" content="@ViewData["Title"] - JA-Fleet【本邦航空会社機材一覧サイト】" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    @RenderSection("CssPartial", required: false)
+    <style>
+        body{
+            padding-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    @if (!CookieUtil.IsAdmin(Context))
+    {
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47052530-4"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'UA-47052530-4');
+        </script>
+    }
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js" crossorigin="anonymous" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js" crossorigin="anonymous" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.5/dayjs.min.js" integrity="sha256-cautXtuzdqnrn4ue0yo/50ZM6zI7AsxibIbJJRWLajo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" integrity="sha256-9wRM03dUw6ABCs+AU69WbK33oktrlXamEXMvxUaF+KU=" crossorigin="anonymous"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    @RenderSection("ScriptsPartial", required: false)
+
+</body>
+</html>

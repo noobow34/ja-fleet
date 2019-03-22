@@ -21,7 +21,7 @@
 @if (Model.IsAdmin)
 {
     @:{data: 'serialNumber', render: function(data, type, row, meta)  {
-    @:return '<a href="/E/' + row.registrationNumber + '">' + data + '</a>';
+    @:return "<a href=\"javascript:openColorbox('/E/" + row.registrationNumber + "')\">" + data + "</a>";
     @:},className: 'dt-center'},
 }
 else
