@@ -28,6 +28,7 @@ namespace jafleet
             {
                 cfg.CreateMap<SearchModel, SearchConditionInModel>();
                 cfg.CreateMap<SearchConditionInModel, SearchModel>();
+                cfg.CreateMap<Aircraft, AircraftHistory>();
             });
 
         }

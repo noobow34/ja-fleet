@@ -6,6 +6,7 @@ using jafleet.Models;
 using jafleet.Commons.EF;
 using jafleet.Util;
 using jafleet.Commons.Constants;
+using AutoMapper;
 
 namespace jafleet.Controllers
 {
@@ -65,19 +66,29 @@ namespace jafleet.Controllers
         [HttpPost]
         public IActionResult Store( EditModel model){
             try{
+                DateTime storeDate = DateTime.Now;
                 String reg = model.Aircraft.RegistrationNumber;
                 if (!model.NotUpdateDate){
-                    model.Aircraft.UpdateTime = DateTime.Now;
+                    model.Aircraft.UpdateTime = storeDate;
                 }
-                model.Aircraft.ActualUpdateTime = DateTime.Now;
+                model.Aircraft.ActualUpdateTime = storeDate;
                 if (model.IsNew)
                 {
-                    model.Aircraft.CreationTime = DateTime.Now;
+                    model.Aircraft.CreationTime = storeDate;
                     _context.Aircraft.Add(model.Aircraft);
                 }
                 else
                 {
                     _context.Entry(model.Aircraft).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    //Historyにコピー
+                    var ah = new AircraftHistory();
+                    Mapper.Map(model.Aircraft, ah);
+                    ah.HistoryRegisterAt = storeDate;
+                    //HistoryのSEQのMAXを取得
+                    var maxseq = _context.AircraftHistory.Where(ahh => ahh.RegistrationNumber == ah.RegistrationNumber).GroupBy(ahh => ahh.RegistrationNumber)
+                                            .Select(ahh => new { maxseq = ahh.Max(x => x.Seq) }).FirstOrDefault();
+                    ah.Seq = (maxseq?.maxseq ?? 0) + 1;
+                    _context.AircraftHistory.Add(ah);
                 }
                 _context.SaveChanges();
             }catch(Exception ex){

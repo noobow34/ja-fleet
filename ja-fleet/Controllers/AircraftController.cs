@@ -110,16 +110,6 @@ namespace jafleet.Controllers
             string jetphotoUrl = string.Format("https://www.jetphotos.com/showphotos.php?keywords-type=reg&keywords={0}&search-type=Advanced&keywords-contain=0&sort-order=2", id);
             string redirectUrl = string.Empty;
 
-            Log log = new Log
-            {
-                LogDate = DateTime.Now
-                , LogType = LogType.PHOTO
-                , LogDetail = id
-                , UserId = CookieUtil.IsAdmin(HttpContext).ToString()
-            };
-
-            _context.Log.Add(log);
-            _context.SaveChanges();
             redirectUrl = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault()?.LinkUrl;
 
             if(redirectUrl == null){
@@ -132,18 +122,18 @@ namespace jafleet.Controllers
                     //Jetphotosに写真があった場合
                     string newestPhotoLink = photos[0].GetAttribute("href");
                     redirectUrl = "https://www.jetphotos.com" + newestPhotoLink;
-                    return Content(redirectUrl);
+                    return Redirect(redirectUrl);
                 }
                 else
                 {
                     //Jetphotosに写真がなかった場合
-                    return Content(string.Empty);
+                    return Content("Jetphotosに写真が登録されていないため表示できません。写真が投稿されると表示できるようになります。");
                 }
             }
             else
             {
                 //DBでリンク先が指定されていない場合
-                return Content(redirectUrl);
+                return Redirect(redirectUrl);
             }
 
         }

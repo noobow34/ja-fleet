@@ -14,7 +14,7 @@
         if (row.operationCode == "0") {
             return data;
         } else {
-            return "<a href=\"javascript:linkJetphotos('" + data + "')\">" + data + "</a>";
+            return "<a href=\"javascript:openColorbox('/AircraftDetail/" + row.registrationNumber + "?nohead=true')\">" + data + "</a>";
         }
         }, className: 'dt-center'
     },
