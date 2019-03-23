@@ -1,5 +1,9 @@
 ﻿const openColorbox = function (link) {
-    $.colorbox({ href: link, iframe:true, width: "100%", height: "90%" });
+    $.magnificPopup.open({
+        items: { src: link },
+        type: 'iframe'
+    });
+    $('.mfp-iframe-holder .mfp-content').css({ 'height': '90vh' });
 }
 
 const sendMessageToMe = function() {
