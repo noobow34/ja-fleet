@@ -1,8 +1,4 @@
-﻿.mfp-iframe-holder .mfp-content {
-    width: 95% !important;
-    max-width: 95% !important;
-}
-.navbar-brand {
+﻿.navbar-brand {
     background: url("../images/JA-Fleet_2.png") no-repeat left center;
     background-size: contain;
     width: 200px;

@@ -4,6 +4,11 @@
         type: 'iframe'
     });
     $('.mfp-iframe-holder .mfp-content').css({ 'height': '90vh' });
+    let setwidth = window.innerWidth * 0.95;
+    if (setwidth > 1200) {
+        setwidth = 1200;
+    }
+    $('.mfp-iframe-holder .mfp-content').css({ 'max-width': setwidth + 'px' });
 }
 
 const sendMessageToMe = function() {
