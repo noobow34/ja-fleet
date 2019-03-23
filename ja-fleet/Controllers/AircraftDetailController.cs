@@ -26,7 +26,7 @@ namespace jafleet.Controllers
             _services = serviceScopeFactory;
         }
 
-        public IActionResult Index(String id, [FromQuery]Boolean nohead, AircraftDetailModel model)
+        public IActionResult Index(String id, [FromQuery]Boolean nohead, [FromQuery]Boolean needback, AircraftDetailModel model)
         {
 
             ViewData["Title"] = id;
@@ -37,6 +37,7 @@ namespace jafleet.Controllers
             model.NoHead = nohead;
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
             model.Reg = id;
+            model.NeedBack = needback;
 
             //ログは非同期で書き込み
             Task.Run(() =>

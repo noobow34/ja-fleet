@@ -1,17 +1,20 @@
 ﻿const openColorbox = function (link) {
-    $.magnificPopup.open({
-        items: { src: link },
-        type: 'iframe'
-    });
-    let setwidth = window.innerWidth * 0.95;
-    if (setwidth > 1200) {
-        setwidth = 1200;
+    if (window.innerWidth < 700) {
+        link += "&needback=true";
+        window.open(link);
+    } else {
+        $.magnificPopup.open({
+            items: { src: link },
+            type: 'iframe'
+        });
+        let setwidth = window.innerWidth * 0.95;
+        if (setwidth > 1200) {
+            setwidth = 1200;
+        }
+        $('.mfp-iframe-holder .mfp-content').css({ 'height': '90vh' });
+        $('.mfp-iframe-holder .mfp-content').css({ 'max-width': setwidth + 'px' });
+        $('.mfp-iframe-holder .mfp-content').css({ 'width': setwidth + 'px' });
     }
-    $('.mfp-iframe-holder .mfp-content').css({ 'height': '90vh' });
-    $('.mfp-iframe-holder .mfp-content').css({ 'max-width': setwidth + 'px' });
-    $('.mfp-iframe-holder .mfp-content').css({ 'width': setwidth + 'px' });
-    //$('.mfp-iframe').css({ 'max-width': setwidth + 'px' });
-    //$('.mfp-iframe').css({ 'width': setwidth + 'px' });
 }
 
 const sendMessageToMe = function() {

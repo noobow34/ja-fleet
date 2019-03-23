@@ -1,9 +1,4 @@
-﻿iframe {
-    width: 1px !important;
-    min-width: 100% !important;
-    *width: 100% !important;
-}
-.navbar-brand {
+﻿.navbar-brand {
     background: url("../images/JA-Fleet_2.png") no-repeat left center;
     background-size: contain;
     width: 200px;
