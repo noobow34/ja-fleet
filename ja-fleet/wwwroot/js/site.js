@@ -10,8 +10,8 @@
     $('.mfp-iframe-holder .mfp-content').css({ 'height': '90vh' });
     $('.mfp-iframe-holder .mfp-content').css({ 'max-width': setwidth + 'px' });
     $('.mfp-iframe-holder .mfp-content').css({ 'width': setwidth + 'px' });
-    $('.mfp-iframe').css({ 'max-width': setwidth + 'px' });
-    $('.mfp-iframe').css({ 'width': setwidth + 'px' });
+    //$('.mfp-iframe').css({ 'max-width': setwidth + 'px' });
+    //$('.mfp-iframe').css({ 'width': setwidth + 'px' });
 }
 
 const sendMessageToMe = function() {
