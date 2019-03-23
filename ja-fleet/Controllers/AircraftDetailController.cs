@@ -30,7 +30,9 @@ namespace jafleet.Controllers
         {
 
             ViewData["Title"] = id;
-            ViewData["api"] = "/api/airlinegroup/";
+            ViewData["TableId"] = id;
+            ViewData["api"] = "/api/aircraftwithhistory/" + id;
+            ViewData["isDetail"] = true;
 
             model.NoHead = nohead;
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
@@ -51,8 +53,8 @@ namespace jafleet.Controllers
                             UserId = CookieUtil.IsAdmin(HttpContext).ToString()
                         };
 
-                        _context.Log.Add(log);
-                        _context.SaveChanges();
+                        context.Log.Add(log);
+                        context.SaveChanges();
                     }
                 }
             });

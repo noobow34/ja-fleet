@@ -80,15 +80,18 @@ namespace jafleet.Controllers
                 else
                 {
                     _context.Entry(model.Aircraft).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                    //Historyにコピー
-                    var ah = new AircraftHistory();
-                    Mapper.Map(model.Aircraft, ah);
-                    ah.HistoryRegisterAt = storeDate;
-                    //HistoryのSEQのMAXを取得
-                    var maxseq = _context.AircraftHistory.Where(ahh => ahh.RegistrationNumber == ah.RegistrationNumber).GroupBy(ahh => ahh.RegistrationNumber)
-                                            .Select(ahh => new { maxseq = ahh.Max(x => x.Seq) }).FirstOrDefault();
-                    ah.Seq = (maxseq?.maxseq ?? 0) + 1;
-                    _context.AircraftHistory.Add(ah);
+                    if (!model.NotUpdateDate)
+                    {
+                        //Historyにコピー
+                        var ah = new AircraftHistory();
+                        Mapper.Map(model.Aircraft, ah);
+                        ah.HistoryRegisterAt = storeDate;
+                        //HistoryのSEQのMAXを取得
+                        var maxseq = _context.AircraftHistory.Where(ahh => ahh.RegistrationNumber == ah.RegistrationNumber).GroupBy(ahh => ahh.RegistrationNumber)
+                                                .Select(ahh => new { maxseq = ahh.Max(x => x.Seq) }).FirstOrDefault();
+                        ah.Seq = (maxseq?.maxseq ?? 0) + 1;
+                        _context.AircraftHistory.Add(ah);
+                    }
                 }
                 _context.SaveChanges();
             }catch(Exception ex){

@@ -1,5 +1,5 @@
 ﻿const openColorbox = function (link) {
-    $.colorbox({ href: link, iframe: true, width: "80%", height: "90%" });
+    $.colorbox({ href: link, iframe: true, width: "95%", height: "90%" });
 }
 
 const sendMessageToMe = function() {

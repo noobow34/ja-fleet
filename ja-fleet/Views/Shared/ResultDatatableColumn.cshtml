@@ -1,22 +1,29 @@
 ﻿columns: [
+@if ((Boolean)ViewData["isDetail"])
+{
+    @:{data: 'updateTimeString',className: 'dt-center'},
+}
     {data: 'airlineNameJpShort',className: 'dt-center'},
     {data: null
     ,render: function( data, type, row ) {
-                if(row.typeDetailName != null){
-                    return row.typeDetailName;
-                }else{
-                    return row.typeName;
+                    if(row.typeDetailName != null){
+                        return row.typeDetailName;
+                    }else{
+                        return row.typeName;
+                    }
                 }
-            }
         , className: 'dt-center'
     },
     {data: 'registrationNumber', render: function(data, type, row, meta) {
-        if (row.operationCode == "0") {
-            return data;
-        } else {
-            return "<a href=\"javascript:openColorbox('/AircraftDetail/" + row.registrationNumber + "?nohead=true')\">" + data + "</a>";
-        }
-        }, className: 'dt-center'
+@if (!(Boolean)ViewData["isDetail"])
+{
+    @:return "<a href=\"javascript:openColorbox('/AircraftDetail/" + row.registrationNumber + "?nohead=true')\">" + data + "</a>";
+}
+else
+{
+    @:return data;
+}
+            }, className: 'dt-center'
     },
 @if (Model.IsAdmin)
 {
@@ -51,3 +58,7 @@ else
     scrollX: true,
     scrollCollapse: true,
     searching: false
+@if ((Boolean)ViewData["isDetail"])
+{
+@:,info: false
+}
