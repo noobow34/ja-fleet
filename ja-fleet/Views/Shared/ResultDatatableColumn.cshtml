@@ -42,7 +42,7 @@ else
     {data: 'wifi',className: 'dt-center'},
     {data: 'remarks',className: 'dt-left'}
 ],
-@if ((Boolean)ViewData["isDetail"])
+@if (!(Boolean)ViewData["isDetail"])
 {
     @:createdRow: function(row, data, dataIndex) {
     @:if (data['updateTime'] != null)
