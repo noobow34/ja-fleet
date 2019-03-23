@@ -42,23 +42,28 @@ else
     {data: 'wifi',className: 'dt-center'},
     {data: 'remarks',className: 'dt-left'}
 ],
-    createdRow: function(row, data, dataIndex) {
-        if(data['updateTime'] != null){
-            let updateTime = dayjs(data['updateTime']);
-            let today = dayjs();
-            if(today.diff(updateTime, 'days', true) <= 7){
-                $(row).css({"background-color":"#FFCCFF"});
-            }
-        }
-    },
-    paging:   false,
-    ordering: false,
-    fixedHeader: true,
-    scrollY: gridheight,
-    scrollX: true,
-    scrollCollapse: true,
-    searching: false
 @if ((Boolean)ViewData["isDetail"])
 {
-@:,info: false
+    @:createdRow: function(row, data, dataIndex) {
+    @:if (data['updateTime'] != null)
+    @:{
+    @:let updateTime = dayjs(data['updateTime']);
+    @:let today = dayjs();
+    @:if (today.diff(updateTime, 'days', true) <= 7)
+    @:{
+    @:$(row).css({ "background-color":"#FFCCFF"});
+    @:}
+    @:}
+    @:},
+}
+paging: false,
+ordering: false,
+fixedHeader: true,
+scrollY: gridheight,
+scrollX: true,
+scrollCollapse: true,
+searching: false
+@if ((Boolean)ViewData["isDetail"])
+{
+    @:,info: false
 }
