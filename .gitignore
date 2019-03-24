@@ -46,6 +46,8 @@ build/
 *.pidb
 *.log
 *.scc
+site.min.js
+site.min.css
 
 # Visual C++ cache files
 ipch/
