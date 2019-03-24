@@ -2,18 +2,22 @@
     if (window.innerWidth < 700) {
         window.open('/ADNB/' + reg);
     } else {
-        $.magnificPopup.open({
-            items: { src: '/ADN/' + reg },
-            type: 'iframe'
-        });
-        let setwidth = window.innerWidth * 0.95;
-        if (setwidth > 1200) {
-            setwidth = 1200;
-        }
-        $('.mfp-iframe-holder .mfp-content').css({ 'height': '90vh' });
-        $('.mfp-iframe-holder .mfp-content').css({ 'max-width': setwidth + 'px' });
-        $('.mfp-iframe-holder .mfp-content').css({ 'width': setwidth + 'px' });
+        openPopUp('/ADN/' + reg)
     }
+}
+
+const openPopUp = function(url){
+    $.magnificPopup.open({
+        items: { src: url },
+        type: 'iframe'
+    });
+    let setwidth = window.innerWidth * 0.95;
+    if (setwidth > 1200) {
+        setwidth = 1200;
+    }
+    $('.mfp-iframe-holder .mfp-content').css({ 'height': '90vh' });
+    $('.mfp-iframe-holder .mfp-content').css({ 'max-width': setwidth + 'px' });
+    $('.mfp-iframe-holder .mfp-content').css({ 'width': setwidth + 'px' });
 }
 
 const sendMessageToMe = function() {

@@ -3,9 +3,6 @@ using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
 using System.Linq;
 using System.Collections.Generic;
-using System.Collections;
-using Microsoft.EntityFrameworkCore.Extensions.Internal;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Manager
@@ -35,16 +32,16 @@ namespace jafleet.Manager
             });
             _allAirline = tempaa.ToArray();
 
-            _ana = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup).OrderBy(p => p.DisplayOrder).ToArray();
-            _jal = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup).OrderBy(p => p.DisplayOrder).ToArray();
-            _lcc = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToArray();
-            _other = context.Airline.Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToArray();
-            _type = context.Type.OrderBy(p => p.DisplayOrder).ToArray();
-            _wifi = context.Code.Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
-            _adminUser = context.AdminUser.Select(e => e.UserId).ToList();
-            _typeDetailGroup = context.TypeDetailView.OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
+            _ana = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup).OrderBy(p => p.DisplayOrder).ToArray();
+            _jal = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup).OrderBy(p => p.DisplayOrder).ToArray();
+            _lcc = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToArray();
+            _other = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToArray();
+            _type = context.Type.AsNoTracking().OrderBy(p => p.DisplayOrder).ToArray();
+            _wifi = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
+            _adminUser = context.AdminUser.AsNoTracking().Select(e => e.UserId).ToList();
+            _typeDetailGroup = context.TypeDetailView.AsNoTracking().OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
 
-            var tempop = context.Code.Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
+            var tempop = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
             tempop.ForEach(o => {
                 if(OperationCode.PRE_OPERATION.Contains(o.Key))
                 {

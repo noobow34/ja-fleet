@@ -21,7 +21,7 @@ namespace jafleet.Controllers
             _context = context;
         }
 
-        public IActionResult Index(String id,EditModel model)
+        public IActionResult Index(String id,EditModel model, [FromQuery]Boolean nohead)
         {
             if (!CookieUtil.IsAdmin(HttpContext))
             {
@@ -34,6 +34,7 @@ namespace jafleet.Controllers
             model.OperationList = MasterManager.Operation;
             model.WiFiList = MasterManager.Wifi;
             model.NotUpdateDate = true;
+            model.NoHead = nohead;
 
             if (string.IsNullOrEmpty(id))
             {
@@ -104,7 +105,12 @@ namespace jafleet.Controllers
             model.TypeList = MasterManager.Type;
             model.OperationList = MasterManager.Operation;
             model.WiFiList = MasterManager.Wifi;
-            return Redirect("/E/" + model.Aircraft.RegistrationNumber);
+            string noheadString = string.Empty;
+            if (model.NoHead)
+            {
+                noheadString = "?nohead=" + model.NoHead.ToString();
+            }
+            return Redirect("/E/" + model.Aircraft.RegistrationNumber + noheadString);
         }
     }
 }

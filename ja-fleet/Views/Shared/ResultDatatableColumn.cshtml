@@ -28,7 +28,7 @@ else
 @if (Model.IsAdmin)
 {
     @:{data: 'serialNumber', render: function(data, type, row, meta)  {
-    @:return "<a href=\"javascript:openColorbox('/E/" + row.registrationNumber + "')\">" + data + "</a>";
+    @:return "<a href=\"javascript:openPopUp('/E/" + row.registrationNumber + "?nohead=true')\">" + data + "</a>";
     @:},className: 'dt-center'},
 }
 else

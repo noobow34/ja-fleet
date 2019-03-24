@@ -5,7 +5,7 @@ using jafleet.Commons.Constants;
 
 namespace jafleet.Models
 {
-    public class EditModel
+    public class EditModel:BaseModel
     {
         public Aircraft Aircraft { get; set; }
         public Boolean IsNew { get; set; } = false;
