@@ -10,11 +10,11 @@
     }
 }
 @section HeadPartial{
-    <meta name="description" content="@ViewData["Title"]の詳細情報です。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。">
+    <meta name="description" content="@(Model.Title)の詳細情報です。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。">
     <meta name="referrer" content="no-referrer" />
 
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="@ViewData["Title"]の詳細情報です。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。" />
+    <meta property="og:description" content="@(Model.Title)の詳細情報です。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。" />
     <meta property="og:image" content="https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png" />
     <meta property="og:url" content="https://ja-fleet.noobow.me/@Context.Request.Path" />
     <meta property="og:site_name" content="JA-Fleet【本邦航空会社機材一覧サイト】" />
@@ -23,11 +23,11 @@
 }
 @if (!Model.NeedBack)
 {
-    <h2>@ViewData["Title"]</h2>
+    <h2>@(Model.Title)</h2>
 }
 else
 {
-    <h2  style="display:inline;">@ViewData["Title"]</h2>　<input type="button" value="戻る" onClick="window.close();" id="back" class="btn btn-primary btn-xs" />
+    <h2  style="display:inline;">@(Model.Title)</h2>　<input type="button" value="戻る" onClick="window.close();" id="back" class="btn btn-primary btn-xs" />
 }
 
 @await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml", ViewData)

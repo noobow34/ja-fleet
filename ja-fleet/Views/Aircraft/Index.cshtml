@@ -1,10 +1,10 @@
 ﻿@model AircraftModel
 @section HeadPartial{
-    <meta name="description" content="@ViewData["Title"]の機材（飛行機）一覧ページです。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。">
+    <meta name="description" content="@(Model.Title)の機材（飛行機）一覧ページです。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。">
     <meta name="referrer" content="no-referrer" />
 
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="@ViewData["Title"]の機材（飛行機）一覧ページです。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。" />
+    <meta property="og:description" content="@(Model.Title)の機材（飛行機）一覧ページです。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。" />
     <meta property="og:image" content="https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png" />
     <meta property="og:url" content="https://ja-fleet.noobow.me/@Context.Request.Path" />
     <meta property="og:site_name" content="JA-Fleet【本邦航空会社機材一覧サイト】" />
@@ -14,7 +14,7 @@
 @section CssPartial{
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" integrity="sha256-PZLhE6wwMbg4AB3d35ZdBF9HD/dI/y4RazA3iRDurss=" crossorigin="anonymous" />
 }
-<h2>@ViewData["Title"]</h2>
+<h2>@(Model.Title)</h2>
 <div class="form-group">
     @Html.CheckBoxFor(model => model.IncludeRetire)
     @Html.LabelFor(model => model.IncludeRetire, new { @class = "control-label" })

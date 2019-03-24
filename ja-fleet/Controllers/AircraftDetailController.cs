@@ -29,7 +29,7 @@ namespace jafleet.Controllers
         public IActionResult Index(String id, [FromQuery]Boolean nohead, [FromQuery]Boolean needback, AircraftDetailModel model)
         {
 
-            ViewData["Title"] = id;
+            model.Title = id;
             ViewData["TableId"] = id;
             ViewData["api"] = "/api/aircraftwithhistory/" + id;
             model.IsDetail = true;

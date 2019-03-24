@@ -10,11 +10,11 @@
     }
     if (Model.IsNew)
     {
-        ViewData["Title"] = "新規";
+        Model.Title = "新規";
     }
     else
     {
-        ViewData["Title"] = Model.Aircraft.RegistrationNumber;
+        Model.Title = Model.Aircraft.RegistrationNumber;
     }
 }
 @if (Model.IsNew)

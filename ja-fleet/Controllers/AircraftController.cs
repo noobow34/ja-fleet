@@ -25,7 +25,7 @@ namespace jafleet.Controllers
         public IActionResult Index(AircraftModel model)
         {
 
-            ViewData["Title"] = "all";
+            model.Title = "all";
             ViewData["TableId"] = "all";
             ViewData["api"] = "/api/airlinegroup/";
 
@@ -42,7 +42,7 @@ namespace jafleet.Controllers
             string groupName;
             groupName = _context.AirlineGroup.FirstOrDefault(p => p.AirlineGroupCode == id)?.AirlineGroupName;
 
-            ViewData["Title"] = groupName ?? "all";
+            model.Title = groupName ?? "all";
             ViewData["TableId"] = id ?? "all";
             ViewData["api"] = "/api/airlinegroup/" + id;
             if (!string.IsNullOrEmpty(id2))
@@ -50,7 +50,7 @@ namespace jafleet.Controllers
                 var typeName = MasterManager.Type.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
                 if (!string.IsNullOrEmpty(typeName))
                 {
-                    ViewData["Title"] += ("・" + typeName);
+                    model.Title += ("・" + typeName);
                     ViewData["api"] += ("/" + id2);
                 }
             }
@@ -69,7 +69,7 @@ namespace jafleet.Controllers
             string airlineName;
             airlineName = _context.Airline.FirstOrDefault(p => p.AirlineCode == id)?.AirlineNameJpShort;
 
-            ViewData["Title"] = airlineName ?? "all";
+            model.Title = airlineName ?? "all";
             ViewData["TableId"] = id ?? "all";
             ViewData["api"] = "/api/airline/" + id;
             if (!string.IsNullOrEmpty(id2))
@@ -77,7 +77,7 @@ namespace jafleet.Controllers
                 var typeName = MasterManager.Type.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
                 if (!string.IsNullOrEmpty(typeName))
                 {
-                    ViewData["Title"] += ("・" + typeName);
+                    model.Title += ("・" + typeName);
                     ViewData["api"] += ("/" + id2);
                 }
             }
@@ -95,7 +95,7 @@ namespace jafleet.Controllers
             string typeName;
             typeName = _context.Type.FirstOrDefault(p => p.TypeCode == id)?.TypeName;
 
-            ViewData["Title"] = typeName ?? "all";
+            model.Title = typeName ?? "all";
             ViewData["TableId"] = id ?? "all";
             ViewData["api"] = "/api/type/" + id;
 

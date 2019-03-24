@@ -1,6 +1,6 @@
 ﻿@using jafleet.Manager
 @{
-    ViewData["Title"] = "検索";
+    Model.Title = "検索";
     ViewData["TableId"] = "SerachResult";
 }
 @model SearchModel
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" integrity="sha256-PZLhE6wwMbg4AB3d35ZdBF9HD/dI/y4RazA3iRDurss=" crossorigin="anonymous" />
 }
-<h3>@ViewData["Title"]</h3>
+<h3>@(Model.Title)</h3>
 
 <div class="row">
     <div class="col-xs-4 col-sm-2">
