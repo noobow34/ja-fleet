@@ -60,7 +60,17 @@ namespace jafleet.Controllers
                 }
             });
 
-            return View(model);
+            return View("~/Views/AircraftDetail/index.cshtml",model);
+        }
+
+        public IActionResult IndexNohead(String id,  AircraftDetailModel model)
+        {
+            return Index(id, true, false, model);
+        }
+
+        public IActionResult IndexNoheadBack(String id, AircraftDetailModel model)
+        {
+            return Index(id, true, true, model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -86,8 +86,14 @@ namespace jafleet
                     defaults: new { controller = "E", action = "Index" });
                 routes.MapRoute("Log", "log/{id?}",
                     defaults: new { controller = "log", action = "Index" });
-                routes.MapRoute("AircraftDetail", "AircraftDetail/{id?}",
+                routes.MapRoute("AircraftDetail1", "AircraftDetail/{id?}",
                     defaults: new { controller = "AircraftDetail", action = "Index" });
+                routes.MapRoute("AircraftDetail1", "AD/{id?}",
+                    defaults: new { controller = "AircraftDetail", action = "Index" });
+                routes.MapRoute("AircraftDetail1", "ADN/{id?}",
+                    defaults: new { controller = "AircraftDetail", action = "IndexNohead" });
+                routes.MapRoute("AircraftDetail1", "ADNB/{id?}",
+                    defaults: new { controller = "AircraftDetail", action = "IndexNoheadBack" });
                 routes.MapRoute("Logy", "logy",
                     defaults: new { controller = "log", action = "Yesterday" });
                 routes.MapRoute(

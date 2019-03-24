@@ -17,7 +17,7 @@
     {data: 'registrationNumber', render: function(data, type, row, meta) {
 @if (!(Boolean)ViewData["isDetail"])
 {
-    @:return "<a href=\"javascript:openColorbox('/AircraftDetail/" + row.registrationNumber + "?nohead=true')\">" + data + "</a>";
+    @:return "<a href=\"javascript:openDetail('" + row.registrationNumber + "')\">" + data + "</a>";
 }
 else
 {

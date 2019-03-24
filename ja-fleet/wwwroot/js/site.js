@@ -1,10 +1,9 @@
-﻿const openColorbox = function (link) {
+﻿const openDetail = function (reg) {
     if (window.innerWidth < 700) {
-        link += "&needback=true";
-        window.open(link);
+        window.open('/ADNB/' + reg);
     } else {
         $.magnificPopup.open({
-            items: { src: link },
+            items: { src: '/ADN/' + reg },
             type: 'iframe'
         });
         let setwidth = window.innerWidth * 0.95;
