@@ -7,6 +7,7 @@ using jafleet.Commons.EF;
 using jafleet.Util;
 using jafleet.Commons.Constants;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Controllers
 {
@@ -57,7 +58,7 @@ namespace jafleet.Controllers
                 {
                     additional = "?includeRetire=true";
                 }
-                model.LinkPage = $"https://ja-fleet.noobow.me/Aircraft/Airline/{av.Airline}/{av.TypeCode}{additional}";
+                model.LinkPage = $"https://ja-fleet.noobow.me/AD/{av.RegistrationNumber}";
             }
 
             return View(model);
@@ -68,7 +69,7 @@ namespace jafleet.Controllers
             try{
                 DateTime storeDate = DateTime.Now;
                 string reg = model.Aircraft.RegistrationNumber;
-                var origin = _context.Aircraft.Where(a => a.RegistrationNumber == reg).FirstOrDefault();
+                var origin = _context.Aircraft.AsNoTracking().Where(a => a.RegistrationNumber == reg).FirstOrDefault();
                 if (!model.NotUpdateDate){
                     model.Aircraft.UpdateTime = storeDate;
                 }
@@ -80,7 +81,6 @@ namespace jafleet.Controllers
                 }
                 else
                 {
-                    _context.Entry(model.Aircraft).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     if (!model.NotUpdateDate)
                     {
                         //Historyにコピー
@@ -88,11 +88,12 @@ namespace jafleet.Controllers
                         Mapper.Map(origin, ah);
                         ah.HistoryRegisterAt = storeDate;
                         //HistoryのSEQのMAXを取得
-                        var maxseq = _context.AircraftHistory.Where(ahh => ahh.RegistrationNumber == ah.RegistrationNumber).GroupBy(ahh => ahh.RegistrationNumber)
+                        var maxseq = _context.AircraftHistory.AsNoTracking().Where(ahh => ahh.RegistrationNumber == ah.RegistrationNumber).GroupBy(ahh => ahh.RegistrationNumber)
                                                 .Select(ahh => new { maxseq = ahh.Max(x => x.Seq) }).FirstOrDefault();
                         ah.Seq = (maxseq?.maxseq ?? 0) + 1;
                         _context.AircraftHistory.Add(ah);
                     }
+                    _context.Entry(model.Aircraft).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 }
                 _context.SaveChanges();
             }catch(Exception ex){
