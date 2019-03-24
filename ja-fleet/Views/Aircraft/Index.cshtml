@@ -34,7 +34,7 @@
 
             datatablesLangInit();
 
-            table = $('#' + '@ViewData["TableId"]').DataTable({
+            table = $('#' + '@(Model.TableId)').DataTable({
                 ajax: {url:'@ViewData["api"]?includeRetire=' + getIncludeRetire(),
                     dataSrc: ''
                 },

@@ -2,7 +2,7 @@
 {
     @:<font color="#FFCCFF">背景ピンク■</font>は更新1週間以内のデータです。
 }
-<table id="@ViewData["TableId"]" class="display cell-border compact dt-body-center nowrap" style="width:100%">
+<table id="@(Model.TableId)" class="display cell-border compact dt-body-center nowrap" style="width:100%">
     <thead>
         <tr>
             @if (Model.IsDetail)

@@ -30,7 +30,7 @@ namespace jafleet.Controllers
         {
 
             model.Title = id;
-            ViewData["TableId"] = id;
+            model.TableId = id;
             ViewData["api"] = "/api/aircraftwithhistory/" + id;
             model.IsDetail = true;
 
