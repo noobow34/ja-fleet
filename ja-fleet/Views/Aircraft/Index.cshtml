@@ -35,7 +35,7 @@
             datatablesLangInit();
 
             table = $('#' + '@(Model.TableId)').DataTable({
-                ajax: {url:'@ViewData["api"]?includeRetire=' + getIncludeRetire(),
+                ajax: {url:'@(Model.api)?includeRetire=' + getIncludeRetire(),
                     dataSrc: ''
                 },
                 @await Html.PartialAsync("/Views/Shared/ResultDatatableColumn.cshtml", Model)
@@ -44,7 +44,7 @@
 
         $('#IncludeRetire').change(function ()  {
             history.pushState(null, null, "?includeRetire=" + getIncludeRetire());
-            table.ajax.url('@ViewData["api"]?includeRetire=' + getIncludeRetire()).load();
+            table.ajax.url('@(Model.api)?includeRetire=' + getIncludeRetire()).load();
             table.ajax.reload();
         });
 

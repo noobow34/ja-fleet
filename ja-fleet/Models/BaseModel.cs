@@ -12,5 +12,6 @@ namespace jafleet.Models
         public Boolean IsDetail { get; set; }
         public string Title { get; set; }
         public string TableId { get; set; }
+        public string api { get; set; }
     }
 }

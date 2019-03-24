@@ -39,7 +39,7 @@ else
             datatablesLangInit();
             let gridheight = "20vh"
             table = $('#' + '@(Model.TableId)').DataTable({
-                ajax: {url:'@ViewData["api"]',
+                ajax: {url:'@(Model.api)',
                     dataSrc: ''
                 },
                 @await Html.PartialAsync("/Views/Shared/ResultDatatableColumn.cshtml", Model)
