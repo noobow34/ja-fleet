@@ -1,6 +1,6 @@
 ﻿namespace jafleet.Models
 {
-    public class MessageModel
+    public class MessageModel:BaseModel
     {
         public string Name { get; set; }
         public string Replay { get; set; }

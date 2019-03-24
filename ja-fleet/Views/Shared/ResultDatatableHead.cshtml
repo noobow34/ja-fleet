@@ -1,11 +1,11 @@
-﻿@if (!(Boolean)ViewData["isDetail"])
+﻿@if (!Model.IsDetail)
 {
     @:<font color="#FFCCFF">背景ピンク■</font>は更新1週間以内のデータです。
 }
 <table id="@ViewData["TableId"]" class="display cell-border compact dt-body-center nowrap" style="width:100%">
     <thead>
         <tr>
-            @if ((Boolean)ViewData["isDetail"])
+            @if (Model.IsDetail)
             {
                 <th>更新日</th>
             }

@@ -2,7 +2,7 @@
 
 namespace jafleet.Models
 {
-    public class SearchResult
+    public class SearchResult:BaseModel
     {
         public string SearchConditionKey { get; set; }
         public AircraftView[] ResultList { get; set; }

@@ -6,7 +6,7 @@ using jafleet.Commons.EF;
 
 namespace jafleet.Models
 {
-    public class SearchModel
+    public class SearchModel:BaseModel
     {
         [Display(Name = "機体記号")]
         public String RegistrationNumber { get; set; }
@@ -42,8 +42,6 @@ namespace jafleet.Models
                                         , new SelectListItem { Value = "2", Text = "あり" } };
 
         public Boolean IsLoading { get; set; } = true;
-
-        public Boolean IsAdmin { get; set; } = false;
 
         public Boolean IsDirect { get; set; } = false;
     }

@@ -28,7 +28,6 @@ namespace jafleet.Controllers
             ViewData["Title"] = "all";
             ViewData["TableId"] = "all";
             ViewData["api"] = "/api/airlinegroup/";
-            ViewData["isDetail"] = false;
 
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
@@ -46,7 +45,6 @@ namespace jafleet.Controllers
             ViewData["Title"] = groupName ?? "all";
             ViewData["TableId"] = id ?? "all";
             ViewData["api"] = "/api/airlinegroup/" + id;
-            ViewData["isDetail"] = false;
             if (!string.IsNullOrEmpty(id2))
             {
                 var typeName = MasterManager.Type.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
@@ -74,7 +72,6 @@ namespace jafleet.Controllers
             ViewData["Title"] = airlineName ?? "all";
             ViewData["TableId"] = id ?? "all";
             ViewData["api"] = "/api/airline/" + id;
-            ViewData["isDetail"] = false;
             if (!string.IsNullOrEmpty(id2))
             {
                 var typeName = MasterManager.Type.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
@@ -101,7 +98,6 @@ namespace jafleet.Controllers
             ViewData["Title"] = typeName ?? "all";
             ViewData["TableId"] = id ?? "all";
             ViewData["api"] = "/api/type/" + id;
-            ViewData["isDetail"] = false;
 
             model.IncludeRetire = includeRetire;
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);

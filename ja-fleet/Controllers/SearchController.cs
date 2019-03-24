@@ -29,7 +29,6 @@ namespace jafleet.Controllers
 
         public IActionResult Index(SearchModel model,[FromQuery]string sc)
         {
-            ViewData["isDetail"] = false;
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
             model.AirlineList = MasterManager.AllAirline;

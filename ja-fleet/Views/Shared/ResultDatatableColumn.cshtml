@@ -1,5 +1,5 @@
 ﻿columns: [
-@if ((Boolean)ViewData["isDetail"])
+@if (Model.IsDetail)
 {
     @:{data: 'updateTimeString',className: 'dt-center'},
 }
@@ -15,7 +15,7 @@
         , className: 'dt-center'
     },
     {data: 'registrationNumber', render: function(data, type, row, meta) {
-@if (!(Boolean)ViewData["isDetail"])
+@if (!Model.IsDetail)
 {
     @:return "<a href=\"javascript:openDetail('" + row.registrationNumber + "')\">" + data + "</a>";
 }
@@ -42,7 +42,7 @@ else
     {data: 'wifi',className: 'dt-center'},
     {data: 'remarks',className: 'dt-left'}
 ],
-@if (!(Boolean)ViewData["isDetail"])
+@if (!Model.IsDetail)
 {
     @:createdRow: function(row, data, dataIndex) {
     @:if (data['updateTime'] != null)
@@ -63,7 +63,7 @@ scrollY: gridheight,
 scrollX: true,
 scrollCollapse: true,
 searching: false
-@if ((Boolean)ViewData["isDetail"])
+@if (Model.IsDetail)
 {
     @:,info: false
 }

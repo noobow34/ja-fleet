@@ -32,7 +32,7 @@ namespace jafleet.Controllers
             ViewData["Title"] = id;
             ViewData["TableId"] = id;
             ViewData["api"] = "/api/aircraftwithhistory/" + id;
-            ViewData["isDetail"] = true;
+            model.IsDetail = true;
 
             model.NoHead = nohead;
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);

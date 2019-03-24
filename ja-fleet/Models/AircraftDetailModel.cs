@@ -3,11 +3,9 @@ using System;
 
 namespace jafleet.Models
 {
-    public class AircraftDetailModel
+    public class AircraftDetailModel:BaseModel
     {
-        public Boolean NoHead { get; set; }
         public Boolean NeedBack { get; set; }
-        public Boolean IsAdmin { get; set; }
         public String Reg { get; set; }
     }
 }

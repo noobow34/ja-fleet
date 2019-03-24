@@ -9,5 +9,6 @@ namespace jafleet.Models
     {
         public Boolean NoHead { get; set; }
         public Boolean IsAdmin { get; set; }
+        public Boolean IsDetail { get; set; }
     }
 }
