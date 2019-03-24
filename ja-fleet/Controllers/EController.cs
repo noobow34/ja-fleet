@@ -67,7 +67,8 @@ namespace jafleet.Controllers
         public IActionResult Store( EditModel model){
             try{
                 DateTime storeDate = DateTime.Now;
-                String reg = model.Aircraft.RegistrationNumber;
+                string reg = model.Aircraft.RegistrationNumber;
+                var origin = _context.Aircraft.Where(a => a.RegistrationNumber == reg).FirstOrDefault();
                 if (!model.NotUpdateDate){
                     model.Aircraft.UpdateTime = storeDate;
                 }
@@ -84,7 +85,7 @@ namespace jafleet.Controllers
                     {
                         //Historyにコピー
                         var ah = new AircraftHistory();
-                        Mapper.Map(model.Aircraft, ah);
+                        Mapper.Map(origin, ah);
                         ah.HistoryRegisterAt = storeDate;
                         //HistoryのSEQのMAXを取得
                         var maxseq = _context.AircraftHistory.Where(ahh => ahh.RegistrationNumber == ah.RegistrationNumber).GroupBy(ahh => ahh.RegistrationNumber)
