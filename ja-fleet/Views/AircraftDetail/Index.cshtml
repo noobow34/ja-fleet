@@ -30,7 +30,7 @@ else
     <h2  style="display:inline;">@(Model.Title)</h2>　<input type="button" value="戻る" onClick="window.close();" id="back" class="btn btn-primary btn-xs" />
 }
 
-@await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml", ViewData)
+@await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")
 <iframe src="/Aircraft/Photo/@Model.Reg" width="100%" height="700px"></iframe>
 @section ScriptsPartial{
     <script>
