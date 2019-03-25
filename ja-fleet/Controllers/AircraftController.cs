@@ -122,18 +122,18 @@ namespace jafleet.Controllers
                     //Jetphotosに写真があった場合
                     string newestPhotoLink = photos[0].GetAttribute("href");
                     redirectUrl = "https://www.jetphotos.com" + newestPhotoLink;
-                    return Redirect(redirectUrl);
+                    return Content(redirectUrl);
                 }
                 else
                 {
                     //Jetphotosに写真がなかった場合
-                    return Content("Jetphotosに写真が登録されていないため表示できません。写真が投稿されると表示できるようになります。");
+                    return Content(string.Empty);
                 }
             }
             else
             {
                 //DBでリンク先が指定されていない場合
-                return Redirect(redirectUrl);
+                return Content(redirectUrl);
             }
 
         }
