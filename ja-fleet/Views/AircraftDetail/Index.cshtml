@@ -54,11 +54,11 @@ else
 
             }).done(function (data) {
                 if (data == null || data == "") {
-                    $("#photoform").attr("action", "/nophoto.html");
+
                 } else {
                     $("#photoform").attr("action", data);
+                    $("#photoform").submit();
                 }
-                $("#photoform").submit();
             });
         });
 
