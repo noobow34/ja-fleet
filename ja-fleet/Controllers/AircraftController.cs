@@ -122,7 +122,7 @@ namespace jafleet.Controllers
                     //Jetphotosに写真があった場合
                     string newestPhotoLink = photos[0].GetAttribute("href");
                     redirectUrl = "https://www.jetphotos.com" + newestPhotoLink;
-                    return Content(redirectUrl);
+                    return Redirect(redirectUrl);
                 }
                 else
                 {
@@ -133,7 +133,7 @@ namespace jafleet.Controllers
             else
             {
                 //DBでリンク先が指定されていない場合
-                return Content(redirectUrl);
+                return Redirect(redirectUrl);
             }
 
         }

@@ -31,9 +31,7 @@ else
 }
 
 @await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")
-<form id="photoform" method="post" action="" target="photofr">
-</form>
-<iframe name="photofr" width="100%" height="700px"></iframe>
+<iframe src="/Aircraft/Photo/@(Model.Title)" id="photofr" width="100%" height="700px"></iframe>
 @section ScriptsPartial{
     <script>
         var table;
@@ -46,21 +44,12 @@ else
                 },
                 @await Html.PartialAsync("/Views/Shared/ResultDatatableColumn.cshtml", Model)
             });
-            $.ajax({
-                type: 'GET',
-                url: '/Aircraft/Photo/@(Model.Title)',
-                cache: false
-            }).fail(function (data) {
-
-            }).done(function (data) {
-                if (data == null || data == "") {
-
-                } else {
-                    $("#photoform").attr("action", data);
-                    $("#photoform").submit();
-                }
-            });
         });
-
+        $('#photofr').on("load",function () {
+            let $if = $('#photofr');
+            let ifrmDoc = $if[0].contentWindow.document;
+            let $ele = $('.important-banner__close', ifrmDoc);
+            $ele.click();
+        });
     </script>
 }
