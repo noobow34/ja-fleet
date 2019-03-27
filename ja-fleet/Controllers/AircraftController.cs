@@ -127,7 +127,7 @@ namespace jafleet.Controllers
                 else
                 {
                     //Jetphotosに写真がなかった場合
-                    return Content(string.Empty);
+                    return Redirect("/nophoto.html");
                 }
             }
             else

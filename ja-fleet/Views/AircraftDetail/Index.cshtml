@@ -45,11 +45,5 @@ else
                 @await Html.PartialAsync("/Views/Shared/ResultDatatableColumn.cshtml", Model)
             });
         });
-        $('#photofr').on("load",function () {
-            let $if = $('#photofr');
-            let ifrmDoc = $if[0].contentWindow.document;
-            let $ele = $('.important-banner__close', ifrmDoc);
-            $ele.click();
-        });
     </script>
 }
