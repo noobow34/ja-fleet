@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
+using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Controllers
 {
@@ -24,7 +25,7 @@ namespace jafleet.Controllers
         public ActionResult<IEnumerable<string>> Get()
         {
             List<AircraftView> list;
-            list = _context.AircraftView.OrderBy(p => p.DisplayOrder).ToList();
+            list = _context.AircraftView.AsNoTracking().OrderBy(p => p.DisplayOrder).ToList();
             return Json(list);
         }
 
@@ -34,7 +35,7 @@ namespace jafleet.Controllers
         {
             List<AircraftView> list;
             String[] ids = id.ToUpper().Split(",");
-            var q = _context.AircraftView.Where(p => ids.Contains(p.TypeCode));
+            var q = _context.AircraftView.AsNoTracking().Where(p => ids.Contains(p.TypeCode));
             if (!includeRetire)
             {
                 q = q.Where(p => p.OperationCode != OperationCode.RETIRE_UNREGISTERED);

@@ -9,6 +9,7 @@ using AngleSharp.Html.Parser;
 using System;
 using jafleet.Util;
 using jafleet.Commons.Constants;
+using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Controllers
 {
@@ -40,7 +41,7 @@ namespace jafleet.Controllers
             id2 = id2?.ToUpper();
 
             string groupName;
-            groupName = _context.AirlineGroup.FirstOrDefault(p => p.AirlineGroupCode == id)?.AirlineGroupName;
+            groupName = _context.AirlineGroup.AsNoTracking().FirstOrDefault(p => p.AirlineGroupCode == id)?.AirlineGroupName;
 
             model.Title = groupName ?? "all";
             model.TableId = id ?? "all";
@@ -67,7 +68,7 @@ namespace jafleet.Controllers
             id2 = id2?.ToUpper();
 
             string airlineName;
-            airlineName = _context.Airline.FirstOrDefault(p => p.AirlineCode == id)?.AirlineNameJpShort;
+            airlineName = _context.Airline.AsNoTracking().FirstOrDefault(p => p.AirlineCode == id)?.AirlineNameJpShort;
 
             model.Title = airlineName ?? "all";
             model.TableId = id ?? "all";
@@ -93,7 +94,7 @@ namespace jafleet.Controllers
             id = id?.ToUpper();
 
             string typeName;
-            typeName = _context.Type.FirstOrDefault(p => p.TypeCode == id)?.TypeName;
+            typeName = _context.Type.AsNoTracking().FirstOrDefault(p => p.TypeCode == id)?.TypeName;
 
             model.Title = typeName ?? "all";
             model.TableId = id ?? "all";
@@ -110,7 +111,7 @@ namespace jafleet.Controllers
             string jetphotoUrl = string.Format("https://www.jetphotos.com/showphotos.php?keywords-type=reg&keywords={0}&search-type=Advanced&keywords-contain=0&sort-order=2", id);
             string redirectUrl = string.Empty;
 
-            redirectUrl = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault()?.LinkUrl;
+            redirectUrl = _context.Aircraft.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault()?.LinkUrl;
 
             if(redirectUrl == null){
                 //DBでリンク先が指定されていない場合

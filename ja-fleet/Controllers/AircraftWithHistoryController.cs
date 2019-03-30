@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
+using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Controllers
 {
@@ -24,8 +25,8 @@ namespace jafleet.Controllers
         public ActionResult<string> Get(string id)
         {
             var list = new List<AircraftViewBase>();
-            var latest = _context.AircraftView.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
-            var history = _context.AircraftHistoryView.Where(p => p.RegistrationNumber == id.ToUpper()).OrderByDescending(p => p.Seq).ToList();
+            var latest = _context.AircraftView.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
+            var history = _context.AircraftHistoryView.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).OrderByDescending(p => p.Seq).ToList();
 
             list.Add(latest);
             list.AddRange(history);

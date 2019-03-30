@@ -6,6 +6,7 @@ using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ja_fleet.Controllers
 {
@@ -48,7 +49,7 @@ namespace ja_fleet.Controllers
             }
 
             List<Log> logs = null;
-            logs = _context.Log.Where(q => q.LogDateYyyyMmDd == targetDate.Value.ToString("yyyyMMdd") && q.IsAdmin == "0").OrderByDescending(q => q.LogId).ToList();
+            logs = _context.Log.AsNoTracking().Where(q => q.LogDateYyyyMmDd == targetDate.Value.ToString("yyyyMMdd") && q.IsAdmin == "0").OrderByDescending(q => q.LogId).ToList();
 
             var retsb = new StringBuilder();
             retsb.Append(DateTime.Now.ToString($"--HH:mm:ss--{Environment.NewLine}"));

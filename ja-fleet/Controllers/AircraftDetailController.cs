@@ -11,6 +11,7 @@ using jafleet.Util;
 using jafleet.Commons.Constants;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Controllers
 {
@@ -41,8 +42,8 @@ namespace jafleet.Controllers
 
             if (!nohead)
             {
-                model.AV = _context.AircraftView.Where(av => av.RegistrationNumber == id).FirstOrDefault();
-                model.AirlineGroupNmae = _context.AirlineGroup.Where(ag => ag.AirlineGroupCode == model.AV.AirlineGroupCode).FirstOrDefault()?.AirlineGroupName;
+                model.AV = _context.AircraftView.AsNoTracking().Where(av => av.RegistrationNumber == id).FirstOrDefault();
+                model.AirlineGroupNmae = _context.AirlineGroup.AsNoTracking().Where(ag => ag.AirlineGroupCode == model.AV.AirlineGroupCode).FirstOrDefault()?.AirlineGroupName;
             }
 
             //ログは非同期で書き込み

@@ -40,7 +40,7 @@ namespace jafleet.Controllers
             {
                 //GETパラメーターで検索条件キーが指定されたら
                 //保存されている検索条件を取得
-                var sce = _context.SearchCondition.Where(e => e.SearchConditionKey == sc).FirstOrDefault();
+                var sce = _context.SearchCondition.AsNoTracking().Where(e => e.SearchConditionKey == sc).FirstOrDefault();
                 if (sce != null)
                 {
                     //取得したjsonから復元
@@ -91,12 +91,12 @@ namespace jafleet.Controllers
             if (regList.Count == 1)
             {
                 //1件の場合はワイルドカードで検索
-                query = _context.AircraftView.Where(a => EF.Functions.Like(a.RegistrationNumber, regList[0]));
+                query = _context.AircraftView.AsNoTracking().Where(a => EF.Functions.Like(a.RegistrationNumber, regList[0]));
             }
             else
             {
                 //2件以上の場合はワイルドカード無効でIN検索
-                query = _context.AircraftView.Where(p => regList.Contains(p.RegistrationNumber));
+                query = _context.AircraftView.AsNoTracking().Where(p => regList.Contains(p.RegistrationNumber));
             }
 
             if (!String.IsNullOrEmpty(model.Airline))
