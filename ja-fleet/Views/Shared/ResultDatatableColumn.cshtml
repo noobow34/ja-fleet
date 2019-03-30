@@ -3,7 +3,13 @@
 {
     @:{data: 'updateTimeString',className: 'dt-center'},
 }
-    {data: 'airlineNameJpShort',className: 'dt-center'},
+    {data: 'airlineNameJpShort',className: 'dt-center'
+                    ,createdCell: function (td, cellData, rowData, row, col) {
+                        if(rowData.airlineChanged == 1){
+                            $(td).css({"background-color":"#FFCCFF"});
+                        }
+                    }
+},
     {data: null
     ,render: function( data, type, row ) {
                     if(row.typeDetailName != null){
@@ -12,7 +18,12 @@
                         return row.typeName;
                     }
                 }
-        , className: 'dt-center'
+        ,className: 'dt-center'
+        ,createdCell: function (td, cellData, rowData, row, col) {
+                        if(rowData.typeDetailChanged == 1){
+                            $(td).css({"background-color":"#FFCCFF"});
+                        }
+                    }
     },
     {data: 'registrationNumber', render: function(data, type, row, meta) {
 @if (!Model.IsDetail)
@@ -29,25 +40,54 @@ else
 {
     @:{data: 'serialNumber', render: function(data, type, row, meta)  {
     @:return "<a href=\"javascript:openPopUp('/E/" + row.registrationNumber + "?nohead=true')\">" + data + "</a>";
-    @:},className: 'dt-center'},
+    @:},className: 'dt-center'
 }
 else
 {
     @:{data: 'serialNumber', render: function(data, type, row, meta) {
     @:return data;
-    @:},className: 'dt-center'},
+    @:},className: 'dt-center'
 }
-    {data: 'registerDate',className: 'dt-center'},
-    {data: 'operation',className: 'dt-center'},
-    {data: 'wifi',className: 'dt-center'},
-    {data: 'remarks',className: 'dt-left'}
+                    ,createdCell: function (td, cellData, rowData, row, col) {
+                        if(rowData.serialNumberChanged == 1){
+                            $(td).css({"background-color":"#FFCCFF"});
+                        }
+                    }
+},
+    {data: 'registerDate',className: 'dt-center'
+                    ,createdCell: function (td, cellData, rowData, row, col) {
+                        if(rowData.registerDateChanged == 1){
+                            $(td).css({"background-color":"#FFCCFF"});
+                        }
+                    }
+},
+    {data: 'operation',className: 'dt-center'
+                    ,createdCell: function (td, cellData, rowData, row, col) {
+                        if(rowData.operationChanged == 1){
+                            $(td).css({"background-color":"#FFCCFF"});
+                        }
+                    }
+     },
+    {data: 'wifi',className: 'dt-center'
+                    ,createdCell: function (td, cellData, rowData, row, col) {
+                        if(rowData.wifiChanged == 1){
+                            $(td).css({"background-color":"#FFCCFF"});
+                        }
+                    }},
+    {data: 'remarks',className: 'dt-left'
+                    ,createdCell: function (td, cellData, rowData, row, col) {
+                        if(rowData.remarksChanged == 1){
+                            $(td).css({"background-color":"#FFCCFF"});
+                        }
+                    }
+}
 ],
 @if (!Model.IsDetail)
 {
     @:createdRow: function(row, data, dataIndex) {
-    @:if (data['updateTime'] != null)
+    @:if (data.updateTime != null)
     @:{
-    @:let updateTime = dayjs(data['updateTime']);
+    @:let updateTime = dayjs(data.updateTime);
     @:let today = dayjs();
     @:if (today.diff(updateTime, 'days', true) <= 7)
     @:{

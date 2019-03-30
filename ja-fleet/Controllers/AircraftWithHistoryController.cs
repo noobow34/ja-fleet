@@ -23,12 +23,17 @@ namespace jafleet.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(string id)
         {
-            var list = new List<Object>();
+            var list = new List<AircraftViewBase>();
             var latest = _context.AircraftView.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
             var history = _context.AircraftHistoryView.Where(p => p.RegistrationNumber == id.ToUpper()).OrderByDescending(p => p.Seq).ToList();
 
             list.Add(latest);
             list.AddRange(history);
+
+            for (int i = 0 ; i <= list.Count - 2 ; i++)
+            {
+                list[i].getDifferenceWith(list[i + 1]);
+            }
 
             return Json(list);
         }
