@@ -21,13 +21,19 @@
     <meta content="summary" name="twitter:card" />
     <meta content="@@ja_fleet" name="twitter:site" />
 }
+
 @if (!Model.NeedBack)
 {
     <h2>@(Model.Title)</h2>
+    @:一覧画面へ
+    <input type="button" value="@Model.AirlineGroupNmae" onclick="location.href='/Aircraft/AirlineGroup/@Model.AV.AirlineGroupCode'" id="airline" class="btn btn-primary btn-xs" />
+    <input type="button" value="@Model.AV.AirlineNameJpShort" onclick="location.href='/Aircraft/Airline/@Model.AV.Airline'" id="airline" class="btn btn-primary btn-xs" />
+    <input type="button" value="@Model.AV.TypeName" onclick="location.href='/Aircraft/Type/@Model.AV.TypeCode'" id="type" class="btn btn-primary btn-xs" />
+    <input type="button" value="@(Model.AV.AirlineNameJpShort)・@(Model.AV.TypeName)" onclick="location.href='/Aircraft/Airline/@Model.AV.Airline/@Model.AV.TypeCode'" id="airlinetype" class="btn btn-primary btn-xs" />
 }
 else
 {
-    <h2  style="display:inline;">@(Model.Title)</h2>　<input type="button" value="戻る" onClick="window.close();" id="back" class="btn btn-primary btn-xs" />
+    <h2 style="display:inline;">@(Model.Title)</h2><input type="button" value="戻る" onClick="window.close();" id="back" class="btn btn-primary btn-xs" />
 }
 
 @await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")

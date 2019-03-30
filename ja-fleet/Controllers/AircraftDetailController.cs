@@ -39,6 +39,12 @@ namespace jafleet.Controllers
             model.Reg = id;
             model.NeedBack = needback;
 
+            if (!nohead)
+            {
+                model.AV = _context.AircraftView.Where(av => av.RegistrationNumber == id).FirstOrDefault();
+                model.AirlineGroupNmae = _context.AirlineGroup.Where(ag => ag.AirlineGroupCode == model.AV.AirlineGroupCode).FirstOrDefault()?.AirlineGroupName;
+            }
+
             //ログは非同期で書き込み
             Task.Run(() =>
             {
