@@ -46,6 +46,9 @@ namespace jafleet.Controllers
                 model.AirlineGroupNmae = _context.AirlineGroup.AsNoTracking().Where(ag => ag.AirlineGroupCode == model.AV.AirlineGroupCode).FirstOrDefault()?.AirlineGroupName;
             }
 
+            //非同期でCookieは取得できなくなるので退避
+            Boolean isAdmin = CookieUtil.IsAdmin(HttpContext);
+
             //ログは非同期で書き込み
             Task.Run(() =>
             {
@@ -58,7 +61,7 @@ namespace jafleet.Controllers
                             LogDate = DateTime.Now,
                             LogType = LogType.DETAIL,
                             LogDetail = id,
-                            UserId = CookieUtil.IsAdmin(HttpContext).ToString()
+                            UserId = isAdmin.ToString()
                         };
 
                         context.Log.Add(log);
