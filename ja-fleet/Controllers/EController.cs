@@ -71,7 +71,7 @@ namespace jafleet.Controllers
                 DateTime storeDate = DateTime.Now;
                 string reg = model.Aircraft.RegistrationNumber;
                 var origin = _context.Aircraft.AsNoTracking().Where(a => a.RegistrationNumber == reg).FirstOrDefault();
-                if (!model.NotUpdateDate){
+                if (!model.NotUpdateDate || model.IsNew){
                     model.Aircraft.UpdateTime = storeDate;
                 }
                 model.Aircraft.ActualUpdateTime = storeDate;
