@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using jafleet.Commons.EF;
-using jafleet.Commons.Constants;
 
 namespace jafleet.Models
 {

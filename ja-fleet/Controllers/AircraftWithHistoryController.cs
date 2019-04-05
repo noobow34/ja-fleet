@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Commons.EF;
-using jafleet.Commons.Constants;
 using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Controllers

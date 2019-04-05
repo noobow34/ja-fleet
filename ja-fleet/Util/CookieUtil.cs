@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using jafleet.Manager;
 using Microsoft.AspNetCore.Http;
 namespace jafleet.Util

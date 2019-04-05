@@ -2,7 +2,6 @@
 using jafleet.Models;
 using jafleet.Commons.EF;
 using Microsoft.Extensions.Configuration;
-using jafleet.Util;
 using Noobow.Commons.Utils;
 using jafleet.Manager;
 using System;

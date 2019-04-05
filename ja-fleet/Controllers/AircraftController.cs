@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using jafleet.Commons.EF;
 using jafleet.Manager;
-using System.Net.Http;
 using AngleSharp.Html.Parser;
 using System;
 using jafleet.Util;
-using jafleet.Commons.Constants;
 using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Controllers
