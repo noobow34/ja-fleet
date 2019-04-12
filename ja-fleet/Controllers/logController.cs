@@ -8,7 +8,7 @@ using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ja_fleet.Controllers
+namespace jafleet.Controllers
 {
     public class logController : Controller
     {

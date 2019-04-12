@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-namespace ja_fleet.Controllers
+namespace jafleet.Controllers
 {
     public class lineController : Controller
     {
