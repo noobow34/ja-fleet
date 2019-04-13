@@ -48,7 +48,8 @@ namespace jafleet.Controllers
 
             //ログは非同期で書き込み
             //Twitterbotは無視
-            if (!HttpContext.Request.Headers["User-Agent"].Contains("Twitterbot"))
+            string ua = HttpContext.Request.Headers["User-Agent"].ToString() ?? string.Empty;
+            if (!ua.ToLower().Contains("twitterbot"))
             {
                 Task.Run(() =>
                 {
