@@ -62,7 +62,8 @@ namespace jafleet.Controllers
                                 LogDate = DateTime.Now,
                                 LogType = LogType.DETAIL,
                                 LogDetail = id,
-                                UserId = isAdmin.ToString()
+                                UserId = isAdmin.ToString(),
+                                Additional = ua
                             };
 
                             context.Log.Add(log);
@@ -70,7 +71,6 @@ namespace jafleet.Controllers
                         }
                     }
                 });
-                Console.WriteLine(ua);
             }
 
             return View("~/Views/AircraftDetail/index.cshtml",model);
