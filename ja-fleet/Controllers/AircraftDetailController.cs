@@ -47,25 +47,29 @@ namespace jafleet.Controllers
             Boolean isAdmin = CookieUtil.IsAdmin(HttpContext);
 
             //ログは非同期で書き込み
-            Task.Run(() =>
+            //Twitterbotは無視
+            if (!HttpContext.Request.Headers["User-Agent"].Contains("Twitterbot"))
             {
-                using (var serviceScope = _services.CreateScope())
+                Task.Run(() =>
                 {
-                    using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
+                    using (var serviceScope = _services.CreateScope())
                     {
-                        Log log = new Log
+                        using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                         {
-                            LogDate = DateTime.Now,
-                            LogType = LogType.DETAIL,
-                            LogDetail = id,
-                            UserId = isAdmin.ToString()
-                        };
+                            Log log = new Log
+                            {
+                                LogDate = DateTime.Now,
+                                LogType = LogType.DETAIL,
+                                LogDetail = id,
+                                UserId = isAdmin.ToString()
+                            };
 
-                        context.Log.Add(log);
-                        context.SaveChanges();
+                            context.Log.Add(log);
+                            context.SaveChanges();
+                        }
                     }
-                }
-            });
+                });
+            }
 
             return View("~/Views/AircraftDetail/index.cshtml",model);
         }
