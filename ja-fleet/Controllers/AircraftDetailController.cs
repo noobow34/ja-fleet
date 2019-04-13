@@ -70,6 +70,7 @@ namespace jafleet.Controllers
                         }
                     }
                 });
+                Console.WriteLine(ua);
             }
 
             return View("~/Views/AircraftDetail/index.cshtml",model);
