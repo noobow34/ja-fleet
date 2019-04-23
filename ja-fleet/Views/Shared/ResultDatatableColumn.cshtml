@@ -3,12 +3,16 @@
 {
     @:{data: 'updateTimeString',className: 'dt-center'},
 }
-    {data: 'airlineNameJpShort',className: 'dt-center'
+else
+{
+    @:{data: 'displayOrder',className: 'dt-center',visible:false},
+}
+{data: 'airlineNameJpShort',className: 'dt-center'
                     ,createdCell: function (td, cellData, rowData, row, col) {
-                        if(rowData.airlineChanged == 1){
+        if(rowData.airlineChanged == 1){
                             $(td).css({"background-color":"#FFCCFF"});
-                        }
-                    }
+        }
+    }
 },
     {data: null
     ,render: function( data, type, row ) {
@@ -97,7 +101,14 @@ else
     @:},
 }
 paging: false,
-ordering: false,
+@if (Model.IsDetail)
+{
+    @:ordering: false,
+}
+else
+{
+    @:ordering: true,
+}
 fixedHeader: true,
 scrollY: gridheight,
 scrollX: true,
