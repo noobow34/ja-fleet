@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
+using jafleet.Manager;
 using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,7 +56,24 @@ namespace jafleet.Controllers
             retsb.Append(DateTime.Now.ToString($"--HH:mm:ss--{Environment.NewLine}"));
             foreach(var log in logs)
             {
-                retsb.Append($"[{log.LogDate.Value.ToString("HH:mm:ss")}][{LogType.GetLogTypeName(log.LogType)}]{log.LogDetail}{Environment.NewLine}");
+                string logDetail;
+                if(log.LogType == LogType.SEARCH)
+                {
+                    if (!string.IsNullOrEmpty(log.Additional))
+                    {
+                        logDetail = MasterManager.GetSearchConditionDisp(log.LogDetail) + log.Additional;
+                    }
+                    else
+                    {
+                        logDetail = log.LogDetail;
+                    }
+
+                }
+                else
+                {
+                    logDetail = log.LogDetail;
+                }
+                retsb.Append($"[{log.LogDate.Value.ToString("HH:mm:ss")}][{LogType.GetLogTypeName(log.LogType)}]{logDetail}{Environment.NewLine}");
             }
 
             if(retsb.Length == 0)

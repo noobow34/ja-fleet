@@ -4,12 +4,18 @@ using jafleet.Commons.Constants;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using jafleet.Models;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace jafleet.Manager
 {
     public static class MasterManager
     {
+        private static jafleetContext _context;
+
         public static void ReadAll(jafleetContext context) {
+            _context = context;
             var tempaa = context.Airline.OrderBy(p => p.DisplayOrder).ToList();
             tempaa.ForEach(aa =>
             {
@@ -55,6 +61,45 @@ namespace jafleet.Manager
                 }
             });
             _operation = tempop.ToArray();
+
+            var scarray = context.SearchCondition.ToArray();
+            foreach (var sc in scarray){
+                string searchConditionDisp = string.Empty;
+                if (sc.SearchConditionJson.Contains("TypeDetail"))
+                {
+                    var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(sc.SearchConditionJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
+                    var typeDetails = _typeDetailGroup.Where(td => scm.TypeDetail.Split("|").ToList().Contains(td.TypeDetailId.ToString()));
+                    scm.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
+                    searchConditionDisp = scm.ToString();
+                }
+                else
+                {
+                    searchConditionDisp = sc.SearchConditionJson;
+                }
+                _searchCondition.Add(sc.SearchConditionKey, searchConditionDisp);
+            }
+        }
+
+        public static string GetSearchConditionDisp(string scKey)
+        {
+            if (_searchCondition.ContainsKey(scKey)){
+                return _searchCondition[scKey];
+            }
+            else
+            {
+                string scJson;
+                string searchConditionDisp = string.Empty;
+                scJson = _context.SearchCondition.FirstOrDefault(sc => sc.SearchConditionKey == scKey)?.SearchConditionJson ?? string.Empty;
+                if (!string.IsNullOrEmpty(scJson))
+                {
+                    var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(scJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
+                    var typeDetails = _typeDetailGroup.Where(td => scm.TypeDetail.Split("|").ToList().Contains(td.TypeDetailId.ToString()));
+                    scm.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
+                    searchConditionDisp = scm.ToString();
+                    _searchCondition.Add(scKey, searchConditionDisp);
+                }
+                return searchConditionDisp;
+            }
         }
 
         private static Code[] _wifi = null;
@@ -87,6 +132,9 @@ namespace jafleet.Manager
 
         private static List<string> _adminUser = null;
         public static List<string> AdminUser { get { return _adminUser; } }
+
+        private static Dictionary<string, string> _searchCondition = new Dictionary<string, string>();
+        public static Dictionary<string,string> SerachCondition { get { return _searchCondition; } }
 
     }
 }
