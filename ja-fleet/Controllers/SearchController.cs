@@ -213,13 +213,12 @@ namespace jafleet.Controllers
                         var scjson2 = scm2.ToString();
 
                         //ログ
-                        string logDetail = scjson2 + $"{model.IsDirect},件数：" + searchResult.Length.ToString();
                         Log log = new Log
                         {
                             LogDate = DateTime.Now,
                             LogType = LogType.SEARCH,
                             LogDetail = schash,
-                            Additional = $"{model.IsDirect},件数：" + searchResult.Length.ToString(),
+                            Additional = $"{model.IsDirect},{searchResult.Length.ToString()}",
                             UserId = isAdmin.ToString()
                         };
                         context.Log.Add(log);
