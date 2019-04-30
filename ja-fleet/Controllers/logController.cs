@@ -68,11 +68,6 @@ namespace jafleet.Controllers
                 retsb.Append($"[{log.LogDate.Value.ToString("HH:mm:ss")}][{LogType.GetLogTypeName(log.LogType)}]{logDetail}{Environment.NewLine}");
             }
 
-            if(retsb.Length == 0)
-            {
-                retsb.Append($"{id} no log!");
-            }
-
             return Content(retsb.ToString());
 
         }
