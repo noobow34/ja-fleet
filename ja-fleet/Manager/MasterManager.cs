@@ -12,10 +12,8 @@ namespace jafleet.Manager
 {
     public static class MasterManager
     {
-        private static jafleetContext _context;
 
         public static void ReadAll(jafleetContext context) {
-            _context = context;
             var tempaa = context.Airline.OrderBy(p => p.DisplayOrder).ToList();
             tempaa.ForEach(aa =>
             {
@@ -80,8 +78,9 @@ namespace jafleet.Manager
             }
         }
 
-        public static string GetSearchConditionDisp(string scKey)
+        public static string GetSearchConditionDisp(string scKey, jafleetContext context)
         {
+            {
             if (_searchCondition.ContainsKey(scKey)){
                 return _searchCondition[scKey];
             }
@@ -89,7 +88,7 @@ namespace jafleet.Manager
             {
                 string scJson;
                 string searchConditionDisp = string.Empty;
-                scJson = _context.SearchCondition.FirstOrDefault(sc => sc.SearchConditionKey == scKey)?.SearchConditionJson ?? string.Empty;
+                scJson = context.SearchCondition.FirstOrDefault(sc => sc.SearchConditionKey == scKey)?.SearchConditionJson ?? string.Empty;
                 if (!string.IsNullOrEmpty(scJson))
                 {
                     var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(scJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
