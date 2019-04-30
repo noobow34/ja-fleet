@@ -59,15 +59,7 @@ namespace jafleet.Controllers
                 string logDetail;
                 if(log.LogType == LogType.SEARCH)
                 {
-                    if (!string.IsNullOrEmpty(log.Additional))
-                    {
-                        logDetail = MasterManager.GetSearchConditionDisp(log.LogDetail,_context) + log.Additional;
-                    }
-                    else
-                    {
-                        logDetail = log.LogDetail;
-                    }
-
+                    logDetail = MasterManager.GetSearchConditionDisp(log.LogDetail,_context) + log.Additional;
                 }
                 else
                 {
