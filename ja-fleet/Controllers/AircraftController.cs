@@ -110,7 +110,7 @@ namespace jafleet.Controllers
             }
             else
             {
-                model.IncludeRetire = includeRetire.Value;
+                model.IncludeRetire = includeRetire.HasValue ? includeRetire.Value : false;
             }
 
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
