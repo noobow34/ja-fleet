@@ -61,35 +61,6 @@ namespace jafleet.Manager
             _operation = tempop.ToArray();
         }
 
-        public static string GetSearchConditionDisp(string scKey, jafleetContext context)
-        {
-            {
-                if (_searchCondition.ContainsKey(scKey))
-                {
-                    return _searchCondition[scKey];
-                }
-                else
-                {
-                    string scJson;
-                    string searchConditionDisp = string.Empty;
-                    scJson = context.SearchCondition.FirstOrDefault(sc => sc.SearchConditionKey == scKey)?.SearchConditionJson ?? string.Empty;
-                    if (!string.IsNullOrEmpty(scJson) && scJson.Contains("TypeDetail"))
-                    {
-                        var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(scJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
-                        var typeDetails = _typeDetailGroup.Where(td => scm.TypeDetail.Split("|").ToList().Contains(td.TypeDetailId.ToString()));
-                        scm.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
-                        searchConditionDisp = scm.ToString();
-                    }
-                    else
-                    {
-                        searchConditionDisp = scJson;
-                    }
-                    _searchCondition.Add(scKey, searchConditionDisp);
-                    return searchConditionDisp;
-                }
-            }
-        }
-
         private static Code[] _wifi = null;
         public static Code[] Wifi { get { return _wifi; } }
 
@@ -120,8 +91,6 @@ namespace jafleet.Manager
 
         private static List<string> _adminUser = null;
         public static List<string> AdminUser { get { return _adminUser; } }
-
-        private static Dictionary<string, string> _searchCondition = new Dictionary<string, string>();
 
     }
 }
