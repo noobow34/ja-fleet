@@ -34,7 +34,7 @@ namespace jafleet.Controllers
             return View("~/Views/Aircraft/index.cshtml", model);
         }
 
-        public IActionResult AirlineGroup(string id, string id2, [FromQuery]Boolean includeRetire, AircraftModel model)
+        public IActionResult AirlineGroup(string id, string id2, [FromQuery]bool includeRetire, AircraftModel model)
         {
             id = id?.ToUpper();
             id2 = id2?.ToUpper();
@@ -61,7 +61,7 @@ namespace jafleet.Controllers
             return View("~/Views/Aircraft/index.cshtml",model);
         }
 
-        public IActionResult Airline(string id, string id2, [FromQuery]Boolean includeRetire,AircraftModel model)
+        public IActionResult Airline(string id, string id2, [FromQuery]bool includeRetire,AircraftModel model)
         {
             id = id?.ToUpper();
             id2 = id2?.ToUpper();
@@ -88,7 +88,7 @@ namespace jafleet.Controllers
             return View("~/Views/Aircraft/index.cshtml",model);
         }
 
-        public IActionResult Type(string id, [FromQuery]Boolean? includeRetire, AircraftModel model)
+        public IActionResult Type(string id, [FromQuery]bool? includeRetire, AircraftModel model)
         {
             id = id?.ToUpper();
 

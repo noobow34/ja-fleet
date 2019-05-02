@@ -41,8 +41,8 @@ namespace jafleet.Models
             = new List<SelectListItem>{ new SelectListItem { Value = "1", Text = "なし" }
                                         , new SelectListItem { Value = "2", Text = "あり" } };
 
-        public Boolean IsLoading { get; set; } = true;
+        public bool IsLoading { get; set; } = true;
 
-        public Boolean IsDirect { get; set; } = false;
+        public bool IsDirect { get; set; } = false;
     }
 }

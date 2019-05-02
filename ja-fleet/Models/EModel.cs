@@ -7,7 +7,7 @@ namespace jafleet.Models
     public class EditModel:BaseModel
     {
         public Aircraft Aircraft { get; set; }
-        public Boolean IsNew { get; set; } = false;
+        public bool IsNew { get; set; } = false;
 
         //選択用リスト
         [Display(Name = "航空会社")]
@@ -26,7 +26,7 @@ namespace jafleet.Models
         public Code[] WiFiList { get; set; }
 
         [Display(Name = "履歴を作成しない")]
-        public Boolean NotUpdateDate { get; set; } = false;
+        public bool NotUpdateDate { get; set; } = false;
 
         public Exception ex { get; set; }
 

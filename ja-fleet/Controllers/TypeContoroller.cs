@@ -31,7 +31,7 @@ namespace jafleet.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(string id, [FromQuery]Boolean includeRetire)
+        public ActionResult<string> Get(string id, [FromQuery]bool includeRetire)
         {
             List<AircraftView> list;
             String[] ids = id.ToUpper().Split(",");

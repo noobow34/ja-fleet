@@ -161,7 +161,7 @@ namespace jafleet.Controllers
             string scjson = scm.ToString();
             string schash = HashUtil.CalcCRC32(scjson);
             //Cookieの値はここで退避しておかないと、↓のTask.Runではちゃんと取れなくなる
-            Boolean isAdmin = CookieUtil.IsAdmin(HttpContext);
+            bool isAdmin = CookieUtil.IsAdmin(HttpContext);
 
             //検索結果を速く返すためにログと検索条件のDB書き込みは非同期で行う
             Task.Run(() =>
