@@ -90,6 +90,8 @@ namespace jafleet.Manager
             }
         }
 
+        public static int GetScCacheCount() => _searchCondition.Count;
+
         private static Code[] _wifi = null;
         public static Code[] Wifi { get { return _wifi; } }
 
