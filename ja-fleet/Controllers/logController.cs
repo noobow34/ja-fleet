@@ -49,17 +49,22 @@ namespace jafleet.Controllers
                 targetDate = DateTime.Now.AddDays(-1).Date;
             }
 
-            //LEFT JOIN
-            var logs = _context.Log.AsNoTracking()
-                .GroupJoin(_context.SearchCondition,l => l.LogDetail,sc => sc.SearchConditionKey,(l,sc) => new {l,sc})
-                .SelectMany(x => x.sc.DefaultIfEmpty(),(l,sc) => new { l.l.LogDetail,l.l.LogDateYyyyMmDd,l.l.IsAdmin,l.l.LogId,l.l.LogType,l.l.Additional,l.l.LogDate,sc.SearchConditionJson })
-                .Where(q => q.LogDateYyyyMmDd == targetDate.Value.ToString("yyyyMMdd") && q.IsAdmin == "0").OrderByDescending(q => q.LogId).ToList();
+            List<Log> logs = null;
+            logs = _context.Log.AsNoTracking().Where(q => q.LogDateYyyyMmDd == targetDate.Value.ToString("yyyyMMdd") && q.IsAdmin == "0").OrderByDescending(q => q.LogId).ToList();
 
             var retsb = new StringBuilder();
             retsb.Append(DateTime.Now.ToString($"--HH:mm:ss--{Environment.NewLine}"));
             foreach(var log in logs)
             {
-                string logDetail = log.SearchConditionJson ?? log.LogDetail + log.Additional;
+                string logDetail;
+                if(log.LogType == LogType.SEARCH)
+                {
+                    logDetail = MasterManager.GetSearchConditionDisp(log.LogDetail,_context) + log.Additional;
+                }
+                else
+                {
+                    logDetail = log.LogDetail;
+                }
                 retsb.Append($"[{log.LogDate.Value.ToString("HH:mm:ss")}][{LogType.GetLogTypeName(log.LogType)}]{logDetail}{Environment.NewLine}");
             }
 
