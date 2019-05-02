@@ -53,7 +53,6 @@ namespace jafleet.Controllers
             logs = _context.Log.AsNoTracking().Where(q => q.LogDateYyyyMmDd == targetDate.Value.ToString("yyyyMMdd") && q.IsAdmin == "0").OrderByDescending(q => q.LogId).ToList();
 
             var retsb = new StringBuilder();
-            string head = DateTime.Now.ToString($"--HH:mm:ss--:{MasterManager.GetScCacheCount()}{Environment.NewLine}");
             foreach(var log in logs)
             {
                 string logDetail;
@@ -67,6 +66,8 @@ namespace jafleet.Controllers
                 }
                 retsb.Append($"[{log.LogDate.Value.ToString("HH:mm:ss")}][{LogType.GetLogTypeName(log.LogType)}]{logDetail}{Environment.NewLine}");
             }
+
+            string head = DateTime.Now.ToString($"--HH:mm:ss--:{MasterManager.GetScCacheCount()}{Environment.NewLine}");
 
             return Content(head + retsb.ToString());
 
