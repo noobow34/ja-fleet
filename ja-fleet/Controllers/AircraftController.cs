@@ -8,6 +8,7 @@ using AngleSharp.Html.Parser;
 using System;
 using jafleet.Util;
 using Microsoft.EntityFrameworkCore;
+using jafleet.Commons.Constants;
 
 namespace jafleet.Controllers
 {
@@ -87,7 +88,7 @@ namespace jafleet.Controllers
             return View("~/Views/Aircraft/index.cshtml",model);
         }
 
-        public IActionResult Type(string id, [FromQuery]Boolean includeRetire, AircraftModel model)
+        public IActionResult Type(string id, [FromQuery]Boolean? includeRetire, AircraftModel model)
         {
             id = id?.ToUpper();
 
@@ -98,7 +99,20 @@ namespace jafleet.Controllers
             model.TableId = id ?? "all";
             model.api = "/api/type/" + id;
 
-            model.IncludeRetire = includeRetire;
+            //全機退役かどうか確認
+            int operatingCount = _context.AircraftView.AsNoTracking().Where(p => p.TypeCode == id && p.OperationCode != OperationCode.RETIRE_UNREGISTERED).Count();
+
+            if(operatingCount == 0 && !includeRetire.HasValue)
+            {
+                //全機退役済みなら強制的に退役済みを表示
+                model.IncludeRetire = true;
+                model.IsAllRetire = true;
+            }
+            else
+            {
+                model.IncludeRetire = includeRetire.Value;
+            }
+
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
             return View("~/Views/Aircraft/index.cshtml",model);

@@ -18,6 +18,10 @@
 <div class="form-group">
     @Html.CheckBoxFor(model => model.IncludeRetire)
     @Html.LabelFor(model => model.IncludeRetire, new { @class = "control-label" })
+    @if (Model.IsAllRetire)
+    {
+        @:<u><font color="red">この機種は全機退役済です</font></u>
+    }
 </div>
 @await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")
 @section ScriptsPartial{
