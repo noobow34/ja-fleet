@@ -24,7 +24,7 @@ namespace jafleet.Controllers
             _services = serviceScopeFactory;
         }
 
-        public IActionResult Index(String id, [FromQuery]bool nohead, [FromQuery]bool needback, AircraftDetailModel model)
+        public IActionResult Index(string id, [FromQuery]bool nohead, [FromQuery]bool needback, AircraftDetailModel model)
         {
 
             model.Title = id;
@@ -70,12 +70,12 @@ namespace jafleet.Controllers
             return View("~/Views/AircraftDetail/index.cshtml",model);
         }
 
-        public IActionResult IndexNohead(String id,  AircraftDetailModel model)
+        public IActionResult IndexNohead(string id,  AircraftDetailModel model)
         {
             return Index(id, true, false, model);
         }
 
-        public IActionResult IndexNoheadBack(String id, AircraftDetailModel model)
+        public IActionResult IndexNoheadBack(string id, AircraftDetailModel model)
         {
             return Index(id, true, true, model);
         }

@@ -7,24 +7,24 @@ namespace jafleet.Models
     public class SearchConditionInModel:BaseModel
     {
         [DefaultValue(null)]
-        public String RegistrationNumber { get; set; }
+        public string RegistrationNumber { get; set; }
 
         [DefaultValue(null)]
-        public String Airline { get; set; } = String.Empty;
+        public string Airline { get; set; } = String.Empty;
 
         [DefaultValue(null)]
-        public String OperationCode { get; set; }
+        public string OperationCode { get; set; }
 
         [DefaultValue(null)]
-        public String WiFiCode { get; set; }
+        public string WiFiCode { get; set; }
 
         [DefaultValue(null)]
-        public String RegistrationDate { get; set; }
+        public string RegistrationDate { get; set; }
         [DefaultValue("0")]
-        public String RegistrationSelection { get; set; }
+        public string RegistrationSelection { get; set; }
 
         [DefaultValue(null)]
-        public String Remarks { get; set; } = String.Empty;
+        public string Remarks { get; set; } = String.Empty;
 
         [DefaultValue(null)]
         public string TypeDetail { get; set; }

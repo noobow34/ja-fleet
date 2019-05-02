@@ -21,7 +21,7 @@ namespace jafleet.Controllers
             _context = context;
         }
 
-        public IActionResult Index(String id,EditModel model, [FromQuery]bool nohead)
+        public IActionResult Index(string id,EditModel model, [FromQuery]bool nohead)
         {
             if (!CookieUtil.IsAdmin(HttpContext))
             {

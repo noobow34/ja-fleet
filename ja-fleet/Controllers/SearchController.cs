@@ -66,7 +66,7 @@ namespace jafleet.Controllers
             int[] typeDetail = new int[] { };
             String[] operation;
             String[] wifi;
-            String registrationDate;;
+            string registrationDate;;
 
             if (model.RegistrationNumber == null){
                 //指定されていない場合は全県
