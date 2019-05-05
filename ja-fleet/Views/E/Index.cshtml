@@ -23,19 +23,17 @@
 }
 else
 {
-    <h1>@Model.Aircraft.RegistrationNumber</h1>
+    <h1 style="display:inline;">@Model.Aircraft.RegistrationNumber</h1>
+    <input type="button" value="C" id="copy" class="btn btn-primary btn-sm" data-clipboard-target="#LinkPage">
 }
+@Html.HiddenFor(model => model.LinkPage, new { @class = "form-control" })
+
 @if (Model.ex != null)
 {
     @Model.ex.ToString()
 }
 <form asp-action="Store" method="post" class="form-inline">
     <div class="row">
-        <div class="row">
-            <div class="form-group">
-                @Html.TextBoxFor(model => model.LinkPage, new { @class = "form-control" })
-            </div>
-        </div>
         <div class="form-group">
             @Html.LabelFor(model => model.Aircraft.RegistrationNumber, new { @class = "control-label" })
 
@@ -138,9 +136,15 @@ else
     @Html.HiddenFor(model => model.NoHead)
 </form>
 @section ScriptsPartial{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
     <script>
-        $("#LinkPage").on('click', function (e) {
-            e.target.setSelectionRange(0, e.target.value.length);
+        new ClipboardJS('.btn', {
+            text: function() {
+                return document.querySelector('input[type=hidden]').value;
+            }
+        });
+        $(function () {
+            $('#copy').click();
         });
     </script>
 }

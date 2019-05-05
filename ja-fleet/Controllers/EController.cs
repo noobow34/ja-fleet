@@ -50,15 +50,11 @@ namespace jafleet.Controllers
                 model.Aircraft = new Aircraft();
                 model.Aircraft.RegistrationNumber = id.ToUpper();
                 model.IsNew = true;
+                model.LinkPage = $"https://ja-fleet.noobow.me/AD/{id.ToUpper()}";
             }
             else
             {
                 var av = _context.AircraftView.Find(id.ToUpper());
-                string additional = string.Empty;
-                if (av.OperationCode == OperationCode.RETIRE_UNREGISTERED)
-                {
-                    additional = "?includeRetire=true";
-                }
                 model.LinkPage = $"https://ja-fleet.noobow.me/AD/{av.RegistrationNumber}";
             }
 
