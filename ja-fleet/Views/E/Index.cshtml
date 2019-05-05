@@ -24,9 +24,8 @@
 else
 {
     <h1 style="display:inline;">@Model.Aircraft.RegistrationNumber</h1>
-    <input type="button" value="C" id="copy" class="btn btn-primary btn-xs" data-clipboard-target="#LinkPage">
-    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="@Model.Aircraft.RegistrationNumber" data-url="@Model.LinkPage" data-show-count="false">Tweet</a>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <input type="button" value="c" id="copy" class="btn btn-primary btn-xs" data-clipboard-target="#LinkPage">
+    <input type="button" value="t" id="tweet"  class="btn btn-primary btn-xs" onClick="window.open('https://twitter.com/intent/tweet?text=@(Model.Aircraft.RegistrationNumber)%0a@(Model.LinkPage)')">
 }
 @Html.HiddenFor(model => model.LinkPage, new { @class = "form-control" })
 
@@ -128,9 +127,8 @@ else
     </div>
     <div class="row">
         <div class="form-group">
-
-            <input type="button" value="前のページに戻る" class="btn btn-default" onclick="history.back()" />
-            <input type="submit" value="登録" class="btn btn-primary" />
+            <input type="button" value="戻る" class="btn btn-default" onclick="history.back();" />
+            <input type="submit" value="登録" class="btn btn-primary" onclick="$('#copy').click();"/>
         </div>
     </div>
 
@@ -144,9 +142,6 @@ else
             text: function () {
                 return document.querySelector('input[type=hidden]').value;
             }
-        });
-        $(function () {
-            $('#copy').click();
         });
     </script>
 }
