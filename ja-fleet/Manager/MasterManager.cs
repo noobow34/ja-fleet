@@ -56,6 +56,9 @@ namespace jafleet.Manager
                 }else if(OperationCode.RETIRE.Contains(o.Key))
                 {
                     o.OptGroup = "退役";
+                }else if (OperationCode.OTHERS.Contains(o.Key))
+                {
+                    o.OptGroup = "その他";
                 }
             });
             _operation = tempop.ToArray();
