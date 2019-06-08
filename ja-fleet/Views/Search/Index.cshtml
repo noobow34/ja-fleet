@@ -181,11 +181,11 @@
         });
     } );
 
-        $('#serach').click(function ()  {
+        $('#serach').click(function () {
             isLoading = false;
             table.ajax.reload();
             table.order.neutral().draw();
-        })
+        });
 
         $(window).on('popstate', function(e) {
             location.reload();
