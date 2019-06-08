@@ -77,6 +77,8 @@ namespace jafleet.Manager
                 }
                 typelist.Add(_type.Where(t => t.TypeCode == at.TypeCode).SingleOrDefault());
             }
+            //最後の1つを処理
+            _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
         }
 
         public static string GetSearchConditionDisp(string scKey, jafleetContext context)
