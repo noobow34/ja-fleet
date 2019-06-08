@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using jafleet.Models;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Type = jafleet.Commons.EF.Type;
 
 namespace jafleet.Manager
 {
@@ -62,6 +63,20 @@ namespace jafleet.Manager
                 }
             });
             _operation = tempop.ToArray();
+
+            var airlineType = context.AircraftView.AsNoTracking().Select(av => new { av.Airline, av.TypeCode}).Distinct().OrderBy(av => av.Airline).ToList();
+            string currentAirline = airlineType[0].Airline;
+            var typelist = new List<Type>();
+            foreach(var at in airlineType)
+            {
+                if(currentAirline != at.Airline)
+                {
+                    _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
+                    currentAirline = at.Airline;
+                    typelist  = new List<Type>();
+                }
+                typelist.Add(_type.Where(t => t.TypeCode == at.TypeCode).SingleOrDefault());
+            }
         }
 
         public static string GetSearchConditionDisp(string scKey, jafleetContext context)
@@ -125,6 +140,9 @@ namespace jafleet.Manager
 
         private static List<string> _adminUser = null;
         public static List<string> AdminUser { get { return _adminUser; } }
+
+        private static Dictionary<string, List<Type>> _airlineType = new Dictionary<string, List<Type>>();
+        public static Dictionary<string, List<Type>> AirlineType { get { return _airlineType; } }
 
         private static Dictionary<string, string> _searchCondition = new Dictionary<string, string>();
 

@@ -20,8 +20,13 @@
 }
 <h1></h1>
 <img src="~/images/JA-Fleet_1.png" alt="JA-Fleet【本邦航空会社機材一覧サイト】" class="img-responsive" />
-<div style="width:50%">
-    <a asp-area="" asp-controller="Search" asp-action="Index" class="btn btn-primary btn-lg">検索</a><br /><br />
+<a asp-area="" asp-controller="Search" asp-action="Index" class="btn btn-primary btn-lg">検索</a><br /><br />
+<div style="width:70%">
+    @Html.DropDownList("Airline", new SelectList(MasterManager.AllAirline, "AirlineCode", "AirlineNameJpShort"), new { @class = "form-control", style = "width: 30%;display:inline;" })
+    ＆@Html.DropDownList("Type",  Enumerable.Empty<SelectListItem>(), new { @class = "form-control", style = "width: 38%;display:inline;" })
+    <input type="button" value="クイックリンク" id="quick" class="btn btn-primary btn-sm" />
+    <br />
+    <br />
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
@@ -125,4 +130,33 @@
 {
     <a class="twitter-timeline" href="https://twitter.com/ja_fleet?ref_src=twsrc%5Etfw" width="320px" height="400px">Tweets by ja_fleet</a>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+}
+@section ScriptsPartial{
+    <script>
+        $(function () {
+            recreateTypeList();
+        });
+        $('#quick').click(function () {
+            let dest = '/Aircraft/Airline/' + $('#Airline').val() + '/' + $('#Type').val();
+            window.location = dest;
+        });
+        $('#Airline').change(function () {
+            recreateTypeList();            
+        });
+
+        const recreateTypeList = function () {
+            $("#quick").prop("disabled", true);
+            $.ajax({
+                type: 'GET',
+                url: '/Master/AirlineType/' + $('#Airline').val(),
+                cache: false
+            }).done(function (data) {
+                $('select#Type option').remove();
+                $.each(data, function(index, typeList){
+                    $('select#Type').append($('<option>').text(typeList.typeName).attr('value', typeList.typeCode));
+                });
+                $("#quick").prop("disabled", false);
+            });
+        };
+    </script>
 }
