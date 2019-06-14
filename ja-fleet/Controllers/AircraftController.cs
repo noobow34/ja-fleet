@@ -140,7 +140,7 @@ namespace jafleet.Controllers
                     a.LinkUrl = null;
                     a.ActualUpdateTime = DateTime.Now;
                     _context.SaveChanges();
-                    LineUtil.PushMe($"{id}のLinkUrlを削除じました", HttpClientManager.GetInstance());
+                    LineUtil.PushMe($"{id}のLinkUrlを削除しました", HttpClientManager.GetInstance());
                 }
 
                 return Redirect($"https://www.jetphotos.com{newestPhotoLink}");
