@@ -25,7 +25,7 @@ else
 {
     <h1 style="display:inline;">@Model.Aircraft.RegistrationNumber</h1>
     <input type="button" value="c" id="copy" class="btn btn-primary btn-xs" data-clipboard-target="#LinkPage">
-    <input type="button" value="t" id="tweet"  class="btn btn-primary btn-xs" onClick="window.open('https://twitter.com/intent/tweet?text=@(Model.Aircraft.RegistrationNumber)%0a@(Model.LinkPage)')">
+    <input type="button" value="t" id="tweet"  class="btn btn-primary btn-xs" onClick="location.href = 'https://twitter.com/intent/tweet?text=@(Model.Aircraft.RegistrationNumber)%0a@(Model.LinkPage)';">
 }
 @Html.HiddenFor(model => model.LinkPage, new { @class = "form-control" })
 
