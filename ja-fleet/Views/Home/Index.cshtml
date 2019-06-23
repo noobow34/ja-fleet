@@ -23,7 +23,7 @@
 <a asp-area="" asp-controller="Search" asp-action="Index" class="btn btn-primary btn-lg">検索</a><br /><br />
 <div style="width:70%">
     @Html.DropDownList("Airline", new SelectList(MasterManager.AllAirline, "AirlineCode", "AirlineNameJpShort"), new { @class = "form-control", style = "width: 30%;display:inline;" })
-    ＆@Html.DropDownList("Type",  Enumerable.Empty<SelectListItem>(), new { @class = "form-control", style = "width: 38%;display:inline;" })
+    ＆@Html.DropDownList("Type", Enumerable.Empty<SelectListItem>(), new { @class = "form-control", style = "width: 38%;display:inline;" })
     <input type="button" value="クイックリンク" id="quick" class="btn btn-primary btn-sm" />
     <br />
     <br />
@@ -131,8 +131,22 @@
     <a class="twitter-timeline" href="https://twitter.com/ja_fleet?ref_src=twsrc%5Etfw" width="320px" height="400px">Tweets by ja_fleet</a>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 }
+@if (Context.Request.Host.ToString().Contains("sakura.ne.jp"))
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+    <input type="button" value="a" id="copy" class="btn btn-danger btn-xs" data-clipboard-target="#admin">
+    <input type="hidden" value="@MasterManager.AdminUser.FirstOrDefault()" id="admin" />
+}
 @section ScriptsPartial{
     <script>
+        @if (Context.Request.Host.ToString().Contains("sakura.ne.jp"))
+        {
+            @:new ClipboardJS('.btn', {
+                @:text: function () {
+                    @:return document.querySelector('input[type=hidden]').value;
+                @:}
+            @:});
+        }
         $(function () {
             recreateTypeList();
         });
@@ -141,18 +155,18 @@
             window.location = dest;
         });
         $('#Airline').change(function () {
-            recreateTypeList();            
+            recreateTypeList();
         });
 
         const recreateTypeList = function () {
             $("#quick").prop("disabled", true);
             $.ajax({
-                type: 'GET',
+            type: 'GET',
                 url: '/Master/AirlineType/' + $('#Airline').val(),
                 cache: false
             }).done(function (data) {
                 $('select#Type option').remove();
-                $.each(data, function(index, typeList){
+                $.each(data, function (index, typeList) {
                     $('select#Type').append($('<option>').text(typeList.typeName).attr('value', typeList.typeCode));
                 });
                 $("#quick").prop("disabled", false);
