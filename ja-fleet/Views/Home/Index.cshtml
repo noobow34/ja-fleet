@@ -126,7 +126,7 @@
 <hr />
     管理者：<a href="https://twitter.com/noobow">ぬーぼー（@@noobow）</a><br />
     更新情報アカウント：<a href="https://twitter.com/ja_fleet">@@ja_fleet</a><br />
-@if (!CookieUtil.IsAdmin(Context))
+@if (!CookieUtil.IsAdmin(Context) && !Context.Request.Host.ToString().Contains("sakura.ne.jp"))
 {
     <a class="twitter-timeline" href="https://twitter.com/ja_fleet?ref_src=twsrc%5Etfw" width="320px" height="400px">Tweets by ja_fleet</a>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
