@@ -100,6 +100,7 @@
     var table;
     var gridheight = '50vh';
     $(function () {
+        $('body').tooltip({selector: '[data-toggle="tooltip"]'});
         $('#Airline').multiselect({
             maxHeight: 400, nonSelectedText: '（未選択）',
             enableClickableOptGroups: true,
