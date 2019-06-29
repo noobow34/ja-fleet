@@ -79,7 +79,7 @@ else
                         }
                     }, render: function(data, type, row, meta)  {
                             if(row.wifiCode == '2'){
-                                return '<a href="#" data-toggle="tooltip" title=" ' + row.wifi + ' ">' + data + '</a>';
+                                return '<a href="#" data-toggle="tooltip" data-placement="right" title=" ' + row.wifi + ' ">' + data + '</a>';
                             }else{
                                 return data;
                             }
