@@ -29,6 +29,7 @@
     <script>
         var table;
         $(function () {
+            $('body').tooltip({selector: '[data-toggle="tooltip"]'});
             let gridheight;
             if (window.innerHeight < 800) {
                 gridheight = '60vh';

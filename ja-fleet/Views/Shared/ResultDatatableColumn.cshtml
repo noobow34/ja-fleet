@@ -72,28 +72,33 @@ else
                         }
                     }
      },
-    {data: 'wifi',className: 'dt-center'
+    {data: 'wifiShort',className: 'dt-center'
                     ,createdCell: function (td, cellData, rowData, row, col) {
                         if(rowData.wifiChanged == 1){
                             $(td).css({"background-color":"#FFCCFF"});
                         }
-                    }},
+                    }, render: function(data, type, row, meta)  {
+                            if(row.wifiCode == '2'){
+                                return '<a href="#" data-toggle="tooltip" title=" ' + row.wifi + ' ">' + data + '</a>';
+                            }else{
+                                return data;
+                            }
+                        }
+    },
     {data: 'remarks',className: 'dt-left'
                     ,createdCell: function (td, cellData, rowData, row, col) {
                         if(rowData.remarksChanged == 1){
-                            $(td).css({"background-color":"#FFCCFF"});
-                        }
-                    }
-}
-],
-@if (!Model.IsDetail)
-{
-    @:createdRow: function(row, data, dataIndex) {
-    @:if (data.updateTime != null)
-    @:{
-    @:let updateTime = dayjs(data.updateTime);
-    @:let today = dayjs();
-    @:if (today.diff(updateTime, 'days', true) <= 7)
+                            $(td).css({" background-color":"#FFCCFF"});
+   }
+   }
+   }
+   ],
+   @if (!Model.IsDetail) { @: createdRow: function(row, data, dataIndex) {
+    @: if (data.updateTime !=null)
+    @: {
+    @: let updateTime=dayjs(data.updateTime);
+    @: let today=dayjs();
+    @: if (today.diff(updateTime, 'days' , true) <= 7)
     @:{
     @:$(row).css({ "background-color":"#FFCCFF"});
     @:}
