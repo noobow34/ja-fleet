@@ -44,6 +44,7 @@ else
     <script>
         var table;
         $(function () {
+            $('body').tooltip({selector: '[data-toggle="tooltip"]'});\
             datatablesLangInit();
             let gridheight = "20vh"
             table = $('#' + '@(Model.TableId)').DataTable({
