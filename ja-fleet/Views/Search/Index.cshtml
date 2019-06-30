@@ -51,7 +51,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.OperationList, new { @class = "control-label" })<br />
             @Html.DropDownListFor(model => model.OperationCode,
-                                                              new SelectList(Model.OperationList, "Key", "Value",null, "OptGroup"),
+                                                              new SelectList(Model.OperationList, "Key", "Value", null, "OptGroup"),
                                                               new { @multiple = "multiple" })
         </div>
     </div>
@@ -63,13 +63,24 @@
                                                                              new { @multiple = "multiple" })
         </div>
     </div>
-    <div class="col-xs-2 col-sm-1">
+    <div class="col-xs-12 col-sm-2">
+        <div class="form-group">
+            @Html.LabelFor(model => model.SpecialLivery, new { @class = "control-label" })<br />
+            @Html.DropDownListFor(model => model.SpecialLiveryList,
+                                   Model.SpecialLiveryList,
+                                     "　",
+                                       new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.SpecialLiveryKeyword, new { @class = "form-control", @disabled = "true" })
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-2">
         <div class="form-group">
             @Html.LabelFor(model => model.Remarks, new { @class = "control-label" })<br />
             @Html.DropDownListFor(model => model.RemarksList,
                                    Model.RemarksList,
                                      "　",
                                        new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.RemarksKeyword, new { @class = "form-control", @disabled = "true" })
         </div>
     </div>
     <div class="col-xs-2 col-sm-1">
@@ -77,24 +88,24 @@
             <br /><input type="button" value="検索" id="serach" class="btn btn-primary" />
         </div>
     </div>
-</div>
-@await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")
-<div class="modal fade" id="emptyresult" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                検索結果は0件です。
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+    </div>
+    @await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")
+    <div class="modal fade" id="emptyresult" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    検索結果は0件です。
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-@section ScriptsPartial{
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js" integrity="sha256-P93G0oq6PBPWTP1IR8Mz/0jHHUpaWL0aBJTKauisG7Q=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js" integrity="sha256-qoj3D1oB1r2TAdqKTYuWObh01rIVC1Gmw9vWp1+q5xw=" crossorigin="anonymous"></script>
-    <script>
+    @section ScriptsPartial{
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js" integrity="sha256-P93G0oq6PBPWTP1IR8Mz/0jHHUpaWL0aBJTKauisG7Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js" integrity="sha256-qoj3D1oB1r2TAdqKTYuWObh01rIVC1Gmw9vWp1+q5xw=" crossorigin="anonymous"></script>
+        <script>
     var isLoading = true;
     var isDirect = @Model.IsDirect.ToString().ToLower();
     var table;
@@ -119,6 +130,7 @@
         $('#RegistrationSelection').multiselect();
         $('#WiFiCode').multiselect({ nonSelectedText: '' });
         $('#RemarksList').multiselect();
+        $('#SpecialLiveryList').multiselect();
         $('#RegistrationNumber').tooltip();
         @if (!string.IsNullOrEmpty(Model.TypeDetail))
         {
@@ -143,6 +155,16 @@
         @if (!string.IsNullOrEmpty(Model.Remarks))
         {
             @:$('#RemarksList').multiselect('select', "@Model.Remarks".split("|"));
+            @:if ($('#RemarksList').val() == "3") {
+                @:$('#RemarksKeyword').prop("disabled", false);
+            @:}
+        }
+        @if (!string.IsNullOrEmpty(Model.SpecialLivery))
+        {
+            @:$('#SpecialLiveryList').multiselect('select', "@Model.SpecialLivery".split("|"));
+            @:if ($('#SpecialLiveryList').val() == "3") {
+                @:$('#SpecialLiveryKeyword').prop("disabled", false);
+            @:}
         }
         @if (!string.IsNullOrEmpty(Model.RegistrationDate))
         {
@@ -166,7 +188,10 @@
                                 d.RegistrationSelection = GetRegistrationSelection();
                                 d.WiFiCode = GetWiFiCode();
                                 d.Remarks = GetRemarks();
-                            },
+                                d.RemarksKeyword = GetRemarksKeyword();
+                                d.SpecialLivery = GetSpecialLivery();
+                                d.SpecialLiveryKeyword = GetSpecialLiveryKeyword();
+                    },
                 dataSrc: function(d) {
                     if (d.searchConditionKey != "" && !GetIsDirect()) {
                         history.pushState(null, null, "?sc=" + d.searchConditionKey);
@@ -231,9 +256,39 @@
             return $('#RemarksList').val();
         }
 
-        const GetOperationCode = function ()  {
+        const GetSpecialLivery = function ()  {
+            return $('#SpecialLiveryList').val();
+        }
+
+        const GetRemarksKeyword = function ()  {
+            return $('#RemarksKeyword').val();
+        }
+
+        const GetSpecialLiveryKeyword = function ()  {
+            return $('#SpecialLiveryKeyword').val();
+        }
+
+        const GetOperationCode = function () {
             let operation = $('#OperationCode').val().toString();
             return operation.replace(/,/g, '|');
         }
-    </script>
-}
+
+        $('#RemarksList').change(function () {
+            if ($('#RemarksList').val() == "3") {
+                $('#RemarksKeyword').prop("disabled", false);
+            } else {
+                $('#RemarksKeyword').val("");
+                $('#RemarksKeyword').prop("disabled", true);
+            }
+        });
+
+        $('#SpecialLiveryList').change(function () {
+            if ($('#SpecialLiveryList').val() == "3") {
+                $('#SpecialLiveryKeyword').prop("disabled", false);
+            } else {
+                $('#SpecialLiveryKeyword').val("");
+                $('#SpecialLiveryKeyword').prop("disabled", true);
+            }
+        });
+        </script>
+    }

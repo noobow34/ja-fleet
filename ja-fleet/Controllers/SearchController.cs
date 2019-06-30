@@ -149,6 +149,22 @@ namespace jafleet.Controllers
             else if (model.Remarks == "2")
             {
                 query = query.Where(p => !String.IsNullOrEmpty(p.Remarks));
+            }else if (model.Remarks == "3")
+            {
+                query = query.Where(p => p.Remarks.Contains(model.RemarksKeyword));
+            }
+
+            if (model.SpecialLivery == "1")
+            {
+                query = query.Where(p => String.IsNullOrEmpty(p.SpecialLivery));
+            }
+            else if (model.SpecialLivery == "2")
+            {
+                query = query.Where(p => !String.IsNullOrEmpty(p.SpecialLivery));
+            }
+            else if (model.SpecialLivery == "3")
+            {
+                query = query.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword));
             }
 
             searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();

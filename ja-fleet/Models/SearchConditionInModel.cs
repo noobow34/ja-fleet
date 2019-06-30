@@ -25,6 +25,13 @@ namespace jafleet.Models
 
         [DefaultValue(null)]
         public string Remarks { get; set; } = String.Empty;
+        [DefaultValue(null)]
+        public string RemarksKeyword { get; set; } = String.Empty;
+
+        [DefaultValue(null)]
+        public string SpecialLivery { get; set; } = String.Empty;
+        [DefaultValue(null)]
+        public string SpecialLiveryKeyword { get; set; } = String.Empty;
 
         [DefaultValue(null)]
         public string TypeDetail { get; set; }

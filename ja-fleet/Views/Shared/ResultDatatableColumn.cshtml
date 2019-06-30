@@ -88,21 +88,21 @@ else
     {data: 'specialLivery',className: 'dt-left'
                     ,createdCell: function (td, cellData, rowData, row, col) {
                         if(rowData.specialLiveryChanged == 1){
-                            $(td).css({" background-color":"#FFCCFF"});
+                            $(td).css({"background-color":"#FFCCFF"});
                         }
                     }
    },
     {data: 'remarks',className: 'dt-center'
                     ,createdCell: function (td, cellData, rowData, row, col) {
                         if(rowData.remarksChanged == 1){
-                            $(td).css({" background-color":"#FFCCFF"});
+                            $(td).css({"background-color":"#FFCCFF"});
                         }
                     }, render: function(data, type, row, meta)  {
-                                if(data != null){
-                                    return '<a href="javascript:void(0)" data-toggle="tooltip" data-placement="left" data-container="body" title=" ' + data + ' ">〇</a>';
-                                }else{
-                                    return '';
-                                }
+                        if(data != null){
+                            return '<a href="javascript:void(0)" data-toggle="tooltip" data-placement="left" data-container="body" title=" ' + data + ' ">〇</a>';
+                        }else{
+                            return '';
+                        }
                     }
    }
    ],

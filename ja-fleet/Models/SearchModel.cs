@@ -37,9 +37,19 @@ namespace jafleet.Models
 
         [Display(Name = "備考")]
         public string Remarks { get; set; } = String.Empty;
+        public string RemarksKeyword { get; set; } = String.Empty;
         public List<SelectListItem> RemarksList { get; set; }
             = new List<SelectListItem>{ new SelectListItem { Value = "1", Text = "なし" }
-                                        , new SelectListItem { Value = "2", Text = "あり" } };
+                                        , new SelectListItem { Value = "2", Text = "あり" }
+                                        , new SelectListItem { Value = "3", Text = "キーワード指定" }};
+
+        [Display(Name = "特別塗装")]
+        public string SpecialLivery { get; set; } = String.Empty;
+        public string SpecialLiveryKeyword { get; set; } = String.Empty;
+        public List<SelectListItem> SpecialLiveryList { get; set; }
+            = new List<SelectListItem>{ new SelectListItem { Value = "1", Text = "なし" }
+                                        , new SelectListItem { Value = "2", Text = "あり" }
+                                        , new SelectListItem { Value = "3", Text = "キーワード指定" }};
 
         public bool IsLoading { get; set; } = true;
 

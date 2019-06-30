@@ -91,6 +91,12 @@ else
     </div>
     <div class="row">
         <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.SpecialLivery, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Aircraft.SpecialLivery, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
             @Html.LabelFor(model => model.Aircraft.Remarks, new { @class = "control-label" })
             @Html.TextBoxFor(model => model.Aircraft.Remarks, new { @class = "form-control" })
         </div>
@@ -128,7 +134,7 @@ else
     <div class="row">
         <div class="form-group">
             <input type="button" value="戻る" class="btn btn-default" onclick="history.back();" />
-            <input type="submit" value="登録" class="btn btn-primary" onclick="$('#copy').click();"/>
+            <input type="submit" value="登録" class="btn btn-primary" onclick="$('#copy').click();" />
         </div>
     </div>
 
