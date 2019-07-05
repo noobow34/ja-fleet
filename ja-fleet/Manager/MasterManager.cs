@@ -8,6 +8,7 @@ using jafleet.Models;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Type = jafleet.Commons.EF.Type;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace jafleet.Manager
 {
@@ -147,6 +148,14 @@ namespace jafleet.Manager
         public static Dictionary<string, List<Type>> AirlineType { get { return _airlineType; } }
 
         private static Dictionary<string, string> _searchCondition = new Dictionary<string, string>();
+
+        public static List<SelectListItem> EXIST_SELECTION = new List<SelectListItem>{ new SelectListItem { Value = "1", Text = "なし" }
+                                        , new SelectListItem { Value = "2", Text = "あり" }
+                                        , new SelectListItem { Value = "3", Text = "キーワード指定" }};
+
+        public static List<SelectListItem> PERIOD_SELECTION = new List<SelectListItem>{new SelectListItem{Value = "0",Text = "と等しい"}
+                                       , new SelectListItem { Value = "1", Text = "以前" }
+                                        , new SelectListItem { Value = "2", Text = "以降" }};
 
     }
 }
