@@ -20,8 +20,11 @@
     }
 
     const reload = function () {
-        let reg = getQuery()["reg"].toString();
-        location.href = "/Aircraft/Photo/" + reg;
+        let querys = getQuery();
+        if (querys != null) {
+            let reg = getQuery()["reg"].toString();
+            location.href = "/Aircraft/Photo/" + reg;
+        }
     }
 </script>
 </body>
