@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>写真検索エラー</title>
+</head>
+<body>
+    写真の検索中にエラーが発生しました。<br />
+    <input type="button" value="再読込" onclick="reload();" />
+<script>
+    const getQuery = function() {
+        if(window.location.search === "") return;
+        const variables = window.location.search.split("?")[1].split("&");
+        const obj = {};
+        variables.forEach(function(v, i) {
+            const variable = v.split("=");
+            obj[variable[0]] = variable[1];
+        });
+        return obj;
+    }
+
+    const reload = function () {
+        let reg = getQuery()["reg"].toString();
+        location.href = "/Aircraft/Photo/" + reg;
+    }
+</script>
+</body>
+</html >

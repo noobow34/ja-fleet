@@ -128,29 +128,35 @@ namespace jafleet.Controllers
             string jetphotoUrl = string.Format("https://www.jetphotos.com/showphotos.php?keywords-type=reg&keywords={0}&search-type=Advanced&keywords-contain=0&sort-order=2", id);
             var a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
             var parser = new HtmlParser();
-            var htmlDocument = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(jetphotoUrl));
-            var photos = htmlDocument.GetElementsByClassName("result__photoLink");
-            if (photos.Length != 0)
+            try
             {
-                //Jetphotosに写真があった場合
-                string newestPhotoLink = photos[0].GetAttribute("href");
-                if (!string.IsNullOrEmpty(a.LinkUrl))
+                var htmlDocument = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(jetphotoUrl));
+                var photos = htmlDocument.GetElementsByClassName("result__photoLink");
+                if (photos.Length != 0)
                 {
-                    //Jetphotosから取得できるのにDBにも登録されている場合は、DBから消す
-                    a.LinkUrl = null;
-                    a.ActualUpdateTime = DateTime.Now;
-                    _context.SaveChanges();
-                    LineUtil.PushMe($"{id}のLinkUrlを削除しました", HttpClientManager.GetInstance());
+                    //Jetphotosに写真があった場合
+                    string newestPhotoLink = photos[0].GetAttribute("href");
+                    if (!string.IsNullOrEmpty(a.LinkUrl))
+                    {
+                        //Jetphotosから取得できるのにDBにも登録されている場合は、DBから消す
+                        a.LinkUrl = null;
+                        a.ActualUpdateTime = DateTime.Now;
+                        _context.SaveChanges();
+                        LineUtil.PushMe($"{id}のLinkUrlを削除しました", HttpClientManager.GetInstance());
+                    }
+
+                    return Redirect($"https://www.jetphotos.com{newestPhotoLink}");
                 }
-
-                return Redirect($"https://www.jetphotos.com{newestPhotoLink}");
+                else
+                {
+                    //Jetphotosに写真がなかった場合
+                    return Redirect(a?.LinkUrl ?? "/nophoto.html");
+                }
             }
-            else
+            catch
             {
-                //Jetphotosに写真がなかった場合
-                return Redirect(a?.LinkUrl ?? "/nophoto.html");
+                return Redirect($"/failphotoload.html?reg={id}");
             }
-
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
