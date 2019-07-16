@@ -176,28 +176,31 @@ namespace jafleet.Controllers
                 }
                 else
                 {
-                    //Jetphotosに写真がなかった場合
-                    _ = Task.Run(() =>
+                    if (string.IsNullOrEmpty(a?.LinkUrl))
                     {
+                        //Jetphotosに写真がなかった場合
+                        _ = Task.Run(() =>
+                        {
                         //写真がないという情報を登録する
                         using (var serviceScope = _services.CreateScope())
-                        {
-                            using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                             {
-                                if (photo != null)
+                                using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                                 {
-                                    photo.PhotoUrl = null;
-                                    photo.LastAccess = DateTime.Now;
-                                    context.AircraftPhoto.Update(photo);
+                                    if (photo != null)
+                                    {
+                                        photo.PhotoUrl = null;
+                                        photo.LastAccess = DateTime.Now;
+                                        context.AircraftPhoto.Update(photo);
+                                    }
+                                    else
+                                    {
+                                        context.AircraftPhoto.Add(new AircraftPhoto { RegistrationNumber = id, PhotoUrl = null, LastAccess = DateTime.Now });
+                                    }
+                                    context.SaveChanges();
                                 }
-                                else
-                                {
-                                    context.AircraftPhoto.Add(new AircraftPhoto { RegistrationNumber = id, PhotoUrl = null, LastAccess = DateTime.Now });
-                                }
-                                context.SaveChanges();
                             }
-                        }
-                    });
+                        });
+                    }
 
                     return Redirect(a?.LinkUrl ?? "/nophoto.html");
                 }
