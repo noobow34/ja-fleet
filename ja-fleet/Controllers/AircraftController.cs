@@ -125,6 +125,13 @@ namespace jafleet.Controllers
 
         public async System.Threading.Tasks.Task<IActionResult> Photo(string id)
         {
+            var photo = _context.AircraftPhoto.Where(p => p.RegistrationNumber == id).SingleOrDefault();
+            if(photo != null && DateTime.Now.Date == photo.LastAccess.Date)
+            {
+                //1日以内のキャッシュがあれば、キャッシュから返す
+                return Redirect(photo.PhotoUrl != null ? $"https://www.jetphotos.com{photo.PhotoUrl}" : $"/nophoto.html");
+            }
+
             string jetphotoUrl = string.Format("https://www.jetphotos.com/showphotos.php?keywords-type=reg&keywords={0}&search-type=Advanced&keywords-contain=0&sort-order=2", id);
             var a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
             var parser = new HtmlParser();
@@ -136,20 +143,62 @@ namespace jafleet.Controllers
                 {
                     //Jetphotosに写真があった場合
                     string newestPhotoLink = photos[0].GetAttribute("href");
-                    if (!string.IsNullOrEmpty(a.LinkUrl))
+                    _ = Task.Run(() =>
                     {
-                        //Jetphotosから取得できるのにDBにも登録されている場合は、DBから消す
-                        a.LinkUrl = null;
-                        a.ActualUpdateTime = DateTime.Now;
-                        _context.SaveChanges();
-                        LineUtil.PushMe($"{id}のLinkUrlを削除しました", HttpClientManager.GetInstance());
-                    }
-
+                        //写真がないという情報を登録する
+                        using (var serviceScope = _services.CreateScope())
+                        {
+                            using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
+                            {
+                                if (!string.IsNullOrEmpty(a.LinkUrl))
+                                {
+                                    //Jetphotosから取得できるのにDBにも登録されている場合は、DBから消す
+                                    a.LinkUrl = null;
+                                    a.ActualUpdateTime = DateTime.Now;
+                                    context.Aircraft.Update(a);
+                                    LineUtil.PushMe($"{id}のLinkUrlを削除しました", HttpClientManager.GetInstance());
+                                }
+                                if(photo != null)
+                                {
+                                    photo.PhotoUrl = newestPhotoLink;
+                                    photo.LastAccess = DateTime.Now;
+                                    context.AircraftPhoto.Update(photo);
+                                }
+                                else
+                                {
+                                    context.AircraftPhoto.Add(new AircraftPhoto { RegistrationNumber = id, PhotoUrl = newestPhotoLink, LastAccess = DateTime.Now });
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                    });
                     return Redirect($"https://www.jetphotos.com{newestPhotoLink}");
                 }
                 else
                 {
                     //Jetphotosに写真がなかった場合
+                    _ = Task.Run(() =>
+                    {
+                        //写真がないという情報を登録する
+                        using (var serviceScope = _services.CreateScope())
+                        {
+                            using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
+                            {
+                                if (photo != null)
+                                {
+                                    photo.PhotoUrl = null;
+                                    photo.LastAccess = DateTime.Now;
+                                    context.AircraftPhoto.Update(photo);
+                                }
+                                else
+                                {
+                                    context.AircraftPhoto.Add(new AircraftPhoto { RegistrationNumber = id, PhotoUrl = null, LastAccess = DateTime.Now });
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                    });
+
                     return Redirect(a?.LinkUrl ?? "/nophoto.html");
                 }
             }
