@@ -123,10 +123,10 @@ namespace jafleet.Controllers
             return View("~/Views/Aircraft/index.cshtml",model);
         }
 
-        public async System.Threading.Tasks.Task<IActionResult> Photo(string id)
+        public async System.Threading.Tasks.Task<IActionResult> Photo(string id,[FromQuery] bool force)
         {
             var photo = _context.AircraftPhoto.Where(p => p.RegistrationNumber == id).SingleOrDefault();
-            if(photo != null && DateTime.Now.Date == photo.LastAccess.Date)
+            if(photo != null && DateTime.Now.Date == photo.LastAccess.Date && !force)
             {
                 //1日以内のキャッシュがあれば、キャッシュから返す
                 return Redirect(photo.PhotoUrl != null ? $"https://www.jetphotos.com{photo.PhotoUrl}" : $"/nophoto.html");
