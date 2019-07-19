@@ -15,7 +15,7 @@ const openPopUp = function(url){
     if (setwidth > 1200) {
         setwidth = 1200;
     }
-    $('.mfp-iframe-holder .mfp-content').css({ 'height': '90vh' });
+    $('.mfp-iframe-holder .mfp-content').css({ 'height': '95vh' });
     $('.mfp-iframe-holder .mfp-content').css({ 'max-width': setwidth + 'px' });
     $('.mfp-iframe-holder .mfp-content').css({ 'width': setwidth + 'px' });
 }
