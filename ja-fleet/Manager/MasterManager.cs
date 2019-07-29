@@ -66,6 +66,7 @@ namespace jafleet.Manager
             _operation = tempop.ToArray();
 
             var airlineType = context.AircraftView.AsNoTracking().Select(av => new { av.Airline, av.TypeCode}).Distinct().OrderBy(av => av.Airline).ToList();
+            _airlineType = new Dictionary<string, List<Type>>();
             string currentAirline = airlineType[0].Airline;
             var typelist = new List<Type>();
             foreach(var at in airlineType)
@@ -144,7 +145,7 @@ namespace jafleet.Manager
         private static List<string> _adminUser = null;
         public static List<string> AdminUser { get { return _adminUser; } }
 
-        private static Dictionary<string, List<Type>> _airlineType = new Dictionary<string, List<Type>>();
+        private static Dictionary<string, List<Type>> _airlineType;
         public static Dictionary<string, List<Type>> AirlineType { get { return _airlineType; } }
 
         private static Dictionary<string, string> _searchCondition = new Dictionary<string, string>();
