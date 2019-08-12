@@ -50,7 +50,7 @@ namespace jafleet
             var loggerFactory = serviceCollection.BuildServiceProvider().GetService<ILoggerFactory>();
 
             services.AddDbContextPool<jafleetContext>(
-                options => options.UseLoggerFactory(loggerFactory).UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+                options => options.UseLoggerFactory(loggerFactory).EnableSensitiveDataLogging().UseMySql(Configuration.GetConnectionString("DefaultConnection"),
                     mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
