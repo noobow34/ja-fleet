@@ -213,6 +213,12 @@
             table.order.neutral().draw();
         });
 
+        $('#RegistrationNumber').keypress(function (e) {
+            if (e.keyCode == 13) {
+                $('#serach').click();
+            }
+        });
+
         $(window).on('popstate', function(e) {
             location.reload();
         });
