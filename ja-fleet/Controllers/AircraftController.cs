@@ -143,6 +143,20 @@ namespace jafleet.Controllers
                     {
                         return Redirect("/nophoto.html");
                     }
+                    else
+                    {
+                        if (a.LinkUrl.Contains("twitter.com"))
+                        {
+                            //ツイート埋め込みを登録している場合
+                            ViewBag.TweetUrl = a.LinkUrl;
+                            return View("~/Views/AircraftDetail/TweetEmb.cshtml");
+                        }
+                        else
+                        {
+                            //それ意外のサイトを登録している場合
+                            return Redirect(a.LinkUrl);
+                        }
+                    }
                 }
             }
 
