@@ -126,14 +126,31 @@ namespace jafleet.Controllers
         public async System.Threading.Tasks.Task<IActionResult> Photo(string id,[FromQuery] bool force)
         {
             var photo = _context.AircraftPhoto.Where(p => p.RegistrationNumber == id).SingleOrDefault();
+            Aircraft a = null;
             if(photo != null && DateTime.Now.Date == photo.LastAccess.Date && !force)
             {
-                //1日以内のキャッシュがあれば、キャッシュから返す
-                return Redirect(photo.PhotoUrl != null ? $"https://www.jetphotos.com{photo.PhotoUrl}" : $"/nophoto.html");
+                if(photo.PhotoUrl != null)
+                {
+                    //1日以内のキャッシュがあれば、キャッシュから返す
+                    return Redirect($"https://www.jetphotos.com{photo.PhotoUrl}");
+                }
+                else
+                {
+                    //キャッシュがNULLの場合は、リンクURLもNULLの場合のみnophotoを返す
+                    //そうしないとキャッシュがNULLで、あとからLinkUrlを登録した場合に最大1日待つ必要が出る。
+                    a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
+                    if (string.IsNullOrEmpty(a.LinkUrl))
+                    {
+                        return Redirect("/nophoto.html");
+                    }
+                }
             }
 
             string jetphotoUrl = string.Format("https://www.jetphotos.com/showphotos.php?keywords-type=reg&keywords={0}&search-type=Advanced&keywords-contain=0&sort-order=2", id);
-            var a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
+            if(a == null)
+            {
+                a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
+            }
             var parser = new HtmlParser();
             try
             {
