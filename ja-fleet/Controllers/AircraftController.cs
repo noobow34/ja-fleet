@@ -145,17 +145,7 @@ namespace jafleet.Controllers
                     }
                     else
                     {
-                        if (a.LinkUrl.Contains("twitter.com"))
-                        {
-                            //ツイート埋め込みを登録している場合
-                            ViewBag.TweetUrl = a.LinkUrl;
-                            return View("~/Views/AircraftDetail/TweetEmb.cshtml");
-                        }
-                        else
-                        {
-                            //それ意外のサイトを登録している場合
-                            return Redirect(a.LinkUrl);
-                        }
+                        return ReturnLinkUrl(a.LinkUrl);
                     }
                 }
             }
@@ -189,17 +179,7 @@ namespace jafleet.Controllers
                                     context.Aircraft.Update(a);
                                     LineUtil.PushMe($"{id}のLinkUrlを削除しました", HttpClientManager.GetInstance());
                                 }
-                                if(photo != null)
-                                {
-                                    photo.PhotoUrl = newestPhotoLink;
-                                    photo.LastAccess = DateTime.Now;
-                                    context.AircraftPhoto.Update(photo);
-                                }
-                                else
-                                {
-                                    context.AircraftPhoto.Add(new AircraftPhoto { RegistrationNumber = id, PhotoUrl = newestPhotoLink, LastAccess = DateTime.Now });
-                                }
-                                context.SaveChanges();
+                                StoreAircraftPhoto(context, photo, newestPhotoLink, id);
                             }
                         }
                     });
@@ -217,17 +197,7 @@ namespace jafleet.Controllers
                             {
                                 using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                                 {
-                                    if (photo != null)
-                                    {
-                                        photo.PhotoUrl = null;
-                                        photo.LastAccess = DateTime.Now;
-                                        context.AircraftPhoto.Update(photo);
-                                    }
-                                    else
-                                    {
-                                        context.AircraftPhoto.Add(new AircraftPhoto { RegistrationNumber = id, PhotoUrl = null, LastAccess = DateTime.Now });
-                                    }
-                                    context.SaveChanges();
+                                    StoreAircraftPhoto(context, photo,null ,id);
                                 }
                             }
                         });
@@ -235,17 +205,7 @@ namespace jafleet.Controllers
                     }
                     else
                     {
-                        if (a.LinkUrl.Contains("twitter.com"))
-                        {
-                            //ツイート埋め込みを登録している場合
-                            ViewBag.TweetUrl = a.LinkUrl;
-                            return View("~/Views/AircraftDetail/TweetEmb.cshtml");
-                        }
-                        else
-                        {
-                            //それ意外のサイトを登録している場合
-                            return Redirect(a.LinkUrl);
-                        }
+                        return ReturnLinkUrl(a.LinkUrl);
                     }
                 }
             }
@@ -253,6 +213,37 @@ namespace jafleet.Controllers
             {
                 return Redirect($"/failphotoload.html?reg={id}");
             }
+        }
+
+        private IActionResult ReturnLinkUrl(string linkUrl)
+        {
+            if (linkUrl.Contains("twitter.com"))
+            {
+                //ツイート埋め込みを登録している場合
+                ViewBag.TweetUrl = linkUrl;
+                return View("~/Views/AircraftDetail/TweetEmb.cshtml");
+            }
+            else
+            {
+                //それ意外のサイトを登録している場合
+                return Redirect(linkUrl);
+            }
+
+        }
+
+        private void StoreAircraftPhoto(jafleetContext context,AircraftPhoto photo, string photoUrl,string reg)
+        {
+            if (photo != null)
+            {
+                photo.PhotoUrl = photoUrl;
+                photo.LastAccess = DateTime.Now;
+                context.AircraftPhoto.Update(photo);
+            }
+            else
+            {
+                context.AircraftPhoto.Add(new AircraftPhoto { RegistrationNumber = reg, PhotoUrl = photoUrl, LastAccess = DateTime.Now });
+            }
+            context.SaveChanges();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
