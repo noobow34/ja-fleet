@@ -35,11 +35,21 @@
 }
 else
 {
-    <h2 style="display:inline;">@(Model.Title)</h2><input type="button" value="戻る" onClick="window.close();" id="back" class="btn btn-primary btn-xs" />
+    <h2 style="display:inline;">@(Model.Title)</h2>
+    <input type="button" value="戻る" onClick="window.close();" id="back" class="btn btn-primary btn-xs" />
 }
 
 @await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")
-<iframe src="/Aircraft/Photo/@(Model.Title)" id="photofr" width="100%" height="700px"></iframe>
+@if (!string.IsNullOrEmpty(Model.AV.LinkUrl) && Model.AV.LinkUrl.Contains("twitter.com"))
+{
+    <blockquote class="twitter-tweet"><a href="@(Model.AV.LinkUrl)"></a></blockquote>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+}
+else
+{
+    <iframe src="/Aircraft/Photo/@(Model.Title)" id="photofr" width="100%" height="700px"></iframe>
+}
+
 @section ScriptsPartial{
     <script>
         var table;

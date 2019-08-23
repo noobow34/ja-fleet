@@ -37,9 +37,9 @@ namespace jafleet.Controllers
             model.Reg = id;
             model.NeedBack = needback;
 
+            model.AV = _context.AircraftView.AsNoTracking().Where(av => av.RegistrationNumber == id).FirstOrDefault();
             if (!nohead)
             {
-                model.AV = _context.AircraftView.AsNoTracking().Where(av => av.RegistrationNumber == id).FirstOrDefault();
                 model.AirlineGroupNmae = _context.AirlineGroup.AsNoTracking().Where(ag => ag.AirlineGroupCode == model.AV.AirlineGroupCode).FirstOrDefault()?.AirlineGroupName;
             }
 
