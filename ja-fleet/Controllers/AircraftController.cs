@@ -145,7 +145,7 @@ namespace jafleet.Controllers
                     string newestPhotoLink = photos[0].GetAttribute("href");
                     _ = Task.Run(() =>
                     {
-                        //写真がないという情報を登録する
+                        //写真をキャッシュに登録する
                         using (var serviceScope = _services.CreateScope())
                         {
                             using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
@@ -200,9 +200,22 @@ namespace jafleet.Controllers
                                 }
                             }
                         });
+                        return Redirect("/nophoto.html");
                     }
-
-                    return Redirect(a?.LinkUrl ?? "/nophoto.html");
+                    else
+                    {
+                        if (a.LinkUrl.Contains("twitter.com"))
+                        {
+                            //ツイート埋め込みを登録している場合
+                            ViewBag.TweetUrl = a.LinkUrl;
+                            return View("~/Views/AircraftDetail/TweetEmb.cshtml");
+                        }
+                        else
+                        {
+                            //それ意外のサイトを登録している場合
+                            return Redirect(a.LinkUrl);
+                        }
+                    }
                 }
             }
             catch
