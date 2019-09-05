@@ -38,6 +38,11 @@ namespace jafleet.Controllers
             model.NeedBack = needback;
 
             model.AV = _context.AircraftView.AsNoTracking().Where(av => av.RegistrationNumber == id).FirstOrDefault();
+            if(model.AV == null)
+            {
+                //存在しないレジが指定された場合はNotFound
+                return NotFound();
+            }
             if (!nohead)
             {
                 model.AirlineGroupNmae = _context.AirlineGroup.AsNoTracking().Where(ag => ag.AirlineGroupCode == model.AV.AirlineGroupCode).FirstOrDefault()?.AirlineGroupName;
