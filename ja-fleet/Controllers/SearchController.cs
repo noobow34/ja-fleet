@@ -71,7 +71,7 @@ namespace jafleet.Controllers
 
             if (model.RegistrationNumber == null){
                 //指定されていない場合は全県
-                regList.Add("%");
+                regList.Add(".*");
             }else{
                 //|区切りで複数件を処理
                 foreach(string r in model.RegistrationNumber.ToUpper().Split("|")){
@@ -81,7 +81,6 @@ namespace jafleet.Controllers
                         //JAがついていなければ付加
                         reg = "JA";
                     }
-                    //画面のワイルドカード仕様から.NETのワイルドカード仕様に変換
                     reg = reg += r.ToUpper();
                     regList.Add(reg);
                 }
