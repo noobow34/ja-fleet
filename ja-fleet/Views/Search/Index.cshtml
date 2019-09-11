@@ -17,7 +17,7 @@
     <div class="col-xs-4 col-sm-2">
         <div class="form-group">
             @Html.LabelFor(model => model.RegistrationNumber, new { @class = "control-label" })<br />
-            @Html.TextBoxFor(model => model.RegistrationNumber, new { data_toggle = "tooltip", Title = "ワイルドカード<br>（＊：任意の文字、<br>　_：任意の一文字）", data_html = "true", @class = "form-control" })
+            @Html.TextBoxFor(model => model.RegistrationNumber, new { data_toggle = "tooltip", Title = "正規表現対応", data_html = "true", @class = "form-control" })
         </div>
     </div>
     <div class="col-xs-8 col-sm-3">
