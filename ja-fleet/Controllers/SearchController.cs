@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.RegularExpressions;
+using Noobow.Commons.Utils;
 
 namespace jafleet.Controllers
 {
@@ -69,10 +70,7 @@ namespace jafleet.Controllers
             String[] wifi;
             string registrationDate;;
 
-            if (model.RegistrationNumber == null){
-                //指定されていない場合は全県
-                regList.Add(".*");
-            }else{
+            if (model.RegistrationNumber != null){
                 //|区切りで複数件を処理
                 foreach(string r in model.RegistrationNumber.ToUpper().Split("|")){
                     string reg = string.Empty;
@@ -87,16 +85,24 @@ namespace jafleet.Controllers
             }
 
             //検索
-            IQueryable<AircraftView> query;
+            IQueryable<AircraftView> query = _context.AircraftView.AsNoTracking();
             if (regList.Count == 1)
             {
-                //1件の場合はワイルドカードで検索
-                query = _context.AircraftView.AsNoTracking().Where(a => Regex.IsMatch(a.RegistrationNumber,regList[0]));
+                if(StringUtil.ContainsMetaCharacter(regList[0]))
+                {
+                    //メタ文字を含む場合正規表現検索
+                    query = query.Where(a => Regex.IsMatch(a.RegistrationNumber, regList[0]));
+                }
+                else
+                {
+                    //含まない場合＝検索
+                    query = query.Where(a => a.RegistrationNumber == regList[0]);
+                }
             }
-            else
+            else if(regList.Count > 1)
             {
-                //2件以上の場合はワイルドカード無効でIN検索
-                query = _context.AircraftView.AsNoTracking().Where(p => regList.Contains(p.RegistrationNumber));
+                //2件以上の場合は正規表現無効でIN検索
+                query = query.Where(p => regList.Contains(p.RegistrationNumber));
             }
 
             if (!String.IsNullOrEmpty(model.Airline))
