@@ -83,6 +83,35 @@ namespace jafleet.Manager
             _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
         }
 
+        public static Dictionary<string, string> GetSearchConditionDisps(IEnumerable<string> scKeys, jafleetContext context)
+        {
+            //キャッシュに含まれていないキーを抽出
+            var notContainsKeys = scKeys.Except(_searchCondition.Where(k => scKeys.Contains(k.Key)).Select(sc => sc.Key));
+            if(notContainsKeys.Count() > 0)
+            {
+                var notContainsSc = context.SearchCondition.AsNoTracking().Where(sc => notContainsKeys.Contains(sc.SearchConditionKey)).ToList();                
+                foreach(var sc in notContainsSc)
+                {
+                    string scJson;
+                    string searchConditionDisp = string.Empty;
+                    scJson = sc.SearchConditionJson ?? string.Empty;
+                    if (!string.IsNullOrEmpty(scJson) && scJson.Contains("TypeDetail"))
+                    {
+                        var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(scJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
+                        var typeDetails = _typeDetailGroup.Where(td => scm.TypeDetail.Split("|").ToList().Contains(td.TypeDetailId.ToString()));
+                        scm.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
+                        searchConditionDisp = scm.ToString();
+                    }
+                    else
+                    {
+                        searchConditionDisp = scJson;
+                    }
+                    _searchCondition.Add(sc.SearchConditionKey, searchConditionDisp);
+                }
+            }
+            return _searchCondition;
+        }
+
         public static string GetSearchConditionDisp(string scKey, jafleetContext context)
         {
             {
