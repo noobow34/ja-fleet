@@ -83,6 +83,11 @@ namespace jafleet.Manager
             _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
         }
 
+        public static void ClearSearchConditionDisp()
+        {
+            _searchCondition.Clear();
+        }
+
         public static Dictionary<string, string> GetSearchConditionDisps(IEnumerable<string> scKeys, jafleetContext context)
         {
             //キャッシュに含まれていないキーを抽出
