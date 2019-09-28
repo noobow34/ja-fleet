@@ -50,7 +50,6 @@
         $('#IncludeRetire').change(function ()  {
             history.pushState(null, null, "?includeRetire=" + getIncludeRetire());
             table.ajax.url('@(Model.api)?includeRetire=' + getIncludeRetire()).load();
-            table.ajax.reload();
         });
 
         const getIncludeRetire = function ()  {
