@@ -88,6 +88,7 @@ namespace jafleet
                     defaults: new { controller = "AircraftDetail", action = "IndexNoheadBack" });
                 endpoints.MapControllerRoute("Logy", "logy",
                     defaults: new { controller = "log", action = "Yesterday" });
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
             });
 
             MasterManager.ReadAll(context);
