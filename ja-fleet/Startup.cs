@@ -58,6 +58,7 @@ namespace jafleet
 
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc().AddNewtonsoftJson();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,jafleetContext context)
@@ -88,7 +89,7 @@ namespace jafleet
                     defaults: new { controller = "AircraftDetail", action = "IndexNoheadBack" });
                 endpoints.MapControllerRoute("Logy", "logy",
                     defaults: new { controller = "log", action = "Yesterday" });
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}/{id2?}");
             });
 
             MasterManager.ReadAll(context);
