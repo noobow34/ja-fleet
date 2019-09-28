@@ -42,12 +42,7 @@ namespace jafleet
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            IServiceCollection serviceCollection = new ServiceCollection();
-            serviceCollection.AddLogging(builder => builder
-            .AddConsole()
-            .AddFilter(level => level >= LogLevel.Information)
-            );
-            var loggerFactory = serviceCollection.BuildServiceProvider().GetService<ILoggerFactory>();
+            var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
             services.AddDbContextPool<jafleetContext>(
                 options => options.UseLoggerFactory(loggerFactory).EnableSensitiveDataLogging().UseMySql(Configuration.GetConnectionString("DefaultConnection"),
@@ -62,40 +57,37 @@ namespace jafleet
             });
 
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,jafleetContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,jafleetContext context)
         {
 
             app.UseExceptionHandler("/Home/Error");
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute("EditStore", "E/Store",
+                endpoints.MapControllerRoute("EditStore", "E/Store",
                     defaults: new { controller = "E", action = "Store" });
-                routes.MapRoute("Edit1", "e/{id?}",
+                endpoints.MapControllerRoute("Edit1", "e/{id?}",
                     defaults: new { controller = "E", action = "Index" });
-                routes.MapRoute("Edit2", "E/{id?}",
+                endpoints.MapControllerRoute("Edit2", "E/{id?}",
                     defaults: new { controller = "E", action = "Index" });
-                routes.MapRoute("Log", "log/{id?}",
+                endpoints.MapControllerRoute("Log", "log/{id?}",
                     defaults: new { controller = "log", action = "Index" });
-                routes.MapRoute("AircraftDetail1", "AircraftDetail/{id?}",
+                endpoints.MapControllerRoute("AircraftDetail1", "AircraftDetail/{id?}",
                     defaults: new { controller = "AircraftDetail", action = "Index" });
-                routes.MapRoute("AircraftDetail2", "AD/{id?}",
+                endpoints.MapControllerRoute("AircraftDetail2", "AD/{id?}",
                     defaults: new { controller = "AircraftDetail", action = "Index" });
-                routes.MapRoute("AircraftDetail3", "ADN/{id?}",
+                endpoints.MapControllerRoute("AircraftDetail3", "ADN/{id?}",
                     defaults: new { controller = "AircraftDetail", action = "IndexNohead" });
-                routes.MapRoute("AircraftDetail4", "ADNB/{id?}",
+                endpoints.MapControllerRoute("AircraftDetail4", "ADNB/{id?}",
                     defaults: new { controller = "AircraftDetail", action = "IndexNoheadBack" });
-                routes.MapRoute("Logy", "logy",
+                endpoints.MapControllerRoute("Logy", "logy",
                     defaults: new { controller = "log", action = "Yesterday" });
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}/{id2?}");
             });
 
             MasterManager.ReadAll(context);
