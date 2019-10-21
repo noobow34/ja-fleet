@@ -35,10 +35,10 @@ namespace jafleet.Manager
             });
             _allAirline = tempaa.ToArray();
 
-            _ana = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup).OrderBy(p => p.DisplayOrder).ToArray();
-            _jal = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup).OrderBy(p => p.DisplayOrder).ToArray();
-            _lcc = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC).OrderBy(p => p.DisplayOrder).ToArray();
-            _other = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.Other).OrderBy(p => p.DisplayOrder).ToArray();
+            _ana = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
+            _jal = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
+            _lcc = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
+            _other = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.Other && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
             _type = context.Type.AsNoTracking().OrderBy(p => p.DisplayOrder).ToArray();
             _wifi = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
             _adminUser = context.AdminUser.AsNoTracking().Select(e => e.UserId).ToList();
