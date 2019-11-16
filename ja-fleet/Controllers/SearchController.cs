@@ -159,15 +159,15 @@ namespace jafleet.Controllers
                 //あり（履歴含む）
                 //一旦履歴テーブルを検索して、履歴の中の該当のレジを取得
                 addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => !String.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
-                regList.AddRange(addSpecialLiveryReg.Distinct().ToList());
-                regList.AddRange(_context.Aircraft.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                regList.AddRange(addSpecialLiveryReg);
+                regList.AddRange(_context.Aircraft.Where(p => !String.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
             }
             else if (model.SpecialLivery == "5")
             {
                 //キーワード指定（履歴含む）
                 //一旦履歴テーブルを検索して、履歴の中の該当のレジを取得
                 addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
-                regList.AddRange(addSpecialLiveryReg.Distinct().ToList());
+                regList.AddRange(addSpecialLiveryReg);
                 regList.AddRange(_context.Aircraft.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
             }
 
