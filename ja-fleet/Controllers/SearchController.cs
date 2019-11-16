@@ -68,7 +68,8 @@ namespace jafleet.Controllers
             int[] typeDetail = new int[] { };
             String[] operation;
             String[] wifi;
-            string registrationDate;;
+            string registrationDate;
+            var addSpecialLiveryReg = new List<string>();
 
             if (model.RegistrationNumber != null){
                 //|区切りで複数件を処理
@@ -86,25 +87,6 @@ namespace jafleet.Controllers
 
             //検索
             IQueryable<AircraftView> query = _context.AircraftView.AsNoTracking();
-            if (regList.Count == 1)
-            {
-                if(StringUtil.ContainsMetaCharacter(regList[0]))
-                {
-                    //メタ文字を含む場合正規表現検索
-                    query = query.Where(a => Regex.IsMatch(a.RegistrationNumber, regList[0]));
-                }
-                else
-                {
-                    //含まない場合＝検索
-                    query = query.Where(a => a.RegistrationNumber == regList[0]);
-                }
-            }
-            else if(regList.Count > 1)
-            {
-                //2件以上の場合は正規表現無効でIN検索
-                query = query.Where(p => regList.Contains(p.RegistrationNumber));
-            }
-
             if (!String.IsNullOrEmpty(model.Airline))
             {
                 airline = model.Airline.Split("|");
@@ -172,8 +154,49 @@ namespace jafleet.Controllers
             {
                 query = query.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword));
             }
+            else if(model.SpecialLivery == "4")
+            {
+                //あり（履歴含む）
+                //一旦履歴テーブルを検索して、履歴の中の該当のレジを取得
+                addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => !String.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                regList.AddRange(addSpecialLiveryReg.Distinct().ToList());
+                regList.AddRange(_context.Aircraft.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
+            }
+            else if (model.SpecialLivery == "5")
+            {
+                //キーワード指定（履歴含む）
+                //一旦履歴テーブルを検索して、履歴の中の該当のレジを取得
+                addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                regList.AddRange(addSpecialLiveryReg.Distinct().ToList());
+                regList.AddRange(_context.Aircraft.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
+            }
+
+            if (regList.Count == 1)
+            {
+                if (StringUtil.ContainsMetaCharacter(regList[0]))
+                {
+                    //メタ文字を含む場合正規表現検索
+                    query = query.Where(a => Regex.IsMatch(a.RegistrationNumber, regList[0]));
+                }
+                else
+                {
+                    //含まない場合＝検索
+                    query = query.Where(a => a.RegistrationNumber == regList[0]);
+                }
+            }
+            else if (regList.Count > 1)
+            {
+                //2件以上の場合は正規表現無効でIN検索
+                query = query.Where(p => regList.Contains(p.RegistrationNumber));
+            }
 
             searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
+
+            //履歴から検索している場合、その旨追記
+            foreach(var reg in addSpecialLiveryReg)
+            {
+                searchResult.Where(s => s.RegistrationNumber == reg).Single().SpecialLivery += "（履歴あり）";
+            }
 
             //検索条件保持用クラスにコピー
             var scm = new SearchConditionInModel();

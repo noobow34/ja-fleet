@@ -120,6 +120,12 @@ namespace jafleet.Manager
                                         , new SelectListItem { Value = "2", Text = "あり" }
                                         , new SelectListItem { Value = "3", Text = "キーワード指定" }};
 
+        public static List<SelectListItem> EXIST_SELECTION_HISTORY = new List<SelectListItem>{ new SelectListItem { Value = "1", Text = "なし" }
+                                        , new SelectListItem { Value = "2", Text = "あり" }
+                                        , new SelectListItem { Value = "3", Text = "キーワード指定" }
+                                        , new SelectListItem { Value = "4", Text = "あり（履歴含む）" }
+                                        , new SelectListItem { Value = "5", Text = "キーワード指定（履歴含む）" }};
+
         public static List<SelectListItem> PERIOD_SELECTION = new List<SelectListItem>{new SelectListItem{Value = "0",Text = "と等しい"}
                                        , new SelectListItem { Value = "1", Text = "以前" }
                                         , new SelectListItem { Value = "2", Text = "以降" }};

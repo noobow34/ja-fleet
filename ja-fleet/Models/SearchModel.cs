@@ -41,7 +41,7 @@ namespace jafleet.Models
         [Display(Name = "特別塗装")]
         public string SpecialLivery { get; set; } = String.Empty;
         public string SpecialLiveryKeyword { get; set; } = String.Empty;
-        public List<SelectListItem> SpecialLiveryList { get; set; } = MasterManager.EXIST_SELECTION;
+        public List<SelectListItem> SpecialLiveryList { get; set; } = MasterManager.EXIST_SELECTION_HISTORY;
 
         public bool IsLoading { get; set; } = true;
 
