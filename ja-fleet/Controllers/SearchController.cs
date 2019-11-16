@@ -195,7 +195,10 @@ namespace jafleet.Controllers
             //履歴から検索している場合、その旨追記
             foreach(var reg in addSpecialLiveryReg)
             {
-                searchResult.Where(s => s.RegistrationNumber == reg).Single().SpecialLivery += "（履歴あり）";
+                var addTarget = searchResult.Where(s => s.RegistrationNumber == reg).SingleOrDefault();
+                if (addTarget != null) {
+                    addTarget.SpecialLivery += "（履歴あり）";
+                }
             }
 
             //検索条件保持用クラスにコピー
