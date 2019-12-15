@@ -149,6 +149,9 @@
         }
         $(function () {
             recreateTypeList();
+            if (location.hash == "#donate") {
+                $('#donate').modal();
+            }
         });
         $('#quick').click(function () {
             let dest = '/Aircraft/Airline/' + $('#Airline').val() + '/' + $('#Type').val();

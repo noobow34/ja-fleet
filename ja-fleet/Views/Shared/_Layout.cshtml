@@ -136,6 +136,9 @@
                                 sendMessageToMe();
                             });
                         }
+                        if (id == "donate") {
+                            $('#mlbl').text(ZGB());
+                        }
                         $(e.target).data('loaded', '1');
                     });
                 }
