@@ -24,4 +24,12 @@
     <ProjectReference Include="..\..\ja-fleet.Commons\ja-fleet.Commons\ja-fleet.Commons.csproj" />
     <ProjectReference Include="..\..\Noobow.Commons\Noobow.Commons\Noobow.Commons.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\css\site.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\js\site.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
