@@ -119,7 +119,7 @@ namespace jafleet.Controllers
                 }
                 else if (model.RegistrationSelection == "2")
                 {
-                    registrationDate += "zzz";
+                    registrationDate += "   ";
                     query = query.Where(p => p.RegisterDate.CompareTo(registrationDate) >= 0);
                 }
             }
