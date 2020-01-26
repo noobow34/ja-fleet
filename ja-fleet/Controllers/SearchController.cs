@@ -278,5 +278,11 @@ namespace jafleet.Controllers
 
             return Json(new SearchResult { ResultList = searchResult,SearchConditionKey = schash });
         }
+
+        public IActionResult GetSearchCondition(string searchCondition)
+        {
+            SearchCondition sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == searchCondition).SingleOrDefault();
+            return Content(sc.SearchConditionJson, "application/json");
+        }
     }
 }

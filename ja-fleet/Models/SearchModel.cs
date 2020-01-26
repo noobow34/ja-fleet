@@ -9,6 +9,8 @@ namespace jafleet.Models
 {
     public class SearchModel:BaseModel
     {
+        [Display(Name = "保存済検索条件")]
+        public SearchCondition[] PresetSearchConditionList { get; set; } = MasterManager.NamedSearchCondition;
         [Display(Name = "機体記号")]
         public string RegistrationNumber { get; set; }
 
