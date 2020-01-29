@@ -45,7 +45,7 @@ namespace jafleet.Manager
             _typeDetailGroup = context.TypeDetailView.AsNoTracking().OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
             var tempSCList = new List<SearchCondition>();
             tempSCList.Add(new SearchCondition());
-            tempSCList.AddRange(context.SearchCondition.AsNoTracking().Where(sc => !string.IsNullOrEmpty(sc.SearchConditionName)));
+            tempSCList.AddRange(context.SearchCondition.AsNoTracking().Where(sc => !string.IsNullOrEmpty(sc.SearchConditionName)).OrderBy(sc => sc.SearchConditionName));
             _namedSearchCondition = tempSCList.ToArray();
 
             var tempop = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
