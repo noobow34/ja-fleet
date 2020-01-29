@@ -19,7 +19,7 @@
             @Html.LabelFor(model => model.PresetSearchConditionList, new { @class = "control-label" })<br />
             @Html.DropDownList("PresetSearchCondition", new SelectList(Model.PresetSearchConditionList, "SearchConditionKey", "SearchConditionName", null),
                                                                             new { @class = "form-control" })
-            <!--<input type="button" value="登録" id="presetReg" class="btn-sm btn-primary" />--><input type="button" value="表示" id="presetDisp" class="btn-sm btn-primary" disabled="disabled" />
+            <!--<input type="button" value="登録" id="presetReg" class="btn-sm btn-primary" />--><input type="button" value="クリア" id="clear" class="btn-sm btn-primary" /><input type="button" value="表示" id="presetDisp" class="btn-sm btn-primary" disabled="disabled" />
         </div>
     </div>
     <div class="col-xs-4 col-sm-2">
@@ -229,6 +229,11 @@
             }
         });
 
+        $('#clear').click(function () {
+            $('#PresetSearchCondition').val('');
+            ConditionAllClear();
+        });
+
         $('#presetDisp').click(function () {
             ReloadFromSCKey($('#PresetSearchCondition').val())
         });
@@ -303,7 +308,24 @@
             });
         }
 
+        const ConditionAllClear = function () {
+            $('#RegistrationNumber').val('');
+            $('#Airline').multiselect("deselectAll", false).multiselect("refresh");
+            $('#TypeDetail').multiselect("deselectAll", false).multiselect("refresh");
+            $('#RegistrationDate').val('');
+            $('#RegistrationSelection').multiselect("deselectAll", false).multiselect("refresh");
+            $('#OperationCode').multiselect("deselectAll", false).multiselect("refresh");
+            $('#WiFiCode').multiselect("deselectAll", false).multiselect("refresh");
+            $('#SpecialLiveryList').multiselect('select','');
+            $('#SpecialLiveryKeyword').prop("disabled", true);
+            $('#SpecialLiveryKeyword').val('');
+            $('#RemarksList').multiselect('select','');
+            $('#RemarksKeyword').prop("disabled", true);
+		    $('#RemarksKeyword').val('');
+        }
+
         const ReloadFromSCKey = function (scKey) {
+            ConditionAllClear();
             GetSearchCondition(scKey).done(
                 function (scJson) {
                     if ('RegistrationNumber' in scJson && scJson.RegistrationNumber != null) {
