@@ -241,7 +241,12 @@
         });
 
         $(window).on('popstate', function (e) {
-            ReloadFromSCKey(getParam('sc'));
+            let sc = getParam('sc');
+            if (sc != null) {
+                ReloadFromSCKey(getParam('sc'));
+            } else {
+                $('#clear').click();
+            }
         });
 
         const GetRegistrationNumber = function ()  {
