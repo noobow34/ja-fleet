@@ -139,7 +139,7 @@
         $('#WiFiCode').multiselect({ nonSelectedText: '' });
         $('#RemarksList').multiselect();
         $('#SpecialLiveryList').multiselect();
-        $('#PresetSearchCondition').multiselect({nonSelectedText: ''});
+        $('#PresetSearchCondition').multiselect({enableFiltering: true,nonSelectedText: ''});
         $('#RegistrationNumber').tooltip();
         @if (!string.IsNullOrEmpty(Model.TypeDetail))
         {
@@ -327,7 +327,7 @@
             $('#SpecialLiveryList').multiselect('select','');
             $('#SpecialLiveryKeyword').prop("disabled", true);
             $('#SpecialLiveryKeyword').val('');
-            $('#RemarksList').multiselect("clearSelection");
+            $('#RemarksList').multiselect('select','');
             $('#RemarksKeyword').prop("disabled", true);
             $('#RemarksKeyword').val('');
         }
