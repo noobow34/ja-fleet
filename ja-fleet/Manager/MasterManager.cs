@@ -44,7 +44,7 @@ namespace jafleet.Manager
             _adminUser = context.AdminUser.AsNoTracking().Select(e => e.UserId).ToList();
             _typeDetailGroup = context.TypeDetailView.AsNoTracking().OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
             var tempSCList = new List<SearchCondition>();
-            tempSCList.Add(new SearchCondition{SearchConditionKey = "　",SearchConditionName = "　" });
+            //tempSCList.Add(new SearchCondition{SearchConditionKey = "　",SearchConditionName = "　" });
             tempSCList.AddRange(context.SearchCondition.AsNoTracking().Where(sc => !string.IsNullOrEmpty(sc.SearchConditionName)).OrderBy(sc => sc.SearchConditionName));
             _namedSearchCondition = tempSCList.ToArray();
 
