@@ -18,8 +18,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PresetSearchConditionList, new { @class = "control-label" })<br />
             @Html.DropDownList("PresetSearchCondition", new SelectList(Model.PresetSearchConditionList, "SearchConditionKey", "SearchConditionName"), "　",
-                                                                            new { @class = "form-control" })
-            <!--<input type="button" value="登録" id="presetReg" class="btn-sm btn-primary" />--><input type="button" value="クリア" id="clear" class="btn-sm btn-primary" /><input type="button" value="表示" id="presetDisp" class="btn-sm btn-primary" disabled="disabled" />
+                                                                            new { @class = "form-control" })<br />
+            <input type="button" value="クリア" id="clear" class="btn-sm btn-primary" /><input type="button" value="登録" id="presetReg" class="btn-sm btn-primary" /><input type="button" value="表示" id="presetDisp" class="btn-sm btn-primary" disabled="disabled" />
         </div>
     </div>
     <div class="col-xs-4 col-sm-2">
@@ -96,24 +96,38 @@
             <br /><input type="button" value="検索" id="serach" class="btn btn-primary" />
         </div>
     </div>
-    </div>
-    @await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")
-    <div class="modal fade" id="emptyresult" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    検索結果は0件です。
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-                </div>
+</div>
+@await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")
+<div class="modal fade" id="modalPart" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="modalMessage">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
             </div>
         </div>
     </div>
-    @section ScriptsPartial{
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js" integrity="sha256-P93G0oq6PBPWTP1IR8Mz/0jHHUpaWL0aBJTKauisG7Q=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js" integrity="sha256-qoj3D1oB1r2TAdqKTYuWObh01rIVC1Gmw9vWp1+q5xw=" crossorigin="anonymous"></script>
-        <script>
+</div>
+<div class="modal fade" id="presetModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                検索条件の名称を入力してください。<br />
+                @Html.TextBox("presetName", null, null, new { @class = "form-control" })
+                <label class="text-primary" id="presetResult"></label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="presetRegModal">登録</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section ScriptsPartial{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js" integrity="sha256-P93G0oq6PBPWTP1IR8Mz/0jHHUpaWL0aBJTKauisG7Q=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js" integrity="sha256-qoj3D1oB1r2TAdqKTYuWObh01rIVC1Gmw9vWp1+q5xw=" crossorigin="anonymous"></script>
+    <script>
     var isLoading = true;
     var isDirect = @Model.IsDirect.ToString().ToLower();
     var table;
@@ -139,7 +153,7 @@
         $('#WiFiCode').multiselect({ nonSelectedText: '' });
         $('#RemarksList').multiselect();
         $('#SpecialLiveryList').multiselect();
-        $('#PresetSearchCondition').multiselect({enableFiltering: true,nonSelectedText: ''});
+        $('#PresetSearchCondition').multiselect({maxHeight: 400,enableFiltering: true,nonSelectedText: ''});
         $('#RegistrationNumber').tooltip();
         @if (!string.IsNullOrEmpty(Model.TypeDetail))
         {
@@ -207,9 +221,10 @@
                     }
                     isDirect = false;
                     if (d.resultList.length == 0 && !isLoading) {
-                        $("#emptyresult").modal();
+                        $('#modalMessage').text("検索結果は0件です。");
+                        $("#modalPart").modal();
                     }
-                    $('#PresetSearchCondition').val(d.searchConditionKey);
+                    $('#PresetSearchCondition').multiselect('select',d.searchConditionKey);
                     return d.resultList;
                     }
             },
@@ -240,6 +255,90 @@
         $('#presetDisp').click(function () {
             ReloadFromSCKey($('#PresetSearchCondition').val())
         });
+
+        $('#presetReg').click(function () {
+            $.ajax({
+                url: '/Search/ExistsSeachCondition',
+                type: 'POST',
+                data: {
+                    RegistrationNumber: GetRegistrationNumber()
+                    , IsLoading: GetIsLoading()
+                    , isDirect: GetIsDirect()
+                    , Airline: GetAirline()
+                    , TypeDetail: GetType()
+                    , OperationCode: GetOperationCode()
+                    , RegistrationDate: GetRegistrationDate()
+                    , RegistrationSelection: GetRegistrationSelection()
+                    , WiFiCode: GetWiFiCode()
+                    , Remarks: GetRemarks()
+                    , RemarksKeyword: GetRemarksKeyword()
+                    , SpecialLivery: GetSpecialLivery()
+                    , SpecialLiveryKeyword: GetSpecialLiveryKeyword()
+                },
+                cache: false
+            }).done(function (data) {
+                if (data != "") {
+                    $('#modalMessage').text('この検索条件はすでに[' + data + ']として登録されています。');
+                    $("#modalPart").modal();
+                } else {
+                    $("#presetName").val('');
+                    $('#presetResult').text('');
+                    $('#presetRegModal').show();
+                    $('#presetName').attr('readonly',false);
+                    $("#presetModal").modal();
+                }
+            }).fail(function () {
+               alert('検索条件登録のための通信に失敗しました。繰り返し表示される場合は管理人にご連絡ください。')
+           });
+        });
+
+        $('#presetRegModal').click(function () {
+            $.ajax({
+                url: '/Search/RegisterNamedSearchCondition',
+                type: 'POST',
+                data: {
+                    RegistrationNumber: GetRegistrationNumber()
+                    , IsLoading: GetIsLoading()
+                    , isDirect: GetIsDirect()
+                    , Airline: GetAirline()
+                    , TypeDetail: GetType()
+                    , OperationCode: GetOperationCode()
+                    , RegistrationDate: GetRegistrationDate()
+                    , RegistrationSelection: GetRegistrationSelection()
+                    , WiFiCode: GetWiFiCode()
+                    , Remarks: GetRemarks()
+                    , RemarksKeyword: GetRemarksKeyword()
+                    , SpecialLivery: GetSpecialLivery()
+                    , SpecialLiveryKeyword: GetSpecialLiveryKeyword()
+                    , SearchConditionName: $("#presetName").val()
+                },
+                cache: false
+            }).done(function (data) {
+                RefreshPresetSearchCondition(data);
+                $('#presetResult').text("登録しました");
+                $('#presetName').attr('readonly',true);
+                $('#presetRegModal').hide();
+                
+            }).fail(function () {
+               alert('検索条件登録に通信に失敗しました。繰り返し表示される場合は管理人にご連絡ください。')
+           });
+        });
+
+        const RefreshPresetSearchCondition = function (vKey) {
+            $.ajax({
+            type: 'GET',
+                url: '/Master/NamedSearchCondition/',
+                cache: false
+            }).done(function (data) {
+                $('select#PresetSearchCondition option').remove();
+                $('select#PresetSearchCondition').append($('<option>').text('　').attr('value', ''));
+                $.each(data, function (index, sc) {
+                    $('select#PresetSearchCondition').append($('<option>').text(sc.searchConditionName).attr('value', sc.searchConditionKey));
+                });
+                $('#PresetSearchCondition').multiselect('rebuild');
+                $('#PresetSearchCondition').multiselect('select',vKey);
+            });
+        }
 
         $(window).on('popstate', function (e) {
             let sc = getParam('sc');
@@ -411,5 +510,5 @@
                 $('#SpecialLiveryKeyword').prop("disabled", true);
             }
         });
-        </script>
-    }
+    </script>
+}

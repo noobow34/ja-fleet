@@ -13,5 +13,10 @@ namespace jafleet.Controllers
             }
             return Json(MasterManager.AirlineType[id]);
         }
+
+        public IActionResult NamedSearchCondition()
+        {
+            return Json(MasterManager.NamedSearchCondition);
+        }
     }
 }

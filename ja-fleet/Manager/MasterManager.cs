@@ -43,11 +43,7 @@ namespace jafleet.Manager
             _wifi = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
             _adminUser = context.AdminUser.AsNoTracking().Select(e => e.UserId).ToList();
             _typeDetailGroup = context.TypeDetailView.AsNoTracking().OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
-            var tempSCList = new List<SearchCondition>();
-            //tempSCList.Add(new SearchCondition{SearchConditionKey = "　",SearchConditionName = "　" });
-            tempSCList.AddRange(context.SearchCondition.AsNoTracking().Where(sc => !string.IsNullOrEmpty(sc.SearchConditionName)).OrderBy(sc => sc.SearchConditionName));
-            _namedSearchCondition = tempSCList.ToArray();
-
+            ReloadNamedSearchCondition(context);
             var tempop = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
             tempop.ForEach(o => {
                 if(OperationCode.PRE_OPERATION.Contains(o.Key))
@@ -83,6 +79,12 @@ namespace jafleet.Manager
             //最後の1つを処理
             _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
         }
+
+        public static void ReloadNamedSearchCondition(jafleetContext context)
+        {
+            _namedSearchCondition = context.SearchCondition.AsNoTracking().Where(sc => !string.IsNullOrEmpty(sc.SearchConditionName)).OrderBy(sc => sc.SearchConditionName).ToArray();
+        }
+
 
         private static Code[] _wifi = null;
         public static Code[] Wifi { get { return _wifi; } }

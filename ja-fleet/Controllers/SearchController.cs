@@ -29,6 +29,12 @@ namespace jafleet.Controllers
             _services = serviceScopeFactory;
         }
 
+        /// <summary>
+        /// 初期アクション
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="sc"></param>
+        /// <returns></returns>
         public IActionResult Index(SearchModel model,[FromQuery]string sc)
         {
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
@@ -56,6 +62,11 @@ namespace jafleet.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// 検索実行
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public IActionResult DoSearch(SearchModel model)
         {
             if(model.IsLoading && !model.IsDirect){
@@ -279,10 +290,58 @@ namespace jafleet.Controllers
             return Json(new SearchResult { ResultList = searchResult,SearchConditionKey = schash });
         }
 
+        /// <summary>
+        /// キーから検索条件をjsonで取得
+        /// </summary>
+        /// <param name="searchCondition"></param>
+        /// <returns></returns>
         public IActionResult GetSearchCondition(string searchCondition)
         {
             SearchCondition sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == searchCondition).SingleOrDefault();
             return Content(sc.SearchConditionJson, "application/json");
+        }
+
+        /// <summary>
+        /// 検索条件がすでに登録されいるか、登録されている場合は名称を返す
+        /// </summary>
+        /// <param name="scm"></param>
+        /// <returns></returns>
+        public IActionResult ExistsSeachCondition(SearchConditionInModel scm)
+        {
+            string scjson = scm.ToString();
+            string schash = HashUtil.CalcCRC32(scjson);
+
+            var sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == schash).AsNoTracking().SingleOrDefault();
+
+            return Content(sc?.SearchConditionName);
+        }
+
+        public IActionResult RegisterNamedSearchCondition(SearchConditionInModel scm,string searchConditionName)
+        {
+            string scjson = scm.ToString();
+            string schash = HashUtil.CalcCRC32(scjson);
+
+            var sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == schash).SingleOrDefault();
+
+            if(sc != null)
+            {
+                sc.SearchConditionName = searchConditionName;
+            }
+            else
+            {
+                sc = new SearchCondition
+                {
+                    SearchConditionKey = schash,
+                    SearchConditionJson = scjson,
+                    SearchConditionName = searchConditionName,
+                    SearchCount = 0
+                };
+                _context.SearchCondition.Add(sc);
+            }
+
+            _context.SaveChanges();
+            MasterManager.ReloadNamedSearchCondition(_context);
+            return Content(sc.SearchConditionKey);
         }
     }
 }
