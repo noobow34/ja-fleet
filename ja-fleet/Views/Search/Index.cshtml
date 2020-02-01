@@ -217,7 +217,7 @@
                     },
                 dataSrc: function(d) {
                     if (d.searchConditionKey != "" && !GetIsDirect()) {
-                        history.pushState(null, null, "?sc=" + d.searchConditionKey);
+                        history.pushState(null, null, "/Search?sc=" + d.searchConditionKey);
                     }
                     isDirect = false;
                     if (d.resultList.length == 0 && !isLoading) {
@@ -246,7 +246,8 @@
 
         $('#clear').click(function () {
             ConditionAllClear();
-            $('#PresetSearchCondition').multiselect('select','');
+            $('#PresetSearchCondition').multiselect('select', '');
+            $('#PresetSearchCondition').multiselect('rebuild');
             table.clear().draw();
             history.pushState(null, null, "/Search");
             $('#presetDisp').prop("disabled", true);
@@ -343,6 +344,7 @@
         $(window).on('popstate', function (e) {
             let sc = getParam('sc');
             if (sc != null) {
+                isDirect = true;
                 ReloadFromSCKey(getParam('sc'));
             } else {
                 $('#clear').click();
