@@ -341,6 +341,8 @@ namespace jafleet.Controllers
 
             _context.SaveChanges();
             MasterManager.ReloadNamedSearchCondition(_context);
+            _ = Task.Run(() => { LineUtil.PushMe($"検索条件が登録されました。\n{searchConditionName}\n{scjson}", HttpClientManager.GetInstance()); });
+
             return Content(sc.SearchConditionKey);
         }
     }
