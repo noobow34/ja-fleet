@@ -72,6 +72,19 @@ else
                         }
                     }
      },
+    {data: 'seatConfig',className: 'dt-center'
+                    ,createdCell: function (td, cellData, rowData, row, col) {
+                        if(rowData.seatConfigChanged == 1){
+                            $(td).css({"background-color":"#FFCCFF"});
+                        }
+                    }, render: function(data, type, row, meta)  {
+                            if(data != null && row.seatUrl != null){
+                                return '<a href="' + row.seatUrl + '" target="_blank">' + data + '</a>';
+                            }else{
+                                return "";
+                            }
+                        }
+    },
     {data: 'wifiShort',className: 'dt-center'
                     ,createdCell: function (td, cellData, rowData, row, col) {
                         if(rowData.wifiChanged == 1){
