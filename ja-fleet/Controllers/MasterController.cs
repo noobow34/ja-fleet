@@ -1,5 +1,8 @@
-﻿using jafleet.Manager;
+﻿using jafleet.Commons.EF;
+using jafleet.Manager;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace jafleet.Controllers
 {
@@ -17,6 +20,21 @@ namespace jafleet.Controllers
         public IActionResult NamedSearchCondition()
         {
             return Json(MasterManager.NamedSearchCondition);
+        }
+
+        public IActionResult SeatConfiguration(string airline,string type)
+        {
+            IEnumerable<SeatConfiguration> q = MasterManager.SeatConfiguration;
+            if (!string.IsNullOrEmpty(airline))
+            {
+                q = q.Where(sc => sc.Airline == airline);
+            }
+            if (!string.IsNullOrEmpty(type))
+            {
+                q = q.Where(sc => sc.Type == type);
+            }
+
+            return Json(q.ToArray());
         }
     }
 }
