@@ -109,6 +109,15 @@ else
     </div>
     <div class="row">
         <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.SeatConfig, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.Aircraft.SeatConfig,
+                                                                                                           new SelectList(Model.SeatConfigurationList, "ConfigId","SeatConfigLong"),
+                                                                                                           "　",
+                                                                                                           new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
             @Html.LabelFor(model => model.Aircraft.CreationTime, new { @class = "control-label" })
             @Html.TextBoxFor(model => model.Aircraft.CreationTime, new { @class = "form-control", @readonly = "readonly" })
         </div>
@@ -149,5 +158,27 @@ else
                 return document.querySelector('input[type=hidden]').value;
             }
         });
+
+        $('#Aircraft_TypeDetailId').change(function () {
+            recreateSeatConfigList();
+        });
+
+        $('#Aircraft_Airline').change(function () {
+            recreateSeatConfigList();
+        });
+
+        const recreateSeatConfigList = function () {
+            $.ajax({
+            type: 'GET',
+                url: '/Master/SeatConfiguration/?airline=' + $('#Aircraft_Airline').val() + "&typeDetailId=" + $('#Aircraft_TypeDetailId').val(),
+                cache: false
+            }).done(function (data) {
+                $('select#Aircraft_SeatConfig option').remove();
+                $('select#Aircraft_SeatConfig').append($('<option>').text("").attr('value', ""));
+                $.each(data, function (index, seatconfigList) {
+                    $('select#Aircraft_SeatConfig').append($('<option>').text(seatconfigList.seatConfigLong).attr('value', seatconfigList.configId));
+                });
+            });
+        };
     </script>
 }

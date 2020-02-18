@@ -25,6 +25,9 @@ namespace jafleet.Models
         [Display(Name = "WiFi")]
         public Code[] WiFiList { get; set; }
 
+        [Display(Name = "シートコンフィグ")]
+        public SeatConfiguration[] SeatConfigurationList { get; set; }
+
         [Display(Name = "履歴を作成しない")]
         public bool NotUpdateDate { get; set; } = false;
 

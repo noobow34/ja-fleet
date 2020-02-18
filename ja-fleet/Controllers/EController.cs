@@ -8,6 +8,7 @@ using jafleet.Util;
 using jafleet.Commons.Constants;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace jafleet.Controllers
 {
@@ -57,6 +58,17 @@ namespace jafleet.Controllers
                 var av = _context.AircraftView.Find(id.ToUpper());
                 model.LinkPage = $"https://ja-fleet.noobow.me/AD/{av.RegistrationNumber}";
             }
+            var type = MasterManager.TypeDetailGroup.Where(td => td.TypeDetailId == model.Aircraft.TypeDetailId).FirstOrDefault()?.TypeCode;
+            IEnumerable<SeatConfiguration> q = MasterManager.SeatConfiguration;
+            if (!string.IsNullOrEmpty(model.Aircraft.Airline))
+            {
+                q = q.Where(sc => sc.Airline == model.Aircraft.Airline);
+            }
+            if (!string.IsNullOrEmpty(type))
+            {
+                q = q.Where(sc => sc.Type == type);
+            }
+            model.SeatConfigurationList = q.ToArray();
 
             return View(model);
         }

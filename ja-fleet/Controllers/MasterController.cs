@@ -22,8 +22,9 @@ namespace jafleet.Controllers
             return Json(MasterManager.NamedSearchCondition);
         }
 
-        public IActionResult SeatConfiguration(string airline,string type)
+        public IActionResult SeatConfiguration(string airline,int typeDetailId)
         {
+            var type = MasterManager.TypeDetailGroup.Where(td => td.TypeDetailId == typeDetailId).FirstOrDefault()?.TypeCode;
             IEnumerable<SeatConfiguration> q = MasterManager.SeatConfiguration;
             if (!string.IsNullOrEmpty(airline))
             {
