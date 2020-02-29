@@ -48,7 +48,7 @@ namespace jafleet
                 options => options.UseLoggerFactory(loggerFactory).EnableSensitiveDataLogging().UseMySql(Configuration.GetConnectionString("DefaultConnection"),
                     mySqlOptions =>
                     {
-                        mySqlOptions.ServerVersion(new Version(10, 3), ServerType.MariaDb);
+                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
                     }
             ));
 
