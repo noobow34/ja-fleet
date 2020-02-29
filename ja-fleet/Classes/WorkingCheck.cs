@@ -18,13 +18,15 @@ namespace jafleet
     public class WorkingCheck
     {
         private IEnumerable<string> _targetRegistrationNumber;
+        private int _interval;
         private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
         private readonly TimeSpan CompareTargetTimeSpan = new TimeSpan(2,0,0,0);
         public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
 
-        public WorkingCheck(IEnumerable<string> targetRegistrationNumber)
+        public WorkingCheck(IEnumerable<string> targetRegistrationNumber,int interval)
         {
             _targetRegistrationNumber = targetRegistrationNumber;
+            _interval = interval;
             if(Options == null)
             {
                 Options = new DbContextOptionsBuilder<jafleetContext>();
@@ -126,7 +128,7 @@ namespace jafleet
                         }
                         Console.WriteLine($"{reg}:データなし");
                     }
-                    Thread.Sleep(Convert.ToInt32(r.NextDouble() * 10 * 1000));
+                    Thread.Sleep(Convert.ToInt32(r.NextDouble() * _interval * 1000));
                 }
                 catch(Exception ex)
                 {

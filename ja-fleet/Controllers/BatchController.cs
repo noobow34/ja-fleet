@@ -29,7 +29,7 @@ namespace jafleet.Controllers
             return Content("OK!");
         }
 
-        public IActionResult WorkingCheck()
+        public IActionResult WorkingCheck(int? interval)
         {
             if (!CookieUtil.IsAdmin(HttpContext))
             {
@@ -44,8 +44,9 @@ namespace jafleet.Controllers
                     using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                     {
                         targetReg = context.Aircraft.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).ToList().Select(a => a.RegistrationNumber);
-                        var check = new WorkingCheck(targetReg);
+                        var check = new WorkingCheck(targetReg,interval ?? 15);
                         _ = check.ExecuteCheckAsync();
+
                     }
                 }
             });
