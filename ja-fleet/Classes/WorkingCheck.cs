@@ -19,26 +19,31 @@ namespace jafleet
     {
         private IEnumerable<string> _targetRegistrationNumber;
         private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
-        private readonly TimeSpan CompareTargetTimeSpan = new TimeSpan(2,0,0);
+        private readonly TimeSpan CompareTargetTimeSpan = new TimeSpan(2,0,0,0);
+        public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
+
         public WorkingCheck(IEnumerable<string> targetRegistrationNumber)
         {
             _targetRegistrationNumber = targetRegistrationNumber;
+            if(Options == null)
+            {
+                Options = new DbContextOptionsBuilder<jafleetContext>();
+                var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
+                var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+                Options.UseLoggerFactory(loggerFactory).UseMySql(config.GetConnectionString("DefaultConnection"),
+                        mySqlOptions =>
+                        {
+                            mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
+                        }
+                );
+            }
         }
 
         public async Task ExecuteCheckAsync()
         {
             var parser = new HtmlParser();
 
-            var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
-            var options = new DbContextOptionsBuilder<jafleetContext>();
-            var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-            options.UseLoggerFactory(loggerFactory).UseMySql(config.GetConnectionString("DefaultConnection"),
-                    mySqlOptions =>
-                    {
-                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
-                    }
-            );
-            using var context = new jafleetContext(options.Options);
+            using var context = new jafleetContext(Options.Options);
             var toWorking = new StringBuilder();
             var toNotWorking = new StringBuilder();
 
@@ -83,7 +88,7 @@ namespace jafleet
                         status.ToAp = td[4].TextContent!.Trim();
                         status.FlightNumber = td[5].TextContent!.Trim();
                         status.Status = td[11].TextContent!.Trim();
-                        status.Working = (DateTime.Now.Date - latestDate.Date) <= CompareTargetTimeSpan;
+                        status.Working = (DateTime.Now.Date < latestDate.Date) || ((DateTime.Now.Date - latestDate.Date) <= CompareTargetTimeSpan);
 
                         if((!previousWorking.HasValue || !previousWorking.Value) && status.Working!.Value)
                         {
