@@ -40,14 +40,10 @@ namespace jafleet.Controllers
 
                 using (var serviceScope = _services.CreateScope())
                 {
-                    List<string> targetReg;
+                    IEnumerable<string> targetReg;
                     using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                     {
-                        //targetReg = context.Aircraft.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).ToList().Select(a => a.RegistrationNumber);
-                        targetReg = new List<string>();
-                        targetReg.Add("JA381A");
-                        targetReg.Add("JA382A");
-                        targetReg.Add("JA002C");
+                        targetReg = context.Aircraft.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).ToList().Select(a => a.RegistrationNumber);
                         var check = new WorkingCheck(targetReg);
                         _ = check.ExecuteCheckAsync();
                     }
