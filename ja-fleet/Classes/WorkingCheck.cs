@@ -128,7 +128,9 @@ namespace jafleet
                         }
                         Console.WriteLine($"{reg}:データなし");
                     }
-                    Thread.Sleep(Convert.ToInt32(r.NextDouble() * _interval * 1000));
+                    int interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
+                    Console.WriteLine($"{interval}ミリ秒待機");
+                    Thread.Sleep(interval);
                 }
                 catch(Exception ex)
                 {
