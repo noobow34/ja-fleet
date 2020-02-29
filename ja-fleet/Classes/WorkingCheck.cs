@@ -85,13 +85,13 @@ namespace jafleet
                         status.Status = td[11].TextContent!.Trim();
                         status.Working = (DateTime.Now.Date - latestDate.Date) <= CompareTargetTimeSpan;
 
-                        if((!previousWorking.HasValue || !previousWorking!.Value) && status.Working!.Value)
+                        if((!previousWorking.HasValue || !previousWorking.Value) && status.Working!.Value)
                         {
                             //非稼働から稼働になった
                             toWorking.Append($"{currentInfo} ← {previousDate}");
                             toWorking.Append("\n");
                         }
-                        else if(previousWorking!.Value && !status.Working!.Value)
+                        else if(previousWorking.HasValue && previousWorking.Value && !status.Working.Value)
                         {
                             //稼働から非稼働になった
                             toNotWorking.Append(currentInfo);
@@ -103,7 +103,7 @@ namespace jafleet
                     {
                         if(status != null)
                         {
-                            if (status.Working!.Value)
+                            if (status.Working.HasValue && status.Working.Value)
                             {
                                 toNotWorking.Append($"{status.RegistrationNumber}:{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
                                 toNotWorking.Append("\n");
@@ -128,7 +128,7 @@ namespace jafleet
                     Console.WriteLine(ex.ToString());
                     LineUtil.PushMe($"WorkingCheck異常終了:{DateTime.Now.ToString()}\n",HttpClientManager.GetInstance());
                     LineUtil.PushMe($"{ex.ToString()}", HttpClientManager.GetInstance());
-                    break;
+                    return;
                 }
             }
             context.SaveChanges();
