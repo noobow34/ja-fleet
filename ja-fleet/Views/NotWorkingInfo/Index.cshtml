@@ -35,8 +35,7 @@
         $(function () {
             let gridheight;
 
-            let currentDate = dayjs().add(-3,"day");
-            $("#fromDate").val(currentDate.format("YYYY-MM-DD"));
+            $("#fromDate").val(dayjs().add(-3,"day").format("YYYY-MM-DD"));
 
             if (window.innerHeight < 800) {
                 gridheight = '60vh';
@@ -70,6 +69,9 @@
         });
 
         const getFromDate = function () {
+            if ($("#fromDate").val() == null) {
+                $("#fromDate").val(dayjs().add(-3,"day").format("YYYY-MM-DD"));
+            }
             return $("#fromDate").val();
         }
 
