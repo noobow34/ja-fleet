@@ -11,14 +11,18 @@
     <meta content="summary" name="twitter:card" />
     <meta content="@@ja_fleet" name="twitter:site" />
 }
+@section CssPartial{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" integrity="sha256-PZLhE6wwMbg4AB3d35ZdBF9HD/dI/y4RazA3iRDurss=" crossorigin="anonymous" />
+}
 <h2>非稼働情報</h2>
 <div class="form-group">
-    最終稼働日が @Html.TextBox("fromDate",null, null, new {type = "date" }) 以前
+    最終稼働日が @Html.TextBox("fromDate", null, null, new { type = "date" }) 以前
 </div>
 毎日朝6時頃にFlightradar24から取得した情報をそのまま表示してます。
 <table id="notWorkingInfoTable" class="display cell-border compact dt-body-center nowrap" style="width:100%">
     <thead>
         <tr>
+            <th></th>
             <th>最終稼働日時</th>
             <th>機体記号</th>
             <th>From</th>
@@ -30,12 +34,13 @@
 </table>
 
 @section ScriptsPartial{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js" integrity="sha256-P93G0oq6PBPWTP1IR8Mz/0jHHUpaWL0aBJTKauisG7Q=" crossorigin="anonymous"></script>
     <script>
         var table;
         $(function () {
             let gridheight;
 
-            $("#fromDate").val(dayjs().add(-3,"day").format("YYYY-MM-DD"));
+            $("#fromDate").val(dayjs().add(-3, "day").format("YYYY-MM-DD"));
 
             if (window.innerHeight < 800) {
                 gridheight = '60vh';
@@ -51,6 +56,13 @@
                     dataSrc: ''
                 },
                 columns: [
+                    {
+                        data: '', className: 'dt-center'
+                        , render: function (data, type, row, meta) {
+                            return "<a href=\"javascript:openDetail('" + row.registrationNumber + "')\">機材</a> " +
+                                "<a href=\"https://www.flightradar24.com/data/aircraft/" + row.registrationNumber + "\" target=\"_blank\">稼働</a>";
+                        }
+                    },
                     { data: 'flightDate', className: 'dt-center' },
                     { data: 'registrationNumber', className: 'dt-center' },
                     { data: 'fromAp', className: 'dt-center' },
@@ -59,7 +71,7 @@
                     { data: 'status', className: 'dt-center' }
                 ],
                 paging: false,
-                ordering: true,
+                ordering: false,
                 fixedHeader: true,
                 scrollY: gridheight,
                 scrollX: true,
@@ -70,7 +82,7 @@
 
         const getFromDate = function () {
             if ($("#fromDate").val() == null) {
-                $("#fromDate").val(dayjs().add(-3,"day").format("YYYY-MM-DD"));
+                $("#fromDate").val(dayjs().add(-3, "day").format("YYYY-MM-DD"));
             }
             return $("#fromDate").val();
         }

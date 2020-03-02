@@ -34,8 +34,8 @@ namespace jafleet.Controllers
             }
             var list = _context.WorkingStatus.Where(ws => !ws.Working.Value && (!ws.FlightDate.HasValue || ws.FlightDate.Value.Date <= searchFromDate))
                 .Join(_context.Aircraft.Where(a => OperationCode.IN_OPERATION.Contains(a.OperationCode)), a => a.RegistrationNumber,ws => ws.RegistrationNumber
-                    , (ws,a) => new{ RegistrationNumber = ws.RegistrationNumber, FlightDate = ws.FlightDate!.ToString() ?? " 不明" ,FromAp = ws.FromAp,ToAp = ws.ToAp,FlightNumber = ws.FlightNumber,Status = ws.Status,Working = ws.Working })
-                .ToArray();
+                    , (ws,a) => new{ ws.RegistrationNumber, FlightDate = ws.FlightDate!.ToString() ?? " 不明" ,ws.FromAp,ws.ToAp,ws.FlightNumber,ws.Status,ws.Working })
+                .OrderBy(ws => ws.FlightDate).ToArray();
 
             return Json(list);
         }
