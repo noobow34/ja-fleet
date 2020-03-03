@@ -6,6 +6,7 @@ using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace jafleet.Controllers
@@ -43,7 +44,8 @@ namespace jafleet.Controllers
                     IEnumerable<string> targetReg;
                     using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                     {
-                        targetReg = context.Aircraft.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).ToList().Select(a => a.RegistrationNumber);
+                        targetReg = context.Aircraft.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray().Select(a => a.RegistrationNumber)
+                                    .OrderBy(r => Guid.NewGuid());
                         var check = new WorkingCheck(targetReg,interval ?? 15);
                         _ = check.ExecuteCheckAsync();
 
