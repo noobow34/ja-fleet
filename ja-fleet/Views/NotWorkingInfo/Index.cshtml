@@ -18,7 +18,7 @@
 <div class="form-group">
     最終稼働日が @Html.TextBox("fromDate", null, null, new { type = "date" }) 以前
 </div>
-毎日朝6時頃にFlightradar24から取得した情報をそのまま表示してます。
+毎日朝6時頃にFlightradar24から取得した情報をそのまま表示してます。<input type="button" value="Excel出力" onclick="$('.buttons-html5').eq(0).click();" id="excel" class="btn btn-primary btn-xs" />
 <table id="notWorkingInfoTable" class="display cell-border compact dt-body-center nowrap" style="width:100%">
     <thead>
         <tr>
@@ -51,6 +51,15 @@
             datatablesLangInit();
 
             table = $('#notWorkingInfoTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {   extend: "excelHtml5",
+                        className: "buttonsToHide",
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }
+                ],
                 ajax: {
                     url: '/NotWorkingInfo/GetInfo?fromDate=' + getFromDate(),
                     dataSrc: ''

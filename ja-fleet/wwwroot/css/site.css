@@ -12,7 +12,12 @@
     max-height: 500px;
     overflow-x: hidden;
 }
-body { padding-top: 80px; }
+.buttonsToHide{
+    display: none;
+}
+body {
+    padding-top: 80px;
+}
 @media ( min-width: 768px ) {
     #banner {
         min-height: 300px;

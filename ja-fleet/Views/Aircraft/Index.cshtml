@@ -40,6 +40,15 @@
             datatablesLangInit();
 
             table = $('#' + '@(Model.TableId)').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {   extend: "excelHtml5",
+                        className: "buttonsToHide",
+                        exportOptions: {
+                            columns: [1,2,3,4,5,6,7,8,9,11],
+                        }
+                    }
+                ],
                 ajax: {url:'@(Model.api)?includeRetire=' + getIncludeRetire(),
                     dataSrc: ''
                 },

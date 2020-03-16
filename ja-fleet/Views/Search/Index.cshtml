@@ -197,6 +197,15 @@
         datatablesLangInit();
 
         table = $('#SerachResult').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {   extend: "excelHtml5",
+                    className: "buttonsToHide",
+                    exportOptions: {
+                        columns: [1,2,3,4,5,6,7,8,9,11],
+                    }
+                }
+            ],
             ajax: {url:'/Search/DoSearch',
                     type:'POST',
                     dataType: 'json',

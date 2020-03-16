@@ -1,6 +1,6 @@
 ﻿@if (!Model.IsDetail)
 {
-    @:<input type="button" value="ソートリセット" onclick="table.order.neutral().draw();" id="resetsort" class="btn btn-primary btn-xs" />　<font color="#FFCCFF">背景ピンク■</font>はデータ更新1週間以内
+    @:<input type="button" value="ソートリセット" onclick="table.order.neutral().draw();" id="resetsort" class="btn btn-primary btn-xs" /> <input type="button" value="Excel出力" onclick="$('.buttons-html5').eq(0).click();" id="excel" class="btn btn-primary btn-xs" />　<font color="#FFCCFF">背景ピンク■</font>はデータ更新1週間以内
 }
 <table id="@(Model.TableId)" class="display cell-border compact dt-body-center nowrap" style="width:100%">
     <thead>
@@ -22,6 +22,7 @@
             <th>コンフィグ</th>
             <th>Wi-Fi</th>
             <th>特別塗装</th>
+            <th>備考</th>
             <th>備考</th>
         </tr>
     </thead>
