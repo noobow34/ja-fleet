@@ -170,7 +170,7 @@ namespace jafleet
                 }
             }
 
-            allLog.Append($"WorkingCheck正常終了:{DateTime.Now}");
+            allLog.Append($"WorkingCheck正常終了:{DateTime.Now}\n");
             if (toWorking0.Count > 0)
             {
                 allLog.Append("--------予約登録が稼働--------\n");
@@ -225,7 +225,7 @@ namespace jafleet
                             $"運用中非稼働が稼働:{toWorking3.Count}件\n" +
                             $"退役未抹消が稼働:{toWorking7.Count}件\n" +
                             $"稼働が非稼働:{toNotWorking.Count}件\n" +
-                            $@"http://ja-fleet.noobow.me/WorkingCheckLog/{DateTime.Now:yyyyMMdd}", HttpClientManager.GetInstance());
+                            $@"https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}", HttpClientManager.GetInstance());
         }
     }
 }
