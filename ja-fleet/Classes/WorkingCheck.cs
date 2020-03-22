@@ -100,7 +100,7 @@ namespace jafleet
 
                         if((!previousWorking.HasValue || !previousWorking.Value) && status.Working!.Value)
                         {
-                            string infoString = $"{currentInfo} ← {previousDate:yyyy/MM/dd HH:mm:ss}";
+                            string infoString = $"{currentInfo} ← {previousDate:yyyy/MM/dd HH:mm}";
                             //非稼働から稼働になった
                             switch (a.OperationCode)
                             {
