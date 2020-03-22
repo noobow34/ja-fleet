@@ -100,7 +100,7 @@ namespace jafleet
 
                         if((!previousWorking.HasValue || !previousWorking.Value) && status.Working!.Value)
                         {
-                            string infoString = $"{currentInfo} ← {previousDate}";
+                            string infoString = $"{currentInfo} ← {previousDate:yyyy/MM/dd HH:mm:ss}";
                             //非稼働から稼働になった
                             switch (a.OperationCode)
                             {
@@ -218,7 +218,7 @@ namespace jafleet
 
             context.SaveChanges();
 
-            LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now}\n" +
+            LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
                             $"予約登録が稼働:{toWorking0.Count}件\n" +
                             $"製造中が稼働:{toWorking1.Count}件\n" +
                             $"デリバリーが稼働:{toWorking2.Count}件\n" +

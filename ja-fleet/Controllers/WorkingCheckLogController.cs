@@ -22,7 +22,8 @@ namespace jafleet.Controllers
                 id = DateTime.Now.ToString("yyyyMMdd");
             }
 
-            string log = string.Join("-----------------",_context.Log.Where(l => l.LogDateYyyyMmDd == id && l.LogType == LogType.WORKING_INFO).AsNoTracking().Select(l => l.LogDetail));
+            string log = string.Join("-----------------",_context.Log.Where(l => l.LogDateYyyyMmDd == id && l.LogType == LogType.WORKING_INFO)
+                        .AsNoTracking().OrderByDescending(l => l.LogDate).Select(l => l.LogDetail));
 
             return Content(log);
         }
