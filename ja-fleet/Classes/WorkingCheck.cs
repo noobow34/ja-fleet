@@ -70,7 +70,7 @@ namespace jafleet
                         string timestamp = row[0].GetAttribute("data-timestamp");
                         DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
                         var currentInfo = new StringBuilder();
-                        currentInfo.Append($"{a.RegistrationNumber}:{latestDate} ");
+                        currentInfo.Append($"{a.RegistrationNumber}:{latestDate:yyyy/MM/dd HH:mm} ");
 
                         //tdの各値
                         var td = row[0].GetElementsByTagName("td");
@@ -109,22 +109,22 @@ namespace jafleet
                                     break;
 
                                 case OperationCode.MAKING:
-                                    toWorking1.Add(a.RegistrationNumber, $"{currentInfo} ← {previousDate}");
+                                    toWorking1.Add(a.RegistrationNumber, infoString);
                                     break;
 
                                 case OperationCode.DELIVERY:
-                                    toWorking2.Add(a.RegistrationNumber, $"{currentInfo} ← {previousDate}");
+                                    toWorking2.Add(a.RegistrationNumber, infoString);
                                     break;
 
                                 case OperationCode.INTERNATIONAL:
                                 case OperationCode.DOMESTIC:
                                 case OperationCode.BOTH:
                                 case OperationCode.CARGO:
-                                    toWorking3.Add(a.RegistrationNumber, $"{currentInfo} ← {previousDate}");
+                                    toWorking3.Add(a.RegistrationNumber, infoString);
                                     break;
 
                                 case OperationCode.RETIRE_REGISTERED:
-                                    toWorking7.Add(a.RegistrationNumber, $"{currentInfo} ← {previousDate}");
+                                    toWorking7.Add(a.RegistrationNumber, infoString);
                                     break;
                                     
                             }
@@ -170,36 +170,42 @@ namespace jafleet
                 }
             }
 
-
-            if(toWorking0.Count > 0)
+            allLog.Append($"WorkingCheck正常終了:{DateTime.Now}");
+            if (toWorking0.Count > 0)
             {
                 allLog.Append("--------予約登録が稼働--------\n");
                 allLog.AppendJoin("\n", toWorking0.Values);
+                allLog.Append("\n");
             }
             if (toWorking1.Count > 0)
             {
                 allLog.Append("--------製造中が稼働--------\n");
                 allLog.AppendJoin("\n", toWorking1.Values);
+                allLog.Append("\n");
             }
             if (toWorking2.Count > 0)
             {
                 allLog.Append("--------デリバリーが稼働--------\n");
                 allLog.AppendJoin("\n", toWorking2.Values);
+                allLog.Append("\n");
             }
             if (toWorking3.Count > 0)
             {
                 allLog.Append("--------運用中非稼働が稼働--------\n");
                 allLog.AppendJoin("\n", toWorking3.Values);
+                allLog.Append("\n");
             }
             if (toWorking7.Count > 0)
             {
                 allLog.Append("--------退役未抹消が稼働--------\n");
                 allLog.AppendJoin("\n", toWorking7.Values);
+                allLog.Append("\n");
             }
             if (toNotWorking.Count > 0)
             {
                 allLog.Append("--------稼働が非稼働--------\n");
                 allLog.AppendJoin("\n", toNotWorking.Values);
+                allLog.Append("\n");
             }
 
             var workingCheckLog = new Log
@@ -218,7 +224,7 @@ namespace jafleet
                             $"デリバリーが稼働:{toWorking2.Count}件\n" +
                             $"運用中非稼働が稼働:{toWorking3.Count}件\n" +
                             $"退役未抹消が稼働:{toWorking7.Count}件\n" +
-                            $"稼働が非稼働:{toNotWorking.Count}件" +
+                            $"稼働が非稼働:{toNotWorking.Count}件\n" +
                             $@"http://ja-fleet.noobow.me/WorkingCheckLog/{DateTime.Now:yyyyMMdd}", HttpClientManager.GetInstance());
         }
     }
