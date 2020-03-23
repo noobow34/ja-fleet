@@ -164,24 +164,27 @@ namespace jafleet.Controllers
                 {
                     //Jetphotosに写真があった場合
                     string newestPhotoLink = photos[0].GetAttribute("href");
+                    var photoTag = htmlDocument.GetElementsByClassName("result__photo");
+                    string directUrl = null;
+                    if (photoTag.Length != 0)
+                    {
+                        directUrl = photoTag[0].GetAttribute("src").Replace("//cdn.jetphotos.com/400", string.Empty);
+                    }
+
                     _ = Task.Run(() =>
                     {
                         //写真をキャッシュに登録する
-                        using (var serviceScope = _services.CreateScope())
+                        using var serviceScope = _services.CreateScope();
+                        using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                        if (!string.IsNullOrEmpty(a.LinkUrl))
                         {
-                            using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
-                            {
-                                if (!string.IsNullOrEmpty(a.LinkUrl))
-                                {
-                                    //Jetphotosから取得できるのにDBにも登録されている場合は、DBから消す
-                                    a.LinkUrl = null;
-                                    a.ActualUpdateTime = DateTime.Now;
-                                    context.Aircraft.Update(a);
-                                    LineUtil.PushMe($"{id}のLinkUrlを削除しました", HttpClientManager.GetInstance());
-                                }
-                                StoreAircraftPhoto(context, photo, newestPhotoLink, id);
-                            }
+                            //Jetphotosから取得できるのにDBにも登録されている場合は、DBから消す
+                            a.LinkUrl = null;
+                            a.ActualUpdateTime = DateTime.Now;
+                            context.Aircraft.Update(a);
+                            LineUtil.PushMe($"{id}のLinkUrlを削除しました", HttpClientManager.GetInstance());
                         }
+                        StoreAircraftPhoto(context, photo, newestPhotoLink, id, directUrl);
                     });
                     return Redirect($"https://www.jetphotos.com{newestPhotoLink}");
                 }
@@ -192,14 +195,10 @@ namespace jafleet.Controllers
                         //Jetphotosに写真がなかった場合
                         _ = Task.Run(() =>
                         {
-                        //写真がないという情報を登録する
-                        using (var serviceScope = _services.CreateScope())
-                            {
-                                using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
-                                {
-                                    StoreAircraftPhoto(context, photo,null ,id);
-                                }
-                            }
+                            //写真がないという情報を登録する
+                            using var serviceScope = _services.CreateScope();
+                            using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                            StoreAircraftPhoto(context, photo, null, id, null);
                         });
                         return Redirect("/nophoto.html");
                     }
@@ -231,11 +230,12 @@ namespace jafleet.Controllers
 
         }
 
-        private void StoreAircraftPhoto(jafleetContext context,AircraftPhoto photo, string photoUrl,string reg)
+        private void StoreAircraftPhoto(jafleetContext context,AircraftPhoto photo, string photoUrl,string reg,string directUrl)
         {
             if (photo != null)
             {
                 photo.PhotoUrl = photoUrl;
+                photo.PhotoDirectUrl = directUrl;
                 photo.LastAccess = DateTime.Now;
                 context.AircraftPhoto.Update(photo);
             }

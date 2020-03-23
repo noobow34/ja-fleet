@@ -9,6 +9,7 @@ using jafleet.Commons.Constants;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace jafleet.Controllers
 {
@@ -74,7 +75,7 @@ namespace jafleet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Store( EditModel model){
+        public IActionResult Store(EditModel model){
             try{
                 DateTime storeDate = DateTime.Now;
                 string reg = model.Aircraft.RegistrationNumber;
@@ -118,6 +119,10 @@ namespace jafleet.Controllers
             {
                 noheadString = "?nohead=" + model.NoHead.ToString();
             }
+
+            //写真を更新
+            _ = HttpClientManager.GetInstance().GetStringAsync($"http://localhost:5000/Aircraft/Photo/{model.Aircraft.RegistrationNumber}?force=true");
+
             return Redirect("/E/" + model.Aircraft.RegistrationNumber + noheadString);
         }
     }
