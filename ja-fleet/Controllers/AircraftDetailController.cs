@@ -38,7 +38,7 @@ namespace jafleet.Controllers
             model.NeedBack = needback;
 
             model.AV = _context.AircraftView.AsNoTracking().Where(av => av.RegistrationNumber == id).FirstOrDefault();
-            model.OgImageUrl = $"https://cdn.jetphotos.com/full{model.AV?.PhotoDirectUrl}" ?? "https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png";
+            model.OgImageUrl = (model.AV?.PhotoDirectUrl != null) ? $"https://cdn.jetphotos.com/full{model.AV?.PhotoDirectUrl}" : "https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png";
             if (model.AV == null)
             {
                 //存在しないレジが指定された場合はNotFound
