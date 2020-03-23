@@ -13,7 +13,14 @@
     <meta name="description" content="@(Model.Title)の詳細情報です。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。">
     <meta name="referrer" content="no-referrer" />
 
-    <meta name="twitter:card" content="summary_large_image" />
+    @if (Model.OgImageUrl.Contains("jetphotos"))
+    {
+        <meta name="twitter:card" content="summary_large_image" />
+    }
+    else
+    {
+        <meta name="twitter:card" content="summary" />
+    }
     <meta name="twitter:site" content="@@ja_fleet" />
 
     <meta property="og:type" content="website" />
