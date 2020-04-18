@@ -307,6 +307,7 @@
                 $('#presetResult').removeClass();
                 $('#presetResult').addClass("text-danger");
                 $('#presetResult').text("名称を入力してください");
+                $("#presetName").focus();
                 return;
             }
             $.ajax({
