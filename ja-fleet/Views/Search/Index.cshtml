@@ -303,6 +303,12 @@
         });
 
         $('#presetRegModal').click(function () {
+            if ($("#presetName").val() == "") {
+                $('#presetResult').removeClass();
+                $('#presetResult').addClass("text-danger");
+                $('#presetResult').text("名称を入力してください");
+                return;
+            }
             $.ajax({
                 url: '/Search/RegisterNamedSearchCondition',
                 type: 'POST',
@@ -325,6 +331,8 @@
                 cache: false
             }).done(function (data) {
                 RefreshPresetSearchCondition(data);
+                $('#presetResult').removeClass();
+                $('#presetResult').addClass("text-primary");
                 $('#presetResult').text("登録しました");
                 $('#presetName').attr('readonly',true);
                 $('#presetRegModal').hide();
