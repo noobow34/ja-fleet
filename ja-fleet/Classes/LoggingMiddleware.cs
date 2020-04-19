@@ -28,6 +28,7 @@ namespace jafleet.Classes
         public async Task Invoke(HttpContext httpContext)
         {
             bool loggingTarget = !EXCLUDE_LIST.Any(s => httpContext.Request.Path.Value.ToUpper().Contains(s));
+            Console.WriteLine($"{httpContext.Request.Path.Value.ToUpper()},{loggingTarget}");
             AccessLog log = null;
             if (loggingTarget)
             {
