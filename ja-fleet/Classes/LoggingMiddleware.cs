@@ -56,13 +56,13 @@ namespace jafleet.Classes
             Stopwatch sw = null;
             if (loggingTarget) { sw = new Stopwatch(); sw.Start(); }
             await _next(httpContext);
-            if (loggingTarget) sw.Stop();
             if (loggingTarget && log != null)
             {
+                sw.Stop();
+                log.ResponseCode = httpContext.Response.StatusCode;
                 _ = Task.Run(() =>
                 {
                     Console.WriteLine("task.run");
-                    log.ResponseCode = httpContext.Response.StatusCode;
                     log.ResponseTime = sw.ElapsedMilliseconds;
                     try
                     {
