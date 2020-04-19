@@ -17,7 +17,7 @@ namespace jafleet.Classes
         private readonly RequestDelegate _next;
         private readonly IServiceScopeFactory _services;
 
-        private static string[] EXCLUDE_LIST = new string[] { ".CSS", ".JS", ".PNG" };
+        private static string[] EXCLUDE_LIST = new string[] { ".CSS", ".JS", ".PNG",".JPG", ".JPEG", ".GIF" };
 
         public LoggingMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
         {
@@ -52,6 +52,7 @@ namespace jafleet.Classes
                     IsAdmin = CookieUtil.IsAdmin(httpContext)
                 };
             }
+            Console.WriteLine("object complete");
             Stopwatch sw = null;
             if (loggingTarget) { sw = new Stopwatch(); sw.Start(); }
             await _next(httpContext);
@@ -60,6 +61,7 @@ namespace jafleet.Classes
             {
                 _ = Task.Run(() =>
                 {
+                    Console.WriteLine("task.run");
                     log.ResponseCode = httpContext.Response.StatusCode;
                     log.ResponseTime = sw.ElapsedMilliseconds;
                     try
@@ -70,7 +72,9 @@ namespace jafleet.Classes
                     using var serviceScope = _services.CreateScope();
                     using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
                     context.AccessLog.Add(log);
+                    Console.WriteLine("add");
                     context.SaveChanges();
+                    Console.WriteLine("save");
                 });
             }
         }
