@@ -42,7 +42,7 @@ namespace jafleet.Classes
                     ,
                     RequestQuery = httpContext.Request.QueryString.ToString() != string.Empty ? httpContext.Request.QueryString.ToString() : null
                     ,
-                    RequestCookies = string.Concat(httpContext.Request.Cookies)
+                    RequestCookies = httpContext.Request.Cookies.Count != 0 ? string.Concat(httpContext.Request.Cookies) : null
                     ,
                     UserAgent = httpContext.Request.Headers["User-Agent"].FirstOrDefault()
                     ,
