@@ -35,7 +35,8 @@ namespace jafleet.Classes
                 {
                     RequestTime = DateTime.Now
                     ,
-                    RequestIp = httpContext.Connection.RemoteIpAddress.ToString()
+                    RequestIp = httpContext.Request.Headers?["X-Real-IP"].FirstOrDefault() != null ?
+                                httpContext.Request.Headers["X-Real-IP"].First() : httpContext.Connection.RemoteIpAddress.MapToIPv4().ToString()
                     ,
                     RequestPath = httpContext.Request.Path
                     ,
@@ -43,9 +44,9 @@ namespace jafleet.Classes
                     ,
                     RequestCookies = string.Concat(httpContext.Request.Cookies)
                     ,
-                    UserAgent = httpContext.Request.Headers?["User-Agent"]
+                    UserAgent = httpContext.Request.Headers["User-Agent"].FirstOrDefault()
                     ,
-                    Referer = httpContext.Request.Headers?["Referer"]
+                    Referer = httpContext.Request.Headers["Referer"].FirstOrDefault()
                     ,
                     IsAdmin = CookieUtil.IsAdmin(httpContext)
                 };
@@ -56,11 +57,15 @@ namespace jafleet.Classes
             if (loggingTarget) sw.Stop();
             if (loggingTarget && log != null)
             {
-                log.ResponseCode = httpContext.Response.StatusCode;
-                log.ResponseTime = sw.ElapsedMilliseconds;
                 _ = Task.Run(() =>
                 {
-                    log.RequestHostname = Dns.GetHostEntry(log.RequestIp).HostName;
+                    log.ResponseCode = httpContext.Response.StatusCode;
+                    log.ResponseTime = sw.ElapsedMilliseconds;
+                    try
+                    {
+                        log.RequestHostname = Dns.GetHostEntry(log.RequestIp).HostName;
+                    }
+                    catch { }
                     using var serviceScope = _services.CreateScope();
                     using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
                     context.AccessLog.Add(log);
