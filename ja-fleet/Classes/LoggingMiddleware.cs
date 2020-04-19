@@ -28,7 +28,6 @@ namespace jafleet.Classes
         public async Task Invoke(HttpContext httpContext)
         {
             bool loggingTarget = !EXCLUDE_LIST.Any(s => httpContext.Request.Path.Value.ToUpper().Contains(s));
-            Console.WriteLine($"{httpContext.Request.Path.Value.ToUpper()},{loggingTarget}");
             AccessLog log = null;
             if (loggingTarget)
             {
@@ -52,7 +51,6 @@ namespace jafleet.Classes
                     IsAdmin = CookieUtil.IsAdmin(httpContext)
                 };
             }
-            Console.WriteLine("object complete");
             Stopwatch sw = null;
             if (loggingTarget) { sw = new Stopwatch(); sw.Start(); }
             await _next(httpContext);
@@ -62,7 +60,6 @@ namespace jafleet.Classes
                 log.ResponseCode = httpContext.Response.StatusCode;
                 _ = Task.Run(() =>
                 {
-                    Console.WriteLine("task.run");
                     log.ResponseTime = sw.ElapsedMilliseconds;
                     try
                     {
@@ -72,9 +69,7 @@ namespace jafleet.Classes
                     using var serviceScope = _services.CreateScope();
                     using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
                     context.AccessLog.Add(log);
-                    Console.WriteLine("add");
                     context.SaveChanges();
-                    Console.WriteLine("save");
                 });
             }
         }
