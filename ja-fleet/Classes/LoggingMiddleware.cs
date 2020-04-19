@@ -1,0 +1,80 @@
+﻿using jafleet.Commons.EF;
+using jafleet.Util;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+
+namespace jafleet.Classes
+{
+    public class LoggingMiddleware
+    {
+        private readonly RequestDelegate _next;
+        private readonly IServiceScopeFactory _services;
+
+        private static string[] EXCLUDE_LIST = new string[] { ".CSS", ".JS", ".PNG" };
+
+        public LoggingMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
+        {
+            _next = next;
+            _services = serviceScopeFactory;
+        }
+
+        public async Task Invoke(HttpContext httpContext)
+        {
+            bool loggingTarget = !EXCLUDE_LIST.Any(s => httpContext.Request.Path.Value.ToUpper().Contains(s));
+            AccessLog log = null;
+            if (loggingTarget)
+            {
+                log = new AccessLog
+                {
+                    RequestTime = DateTime.Now
+                    ,
+                    RequestIp = httpContext.Connection.RemoteIpAddress.ToString()
+                    ,
+                    RequestPath = httpContext.Request.Path
+                    ,
+                    RequestQuery = httpContext.Request.QueryString.ToString() != string.Empty ? httpContext.Request.QueryString.ToString() : null
+                    ,
+                    RequestCookies = string.Concat(httpContext.Request.Cookies)
+                    ,
+                    UserAgent = httpContext.Request.Headers?["User-Agent"]
+                    ,
+                    Referer = httpContext.Request.Headers?["Referer"]
+                    ,
+                    IsAdmin = CookieUtil.IsAdmin(httpContext)
+                };
+            }
+            Stopwatch sw = null;
+            if (loggingTarget) { sw = new Stopwatch(); sw.Start(); }
+            await _next(httpContext);
+            if (loggingTarget) sw.Stop();
+            if (loggingTarget && log != null)
+            {
+                log.ResponseCode = httpContext.Response.StatusCode;
+                log.ResponseTime = sw.ElapsedMilliseconds;
+                _ = Task.Run(() =>
+                {
+                    log.RequestHostname = Dns.GetHostEntry(log.RequestIp).HostName;
+                    using var serviceScope = _services.CreateScope();
+                    using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                    context.AccessLog.Add(log);
+                    context.SaveChanges();
+                });
+            }
+        }
+    }
+
+    public static class LoggingMiddlewareExtensions
+    {
+        public static IApplicationBuilder UseLoggingMiddleware(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<LoggingMiddleware>();
+        }
+    }
+}

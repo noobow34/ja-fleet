@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.WebEncoders;
 using System.Text.Unicode;
+using jafleet.Classes;
 
 namespace jafleet
 {
@@ -66,6 +67,7 @@ namespace jafleet
 
             app.UseExceptionHandler("/Home/Error");
 
+            app.UseLoggingMiddleware();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
