@@ -35,8 +35,8 @@ namespace jafleet.Classes
                 {
                     RequestTime = DateTime.Now
                     ,
-                    RequestIp = httpContext.Request.Headers?["X-Real-IP"].FirstOrDefault() != null ?
-                                httpContext.Request.Headers["X-Real-IP"].First() : httpContext.Connection.RemoteIpAddress.MapToIPv4().ToString()
+                    RequestIp = httpContext.Request.Headers?["X-Forwarded-For"].FirstOrDefault() != null ?
+                                httpContext.Request.Headers["X-Forwarded-For"].First().Split(",")[0] : httpContext.Connection.RemoteIpAddress.MapToIPv4().ToString()
                     ,
                     RequestPath = httpContext.Request.Path
                     ,
