@@ -13,7 +13,7 @@ namespace jafleet.Manager
     {
 
         public static void ReadAll(jafleetContext context) {
-            var tempaa = context.Airline.OrderBy(p => p.DisplayOrder).ToList();
+            var tempaa = context.Airline.Where(a => !a.Deleted).OrderBy(p => p.DisplayOrder).ToList();
             tempaa.ForEach(aa =>
             {
                 switch (aa.AirlineGroupCode)
