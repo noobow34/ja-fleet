@@ -43,8 +43,8 @@ namespace jafleet
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+#if DEBUG
             var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-
             services.AddDbContextPool<jafleetContext>(
                 options => options.UseLoggerFactory(loggerFactory).EnableSensitiveDataLogging().UseMySql(Configuration.GetConnectionString("DefaultConnection"),
                     mySqlOptions =>
@@ -52,7 +52,15 @@ namespace jafleet
                         mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
                     }
             ));
-
+#else
+            services.AddDbContextPool<jafleetContext>(
+                options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+                    mySqlOptions =>
+                    {
+                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
+                    }
+            ));
+#endif
             services.Configure<WebEncoderOptions>(options => {
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
             });
