@@ -248,7 +248,7 @@ namespace jafleet
                 allLog.AppendJoin("\n", mainteStart.Values);
                 allLog.Append("\n");
             }
-            if (mainteStart.Count > 0)
+            if (mainteEnd.Count > 0)
             {
                 allLog.Append("--------整備終了--------\n");
                 allLog.AppendJoin("\n", mainteEnd.Values);
