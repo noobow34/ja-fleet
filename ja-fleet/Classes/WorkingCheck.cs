@@ -22,6 +22,7 @@ namespace jafleet
         private int _interval;
         private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
         private readonly static TimeSpan CompareTargetTimeSpan = new TimeSpan(2,0,0,0);
+        private static readonly string[] MAINTE_PLACE = new string[] {"TPE","MNL","XSP","QPG","XMN","SIN","TNA","HKG","OKA" };
         public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
 
         public WorkingCheck(IEnumerable<Aircraft> targetRegistrationNumber,int interval)
@@ -53,119 +54,153 @@ namespace jafleet
             var toWorking3 = new SortedDictionary<string, string>(); //運用中で非稼働が稼働した
             var toWorking7 = new SortedDictionary<string, string>(); //退役で非稼働が稼働した（退役フェリーされた）
             var toNotWorking = new SortedDictionary<string, string>(); //非稼働になった
+            var mainteStart = new SortedDictionary<string, string>(); //整備開始の疑い
+            var mainteEnd = new SortedDictionary<string, string>(); //整備終了の疑い
+            var mainteing = new SortedDictionary<string, string>(); //整備中の疑い
             var allLog = new StringBuilder();
 
             foreach (Aircraft a in _targetRegistrationNumber)
             {
-                try
+                bool success = false;
+                int failCount = 0;
+                Exception exBack = null;
+                while(!success && failCount <= 5)
                 {
-                    var htmlDocument = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(FR24_DATA_URL + a.RegistrationNumber));
-                    var row = htmlDocument.GetElementsByClassName("data-row");
-                    var status = context.WorkingStatus.Where(s => s.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
-                    var r = new Random();
-                    if (row!.Length != 0)
+                    try
                     {
-
-                        //rowがもつ日付
-                        string timestamp = row[0].GetAttribute("data-timestamp");
-                        DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
-                        var currentInfo = new StringBuilder();
-                        currentInfo.Append($"{a.RegistrationNumber}:{latestDate:yyyy/MM/dd HH:mm} ");
-
-                        //tdの各値
-                        var td = row[0].GetElementsByTagName("td");
-                        if(td!.Length != 0)
+                        var htmlDocument = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(FR24_DATA_URL + a.RegistrationNumber));
+                        var row = htmlDocument.GetElementsByClassName("data-row");
+                        var status = context.WorkingStatus.Where(s => s.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
+                        var r = new Random();
+                        if (row!.Length != 0)
                         {
-                            currentInfo.Append($"{td[3].TextContent!.Trim()} {td[4].TextContent!.Trim()} {td[5].TextContent!.Trim()} {td[11].TextContent!.Trim()}");
-                        }
 
-                        bool? previousWorking;
-                        DateTime? previousDate;
-                        if(status == null)
-                        {
-                            status = new WorkingStatus()
+                            //rowがもつ日付
+                            string timestamp = row[0].GetAttribute("data-timestamp");
+                            DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
+                            var currentInfo = new StringBuilder();
+                            currentInfo.Append($"{a.RegistrationNumber}:{latestDate:yyyy/MM/dd HH:mm} ");
+
+                            //tdの各値
+                            var td = row[0].GetElementsByTagName("td");
+                            if (td!.Length != 0)
                             {
-                                RegistrationNumber = a.RegistrationNumber
-                            };
-                            context.WorkingStatus.Add(status);
-                        }
-                        previousWorking = status.Working;
-                        previousDate = status.FlightDate;
-                        status.FlightDate = latestDate;
-                        status.FromAp = td[3].TextContent!.Trim();
-                        status.ToAp = td[4].TextContent!.Trim();
-                        status.FlightNumber = td[5].TextContent!.Trim();
-                        status.Status = td[11].TextContent!.Trim();
-                        status.Working = (DateTime.Now.Date < latestDate.Date) || ((DateTime.Now.Date - latestDate.Date) <= CompareTargetTimeSpan);
-
-                        if((!previousWorking.HasValue || !previousWorking.Value) && status.Working!.Value)
-                        {
-                            string infoString = $"{currentInfo} ← {previousDate:yyyy/MM/dd HH:mm}";
-                            //非稼働から稼働になった
-                            switch (a.OperationCode)
-                            {
-                                case OperationCode.RESERVED:
-                                    toWorking0.Add(a.RegistrationNumber, infoString);
-                                    break;
-
-                                case OperationCode.MAKING:
-                                    toWorking1.Add(a.RegistrationNumber, infoString);
-                                    break;
-
-                                case OperationCode.DELIVERY:
-                                    toWorking2.Add(a.RegistrationNumber, infoString);
-                                    break;
-
-                                case OperationCode.INTERNATIONAL:
-                                case OperationCode.DOMESTIC:
-                                case OperationCode.BOTH:
-                                case OperationCode.CARGO:
-                                    toWorking3.Add(a.RegistrationNumber, infoString);
-                                    break;
-
-                                case OperationCode.RETIRE_REGISTERED:
-                                    toWorking7.Add(a.RegistrationNumber, infoString);
-                                    break;
-                                    
+                                currentInfo.Append($"{td[3].TextContent!.Trim()} {td[4].TextContent!.Trim()} {td[5].TextContent!.Trim()} {td[11].TextContent!.Trim()}");
                             }
-                        }
-                        else if(previousWorking.HasValue && previousWorking.Value && !status.Working.Value)
-                        {
-                            //稼働から非稼働になった
-                            toNotWorking.Add(a.RegistrationNumber, currentInfo.ToString());
-                        }
-                        Console.WriteLine(currentInfo);
-                    }
-                    else
-                    {
-                        if(status != null)
-                        {
-                            if (status.Working.HasValue && status.Working.Value)
+
+                            bool? previousWorking;
+                            DateTime? previousDate;
+                            if (status == null)
                             {
-                                toNotWorking.Add(a.RegistrationNumber, $"{status.RegistrationNumber}:{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
+                                status = new WorkingStatus()
+                                {
+                                    RegistrationNumber = a.RegistrationNumber
+                                };
+                                context.WorkingStatus.Add(status);
                             }
-                            status.Working = false;
+                            previousWorking = status.Working;
+                            previousDate = status.FlightDate;
+                            status.FlightDate = latestDate;
+                            status.FromAp = td[3].TextContent!.Trim();
+                            status.ToAp = td[4].TextContent!.Trim();
+                            status.FlightNumber = td[5].TextContent!.Trim();
+                            status.Status = td[11].TextContent!.Trim();
+                            status.Working = (DateTime.Now.Date < latestDate.Date) || ((DateTime.Now.Date - latestDate.Date) <= CompareTargetTimeSpan);
+
+                            if ((!previousWorking.HasValue || !previousWorking.Value) && status.Working!.Value)
+                            {
+                                string infoString = $"{currentInfo} ← {previousDate:yyyy/MM/dd HH:mm}";
+                                //非稼働から稼働になった
+                                switch (a.OperationCode)
+                                {
+                                    case OperationCode.RESERVED:
+                                        toWorking0.Add(a.RegistrationNumber, infoString);
+                                        break;
+
+                                    case OperationCode.MAKING:
+                                        toWorking1.Add(a.RegistrationNumber, infoString);
+                                        break;
+
+                                    case OperationCode.DELIVERY:
+                                        toWorking2.Add(a.RegistrationNumber, infoString);
+                                        break;
+
+                                    case OperationCode.INTERNATIONAL:
+                                    case OperationCode.DOMESTIC:
+                                    case OperationCode.BOTH:
+                                    case OperationCode.CARGO:
+                                        toWorking3.Add(a.RegistrationNumber, infoString);
+                                        break;
+
+                                    case OperationCode.RETIRE_REGISTERED:
+                                        toWorking7.Add(a.RegistrationNumber, infoString);
+                                        break;
+
+                                }
+                                //整備終了の疑い
+                                if (MAINTE_PLACE.Any(m => status.FromAp.Contains(m)))
+                                {
+                                    mainteEnd.Add(a.RegistrationNumber, currentInfo.ToString());
+                                }
+                            }
+                            else if (previousWorking.HasValue && previousWorking.Value && !status.Working.Value)
+                            {
+                                //稼働から非稼働になった
+                                toNotWorking.Add(a.RegistrationNumber, currentInfo.ToString());
+                                //整備開始の疑い
+                                if (MAINTE_PLACE.Any(m => status.ToAp.Contains(m)))
+                                {
+                                    mainteStart.Add(a.RegistrationNumber, currentInfo.ToString());
+                                }
+                            }
+                            else if (!previousWorking.Value)
+                            {
+                                //非稼働継続中で整備
+                                if (MAINTE_PLACE.Any(m => status.ToAp.Contains(m)))
+                                {
+                                    mainteing.Add(a.RegistrationNumber, currentInfo.ToString());
+                                }
+                            }
+                            Console.WriteLine(currentInfo);
                         }
                         else
                         {
-                            status = new WorkingStatus()
+                            if (status != null)
                             {
-                                RegistrationNumber = a.RegistrationNumber,
-                                Working = false
-                            };
-                            context.WorkingStatus.Add(status);
+                                if (status.Working.HasValue && status.Working.Value)
+                                {
+                                    toNotWorking.Add(a.RegistrationNumber, $"{status.RegistrationNumber}:{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
+                                }
+                                status.Working = false;
+                            }
+                            else
+                            {
+                                status = new WorkingStatus()
+                                {
+                                    RegistrationNumber = a.RegistrationNumber,
+                                    Working = false
+                                };
+                                context.WorkingStatus.Add(status);
+                            }
+                            Console.WriteLine($"{a.RegistrationNumber}:データなし");
                         }
-                        Console.WriteLine($"{a.RegistrationNumber}:データなし");
+                        int interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
+                        Console.WriteLine($"{interval}ミリ秒待機");
+                        Thread.Sleep(interval);
+                        success = true;
                     }
-                    int interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
-                    Console.WriteLine($"{interval}ミリ秒待機");
-                    Thread.Sleep(interval);
+                    catch (Exception ex)
+                    {
+                        failCount++;
+                        exBack = ex;
+                        Thread.Sleep(60 * 1000); //Exceptionになったら1分待機
+                    }
                 }
-                catch(Exception ex)
+                if(failCount > 5)
                 {
-                    Console.WriteLine(ex.ToString());
-                    LineUtil.PushMe($"WorkingCheck異常終了:{DateTime.Now.ToString()}\n",HttpClientManager.GetInstance());
-                    LineUtil.PushMe($"{ex}", HttpClientManager.GetInstance());
+                    Console.WriteLine(exBack?.ToString());
+                    LineUtil.PushMe($"WorkingCheck異常終了:{DateTime.Now}\n", HttpClientManager.GetInstance());
+                    LineUtil.PushMe(exBack?.ToString(), HttpClientManager.GetInstance());
                     return;
                 }
             }
@@ -207,6 +242,24 @@ namespace jafleet
                 allLog.AppendJoin("\n", toNotWorking.Values);
                 allLog.Append("\n");
             }
+            if(mainteStart.Count > 0)
+            {
+                allLog.Append("--------整備入り--------\n");
+                allLog.AppendJoin("\n", mainteStart.Values);
+                allLog.Append("\n");
+            }
+            if (mainteStart.Count > 0)
+            {
+                allLog.Append("--------整備終了--------\n");
+                allLog.AppendJoin("\n", mainteEnd.Values);
+                allLog.Append("\n");
+            }
+            if (mainteing.Count > 0)
+            {
+                allLog.Append("--------整備中--------\n");
+                allLog.AppendJoin("\n", mainteing.Values);
+                allLog.Append("\n");
+            }
 
             var workingCheckLog = new Log
             {
@@ -225,6 +278,9 @@ namespace jafleet
                             $"運用中非稼働が稼働:{toWorking3.Count}件\n" +
                             $"退役未抹消が稼働:{toWorking7.Count}件\n" +
                             $"稼働が非稼働:{toNotWorking.Count}件\n" +
+                            $"整備入り:{mainteStart.Count}件\n" +
+                            $"整備終了:{mainteEnd.Count}件\n" +
+                            $"整備中:{mainteing.Count}件\n" +
                             $@"https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}", HttpClientManager.GetInstance());
         }
     }

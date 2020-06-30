@@ -44,8 +44,8 @@ namespace jafleet.Controllers
                     IEnumerable<Aircraft> targetReg;
                     using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                     {
-                        targetReg = context.Aircraft.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray()
-                                    .OrderBy(r => Guid.NewGuid());
+                        targetReg = context.Aircraft.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray().OrderBy(r => Guid.NewGuid());
+                        //targetReg = context.Aircraft.Where(a => a.RegistrationNumber == "JA737Q").AsNoTracking().ToArray();
                         var check = new WorkingCheck(targetReg,interval ?? 15);
                         _ = check.ExecuteCheckAsync();
 
