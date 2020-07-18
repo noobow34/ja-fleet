@@ -138,8 +138,9 @@ namespace jafleet
 
                                 }
                                 //整備終了の疑い
-                                if (MAINTE_PLACE.Any(m => status.FromAp.Contains(m)))
+                                if (status.Maintenancing.Value)
                                 {
+                                    status.Maintenancing = false;
                                     mainteEnd.Add(a.RegistrationNumber, currentInfo.ToString());
                                 }
                             }
@@ -150,16 +151,13 @@ namespace jafleet
                                 //整備開始の疑い
                                 if (MAINTE_PLACE.Any(m => status.ToAp.Contains(m)))
                                 {
+                                    status.Maintenancing = true;
                                     mainteStart.Add(a.RegistrationNumber, currentInfo.ToString());
                                 }
                             }
-                            else if (!previousWorking.Value)
+                            else if (status.Maintenancing.Value)
                             {
-                                //非稼働継続中で整備
-                                if (MAINTE_PLACE.Any(m => status.ToAp.Contains(m)))
-                                {
-                                    mainteing.Add(a.RegistrationNumber, currentInfo.ToString());
-                                }
+                                mainteing.Add(a.RegistrationNumber, currentInfo.ToString());
                             }
                             Console.WriteLine(currentInfo);
                         }
