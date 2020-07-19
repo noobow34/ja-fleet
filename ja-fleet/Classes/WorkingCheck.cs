@@ -138,7 +138,7 @@ namespace jafleet
 
                                 }
                                 //整備終了の疑い
-                                if (status.Maintenancing.Value)
+                                if (status.Maintenancing.HasValue && status.Maintenancing.Value)
                                 {
                                     status.Maintenancing = false;
                                     mainteEnd.Add(a.RegistrationNumber, currentInfo.ToString());
@@ -155,7 +155,7 @@ namespace jafleet
                                     mainteStart.Add(a.RegistrationNumber, currentInfo.ToString());
                                 }
                             }
-                            else if (status.Maintenancing.Value)
+                            else if (status.Maintenancing.HasValue && status.Maintenancing.Value)
                             {
                                 mainteing.Add(a.RegistrationNumber, currentInfo.ToString());
                             }
