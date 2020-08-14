@@ -44,6 +44,7 @@ namespace jafleet.Manager
             _adminUser = context.AdminUser.AsNoTracking().Select(e => e.UserId).ToList();
             _typeDetailGroup = context.TypeDetailView.AsNoTracking().OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
             _seatConfiguration = context.SeatConfigration.AsNoTracking().OrderBy(p => p.Airline).ThenBy(p => p.Type).ToArray();
+            AppInfo = context.AppInfo.SingleOrDefault();
             ReloadNamedSearchCondition(context);
             var tempop = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
             tempop.ForEach(o => {
@@ -128,6 +129,8 @@ namespace jafleet.Manager
 
         public static SeatConfiguration[] _seatConfiguration = null;
         public static SeatConfiguration[] SeatConfiguration { get { return _seatConfiguration; } }
+        public static AppInfo AppInfo { get; set; }
+        public static DateTime LaunchDate { get; private set; } = DateTime.Now;
 
         public static List<SelectListItem> EXIST_SELECTION = new List<SelectListItem>{ new SelectListItem { Value = "1", Text = "なし" }
                                         , new SelectListItem { Value = "2", Text = "あり" }

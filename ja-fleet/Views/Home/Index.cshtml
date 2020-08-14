@@ -20,7 +20,9 @@
 }
 <h1></h1>
 <img src="~/images/JA-Fleet_1.png" alt="JA-Fleet【本邦航空会社機材一覧サイト】" class="img-responsive" />
-<a asp-area="" asp-controller="Search" asp-action="Index" class="btn btn-primary btn-lg">検索</a><br /><br />
+<a asp-area="" asp-controller="Search" asp-action="Index" class="btn btn-primary btn-lg">検索</a>
+<br />
+<br />
 <div style="width:70%">
     @Html.DropDownList("Airline", new SelectList(MasterManager.AllAirline, "AirlineCode", "AirlineNameJpShort"), new { @class = "form-control", style = "width: 30%;display:inline;" })
     ＆@Html.DropDownList("Type", Enumerable.Empty<SelectListItem>(), new { @class = "form-control", style = "width: 38%;display:inline;" })
@@ -124,18 +126,27 @@
     </div>
 </div>
 <hr />
-    管理者：<a href="https://twitter.com/noobow">ぬーぼー（@@noobow）</a><br />
-    更新情報アカウント：<a href="https://twitter.com/ja_fleet">@@ja_fleet</a><br />
+    管理者：<a href="https://twitter.com/noobow">ぬーぼー（@@noobow）</a>
+<br />
+    更新情報アカウント：<a href="https://twitter.com/ja_fleet">@@ja_fleet</a>
+<br />
 @if (!CookieUtil.IsAdmin(Context) && !Context.Request.Host.ToString().Contains("sakura.ne.jp"))
 {
     <a class="twitter-timeline" href="https://twitter.com/ja_fleet?ref_src=twsrc%5Etfw" width="320px" height="400px">Tweets by ja_fleet</a>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 }
-@if (Context.Request.Host.ToString().Contains("sakura.ne.jp"))
+@if (CookieUtil.IsAdmin(Context))
 {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
-    <input type="button" value="a" id="copy" class="btn btn-danger btn-xs" data-clipboard-target="#admin">
-    <input type="hidden" value="@MasterManager.AdminUser.FirstOrDefault()" id="admin" />
+    <hr />
+    @:ver：<a href="https://github.com/noobow34/ja-fleet/commit/@MasterManager.AppInfo.CommitHash" target="_blank">@MasterManager.AppInfo.CommitHash _ @MasterManager.AppInfo.CommitDate</a><br />
+    @:deploy：@MasterManager.AppInfo.DeployDate<br />
+    @:launch：@MasterManager.LaunchDate
+}
+@if(Context.Request.Host.ToString().Contains("sakura.ne.jp"))
+{
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<input type="button" value="a" id="copy" class="btn btn-danger btn-xs" data-clipboard-target="#admin">
+<input type="hidden" value="@MasterManager.AdminUser.FirstOrDefault()" id="admin" />
 }
 @section ScriptsPartial{
     <script>
