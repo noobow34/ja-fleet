@@ -32,7 +32,7 @@ namespace jafleet.Controllers
 
             model.AirlineList = MasterManager.AllAirline;
             model.TypeList = MasterManager.Type;
-            model.TypeDetailList = _context.TypeDetail.ToArray();
+            model.TypeDetailList = _context.TypeDetail.OrderBy(t => t.TypeDetailName).ToArray();
             model.OperationList = MasterManager.Operation;
             model.WiFiList = MasterManager.Wifi;
             model.NotUpdateDate = true;
