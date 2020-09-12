@@ -165,6 +165,7 @@
             }
         });
         $('#quick').click(function () {
+            $.ajax('/Dummy?quick');
             let dest = '/Aircraft/Airline/' + $('#Airline').val() + '/' + $('#Type').val();
             window.location = dest;
         });
