@@ -297,8 +297,13 @@ namespace jafleet.Controllers
         /// <returns></returns>
         public IActionResult GetSearchCondition(string searchCondition)
         {
+            if (string.IsNullOrEmpty(searchCondition))
+            {
+                return BadRequest();
+            }
+
             SearchCondition sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == searchCondition).SingleOrDefault();
-            return Content(sc.SearchConditionJson, "application/json");
+            return Content(sc?.SearchConditionJson, "application/json");
         }
 
         /// <summary>
