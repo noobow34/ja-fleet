@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
+using jafleet.Manager;
 using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Noobow.Commons.Utils;
 
 namespace jafleet.Controllers
 {
@@ -36,6 +38,13 @@ namespace jafleet.Controllers
             {
                 return NotFound();
             }
+
+            if (jafleet.WorkingCheck.Processing)
+            {
+                LineUtil.PushMe("WorkingCheck 二重起動を検出", HttpClientManager.GetInstance());
+                return Content("Now Processing!!");
+            }
+
             _ = Task.Run(() =>
             {
 

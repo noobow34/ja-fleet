@@ -24,6 +24,7 @@ namespace jafleet
         private readonly static TimeSpan CompareTargetTimeSpan = new TimeSpan(2,0,0,0);
         private static readonly string[] MAINTE_PLACE = new string[] {"TPE","MNL","XSP","QPG","XMN","SIN","TNA","HKG","OKA" };
         public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
+        public static bool Processing { get; set; } = false;
 
         public WorkingCheck(IEnumerable<Aircraft> targetRegistrationNumber,int interval)
         {
@@ -45,6 +46,7 @@ namespace jafleet
 
         public async Task ExecuteCheckAsync()
         {
+            Processing = true;
             var parser = new HtmlParser();
 
             using var context = new jafleetContext(Options.Options);
@@ -199,6 +201,7 @@ namespace jafleet
                     Console.WriteLine(exBack?.ToString());
                     LineUtil.PushMe($"WorkingCheck異常終了:{DateTime.Now}\n", HttpClientManager.GetInstance());
                     LineUtil.PushMe(exBack?.ToString(), HttpClientManager.GetInstance());
+                    Processing = false;
                     return;
                 }
             }
@@ -267,6 +270,8 @@ namespace jafleet
             };
             context.Log.Add(workingCheckLog);
 
+            context.WorkingStatus.RemoveRange(context.WorkingStatus.Where(a => a.OperationCode == OperationCode.RETIRE_UNREGISTERED).AsNoTracking());
+
             context.SaveChanges();
 
             LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
@@ -280,6 +285,8 @@ namespace jafleet
                             $"整備終了:{mainteEnd.Count}件\n" +
                             $"整備中:{mainteing.Count}件\n" +
                             $@"https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}", HttpClientManager.GetInstance());
+
+            Processing = false;
         }
     }
 }
