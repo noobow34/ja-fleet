@@ -270,8 +270,6 @@ namespace jafleet
             };
             context.Log.Add(workingCheckLog);
 
-            context.WorkingStatus.RemoveRange(context.WorkingStatus.Where(a => a.OperationCode == OperationCode.RETIRE_UNREGISTERED).AsNoTracking());
-
             context.SaveChanges();
 
             LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
