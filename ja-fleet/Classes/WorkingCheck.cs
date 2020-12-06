@@ -171,6 +171,10 @@ namespace jafleet
                                 {
                                     toNotWorking.Add(a.RegistrationNumber, $"{status.RegistrationNumber}:{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
                                 }
+                                if (status.Maintenancing.HasValue && status.Maintenancing.Value)
+                                {
+                                    mainteing.Add(a.RegistrationNumber, $"{status.RegistrationNumber}:{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
+                                }
                                 status.Working = false;
                             }
                             else
