@@ -22,7 +22,7 @@ namespace jafleet
         private int _interval;
         private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
         private readonly static TimeSpan CompareTargetTimeSpan = new TimeSpan(2,0,0,0);
-        private static readonly string[] MAINTE_PLACE = new string[] {"TPE","MNL","XSP","QPG","XMN","SIN","TNA","HKG","OKA" };
+        private static readonly string[] MAINTE_PLACE = new string[] {"TPE","MNL","XSP","QPG","XMN","SIN","TNA","HKG","OKA","TNN" };
         public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
         public static bool Processing { get; set; } = false;
 
