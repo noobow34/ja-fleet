@@ -18,7 +18,7 @@ namespace jafleet
 {
     public class WorkingCheck
     {
-        private IEnumerable<Aircraft> _targetRegistrationNumber;
+        private IEnumerable<AircraftView> _targetRegistrationNumber;
         private int _interval;
         private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
         private readonly static TimeSpan CompareTargetTimeSpan = new TimeSpan(2,0,0,0);
@@ -26,7 +26,7 @@ namespace jafleet
         public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
         public static bool Processing { get; set; } = false;
 
-        public WorkingCheck(IEnumerable<Aircraft> targetRegistrationNumber,int interval)
+        public WorkingCheck(IEnumerable<AircraftView> targetRegistrationNumber,int interval)
         {
             _targetRegistrationNumber = targetRegistrationNumber;
             _interval = interval;
@@ -61,7 +61,7 @@ namespace jafleet
             var mainteing = new SortedDictionary<string, string>(); //整備中の疑い
             var allLog = new StringBuilder();
 
-            foreach (Aircraft a in _targetRegistrationNumber)
+            foreach (AircraftView a in _targetRegistrationNumber)
             {
                 bool success = false;
                 int failCount = 0;
@@ -81,7 +81,7 @@ namespace jafleet
                             string timestamp = row[0].GetAttribute("data-timestamp");
                             DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
                             var currentInfo = new StringBuilder();
-                            currentInfo.Append($"{a.RegistrationNumber}:{latestDate:yyyy/MM/dd HH:mm} ");
+                            currentInfo.Append($"{a.RegistrationNumber}(${a.TypeDetailName}):{latestDate:yyyy/MM/dd HH:mm} ");
 
                             //tdの各値
                             var td = row[0].GetElementsByTagName("td");
