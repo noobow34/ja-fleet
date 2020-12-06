@@ -81,7 +81,7 @@ namespace jafleet
                             string timestamp = row[0].GetAttribute("data-timestamp");
                             DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
                             var currentInfo = new StringBuilder();
-                            currentInfo.Append($"{a.RegistrationNumber}(${a.TypeDetailName}):{latestDate:yyyy/MM/dd HH:mm} ");
+                            currentInfo.Append($"{a.RegistrationNumber}({a.TypeDetailName}):{latestDate:yyyy/MM/dd HH:mm} ");
 
                             //tdの各値
                             var td = row[0].GetElementsByTagName("td");
