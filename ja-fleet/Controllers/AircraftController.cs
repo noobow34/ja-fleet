@@ -220,7 +220,7 @@ namespace jafleet.Controllers
             {
                 //ツイート埋め込みを登録している場合
                 ViewBag.TweetUrl = linkUrl;
-                return View("~/Views/AircraftDetail/TweetEmb.cshtml");
+                return View("~/Views/AircraftDetail/Emb.cshtml");
             }
             else
             {
