@@ -157,7 +157,7 @@ namespace jafleet
                                     mainteStart.Add(a.RegistrationNumber, currentInfo.ToString());
                                 }
                             }
-                            else if (status.Maintenancing.HasValue && status.Maintenancing.Value)
+                            else if (status.Maintenancing.HasValue && status.Maintenancing.Value && a.OperationCode != OperationCode.RETIRE_UNREGISTERED)
                             {
                                 mainteing.Add(a.RegistrationNumber, currentInfo.ToString());
                             }
@@ -169,11 +169,11 @@ namespace jafleet
                             {
                                 if (status.Working.HasValue && status.Working.Value)
                                 {
-                                    toNotWorking.Add(a.RegistrationNumber, $"{status.RegistrationNumber}:{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
+                                    toNotWorking.Add(a.RegistrationNumber, $"{status.RegistrationNumber}({a.TypeDetailName}):{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
                                 }
-                                if (status.Maintenancing.HasValue && status.Maintenancing.Value)
+                                if (status.Maintenancing.HasValue && status.Maintenancing.Value && a.OperationCode != OperationCode.RETIRE_UNREGISTERED)
                                 {
-                                    mainteing.Add(a.RegistrationNumber, $"{status.RegistrationNumber}:{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
+                                    mainteing.Add(a.RegistrationNumber, $"{status.RegistrationNumber}({a.TypeDetailName}):{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
                                 }
                                 status.Working = false;
                             }
