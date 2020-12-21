@@ -157,7 +157,7 @@ namespace jafleet
                                     mainteStart.Add(a.RegistrationNumber, currentInfo.ToString());
                                 }
                             }
-                            else if (status.Maintenancing.HasValue && status.Maintenancing.Value && a.OperationCode != OperationCode.RETIRE_UNREGISTERED)
+                            else if (status.Maintenancing.HasValue && status.Maintenancing.Value && a.OperationCode != OperationCode.RETIRE_REGISTERED)
                             {
                                 mainteing.Add(a.RegistrationNumber, currentInfo.ToString());
                             }
@@ -171,7 +171,7 @@ namespace jafleet
                                 {
                                     toNotWorking.Add(a.RegistrationNumber, $"{status.RegistrationNumber}({a.TypeDetailName}):{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
                                 }
-                                if (status.Maintenancing.HasValue && status.Maintenancing.Value && a.OperationCode != OperationCode.RETIRE_UNREGISTERED)
+                                if (status.Maintenancing.HasValue && status.Maintenancing.Value && a.OperationCode != OperationCode.RETIRE_REGISTERED)
                                 {
                                     mainteing.Add(a.RegistrationNumber, $"{status.RegistrationNumber}({a.TypeDetailName}):{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
                                 }
