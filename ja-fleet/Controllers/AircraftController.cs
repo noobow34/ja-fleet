@@ -216,7 +216,12 @@ namespace jafleet.Controllers
 
         private IActionResult ReturnLinkUrl(string linkUrl)
         {
-            if (linkUrl.Contains("twitter.com"))
+            if (linkUrl.StartsWith("<"))
+            {
+                ViewBag.Tag = linkUrl;
+                return View("~/Views/AircraftDetail/Emb.cshtml");
+            }
+            else if (linkUrl.Contains("twitter.com"))
             {
                 //ツイート埋め込みを登録している場合
                 ViewBag.TweetUrl = linkUrl;
