@@ -23,6 +23,7 @@ namespace jafleet
         private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
         private readonly static TimeSpan CompareTargetTimeSpan = new TimeSpan(2,0,0,0);
         private static readonly string[] MAINTE_PLACE = new string[] {"TPE","MNL","XSP","QPG","XMN","SIN","TNA","HKG","OKA","TNN" };
+        private static readonly TimeSpan NOTIFY_TIME = new TimeSpan(06,45,00);
         public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
         public static bool Processing { get; set; } = false;
 
@@ -275,6 +276,12 @@ namespace jafleet
             context.Log.Add(workingCheckLog);
 
             context.SaveChanges();
+            
+            if(DateTime.Now.TimeOfDay < NOTIFY_TIME)
+            {
+                //通知時間まで待機
+                Thread.Sleep(Convert.ToInt32((NOTIFY_TIME - DateTime.Now.TimeOfDay).TotalMilliseconds));
+            }
 
             LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
                             $"予約登録が稼働:{toWorking0.Count}件\n" +
