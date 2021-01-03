@@ -111,9 +111,21 @@ else
         <div class="form-group">
             @Html.LabelFor(model => model.Aircraft.SeatConfig, new { @class = "control-label" })
             @Html.DropDownListFor(model => model.Aircraft.SeatConfig,
-                                                                                                           new SelectList(Model.SeatConfigurationList, "ConfigId","SeatConfigLong"),
+                                                                                                           new SelectList(Model.SeatConfigurationList, "ConfigId", "SeatConfigLong"),
                                                                                                            "　",
                                                                                                            new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.TestRegistration, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Aircraft.TestRegistration, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Aircraft.MaintenanceNotify, new { @class = "control-label" })
+            @Html.EditorFor(model => model.Aircraft.MaintenanceNotify, new { @class = "form-control" })
         </div>
     </div>
     <div class="row">

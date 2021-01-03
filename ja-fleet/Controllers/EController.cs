@@ -105,6 +105,11 @@ namespace jafleet.Controllers
                     }
                     _context.Entry(model.Aircraft).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 }
+                //デリバリーされたらテストレジはクリア
+                if (!OperationCode.PRE_DELIVERY.Contains(model.Aircraft.OperationCode))
+                {
+                    model.Aircraft.TestRegistration = null;
+                }
                 _context.SaveChanges();
             }catch(Exception ex){
                 model.ex = ex;
