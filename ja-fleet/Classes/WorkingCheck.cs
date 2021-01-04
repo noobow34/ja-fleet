@@ -51,6 +51,7 @@ namespace jafleet
             var parser = new HtmlParser();
 
             using var context = new jafleetContext(Options.Options);
+            var toWorkingTest = new SortedDictionary<string, string>();  //テストレジが飛行した（テスト飛行した）
             var toWorking0 = new SortedDictionary<string, string>(); //予約登録かつ非稼働が稼働した（テスト飛行した）
             var toWorking1 = new SortedDictionary<string, string>(); //製造中かつ非稼働が稼働した（テスト飛行継続）
             var toWorking2 = new SortedDictionary<string,string>(); //デリバリーかつ非稼働が稼働した（営業運航投入）
@@ -82,7 +83,16 @@ namespace jafleet
                             string timestamp = row[0].GetAttribute("data-timestamp");
                             DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
                             var currentInfo = new StringBuilder();
-                            currentInfo.Append($"{a.RegistrationNumber}({a.TypeDetailName}):{latestDate:yyyy/MM/dd HH:mm} ");
+                            string notifyMark = string.Empty;
+                            if (!string.IsNullOrEmpty(a.SpecialLivery))
+                            {
+                                notifyMark = "◎";
+                            }
+                            else if (a.MaintenanceNotify.HasValue && a.MaintenanceNotify.Value)
+                            {
+                                notifyMark = "☆";
+                            }
+                            currentInfo.Append($"{a.RegistrationNumber}{notifyMark}({a.TypeDetailName}):{latestDate:yyyy/MM/dd HH:mm} ");
 
                             //tdの各値
                             var td = row[0].GetElementsByTagName("td");
@@ -192,6 +202,31 @@ namespace jafleet
                         int interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
                         Console.WriteLine($"{interval}ミリ秒待機");
                         Thread.Sleep(interval);
+
+                        //テストレジのチェック
+                        if (!string.IsNullOrEmpty(a.TestRegistration))
+                        {
+                            var htmlDocumentTest = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(FR24_DATA_URL + a.RegistrationNumber));
+                            var rowTest = htmlDocument.GetElementsByClassName("data-row");
+                            if (row!.Length != 0)
+                            {
+                                string timestamp = row[0].GetAttribute("data-timestamp");
+                                DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
+                                if(!status.TestFlightDate.HasValue || status.TestFlightDate.Value < latestDate)
+                                {
+                                    //テストフライトしている
+                                    var previousTestFilight = status.TestFlightDate.HasValue ? $" ← {status.TestFlightDate.Value:yyyy/MM/dd HH:mm}" : string.Empty;
+                                    status.TestFlightDate = latestDate;
+                                    toWorkingTest.Add(a.RegistrationNumber, $"{a.RegistrationNumber}({a.TestRegistration}:{a.TypeDetailName}):{latestDate:yyyy/MM/dd HH:mm}{previousTestFilight}");
+                                }
+                            }
+
+                            }
+
+                        interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
+                        Console.WriteLine($"{interval}ミリ秒待機");
+                        Thread.Sleep(interval);
+
                         success = true;
                     }
                     catch (Exception ex)
@@ -212,6 +247,12 @@ namespace jafleet
             }
 
             allLog.Append($"WorkingCheck正常終了:{DateTime.Now}\n");
+            if (toWorkingTest.Count > 0)
+            {
+                allLog.Append("--------テストレジが稼働--------\n");
+                allLog.AppendJoin("\n", toWorkingTest.Values);
+                allLog.Append("\n");
+            }
             if (toWorking0.Count > 0)
             {
                 allLog.Append("--------予約登録が稼働--------\n");
