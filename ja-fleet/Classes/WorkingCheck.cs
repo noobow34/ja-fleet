@@ -220,13 +220,10 @@ namespace jafleet
                                     toWorkingTest.Add(a.RegistrationNumber, $"{a.RegistrationNumber}({a.TestRegistration}:{a.TypeDetailName}):{latestDate:yyyy/MM/dd HH:mm}{previousTestFilight}");
                                 }
                             }
-
-                            }
-
-                        interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
-                        Console.WriteLine($"{interval}ミリ秒待機");
-                        Thread.Sleep(interval);
-
+                            interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
+                            Console.WriteLine($"{interval}ミリ秒待機");
+                            Thread.Sleep(interval);
+                        }
                         success = true;
                     }
                     catch (Exception ex)
