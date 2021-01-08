@@ -330,7 +330,7 @@ namespace jafleet
                             ((toWorking1.Count > 0) ? $"製造中が稼働:{toWorking1.Count}件\n" : string.Empty) +
                             ((toWorking2.Count > 0) ? $"デリバリーが稼働:{toWorking2.Count}件\n" : string.Empty) +
                             ((toWorking3.Count > 0) ? $"運用中非稼働が稼働:{toWorking3.Count}件\n" : string.Empty) +
-                            ((toWorking3.Count > 0) ? $"退役未抹消が稼働:{toWorking7.Count}件\n" : string.Empty) +
+                            ((toWorking7.Count > 0) ? $"退役未抹消が稼働:{toWorking7.Count}件\n" : string.Empty) +
                             ((toNotWorking.Count > 0) ? $"稼働が非稼働:{toNotWorking.Count}件\n" : string.Empty) +
                             ((mainteStart.Count > 0) ? $"整備入り:{mainteStart.Count}件\n" : string.Empty) +
                             ((mainteEnd.Count > 0) ? $"整備終了:{mainteEnd.Count}件\n" : string.Empty) +
