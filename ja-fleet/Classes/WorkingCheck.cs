@@ -9,6 +9,7 @@ using Noobow.Commons.Utils;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -47,6 +48,8 @@ namespace jafleet
 
         public async Task ExecuteCheckAsync()
         {
+            var sw = new Stopwatch();
+            sw.Start();
             Processing = true;
             var parser = new HtmlParser();
 
@@ -206,11 +209,11 @@ namespace jafleet
                         //テストレジのチェック
                         if (!string.IsNullOrEmpty(a.TestRegistration))
                         {
-                            var htmlDocumentTest = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(FR24_DATA_URL + a.RegistrationNumber));
-                            var rowTest = htmlDocument.GetElementsByClassName("data-row");
-                            if (row!.Length != 0)
+                            var htmlDocumentTest = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(FR24_DATA_URL + a.TestRegistration));
+                            var rowTest = htmlDocumentTest.GetElementsByClassName("data-row");
+                            if (rowTest!.Length != 0)
                             {
-                                string timestamp = row[0].GetAttribute("data-timestamp");
+                                string timestamp = rowTest[0].GetAttribute("data-timestamp");
                                 DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
                                 if(!status.TestFlightDate.HasValue || status.TestFlightDate.Value < latestDate)
                                 {
@@ -314,23 +317,24 @@ namespace jafleet
             context.Log.Add(workingCheckLog);
 
             context.SaveChanges();
-            
+            sw.Stop();
             if(DateTime.Now.TimeOfDay < NOTIFY_TIME)
             {
                 //通知時間まで待機
                 Thread.Sleep(Convert.ToInt32((NOTIFY_TIME - DateTime.Now.TimeOfDay).TotalMilliseconds));
             }
 
-            LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
-                            $"予約登録が稼働:{toWorking0.Count}件\n" +
-                            $"製造中が稼働:{toWorking1.Count}件\n" +
-                            $"デリバリーが稼働:{toWorking2.Count}件\n" +
-                            $"運用中非稼働が稼働:{toWorking3.Count}件\n" +
-                            $"退役未抹消が稼働:{toWorking7.Count}件\n" +
-                            $"稼働が非稼働:{toNotWorking.Count}件\n" +
-                            $"整備入り:{mainteStart.Count}件\n" +
-                            $"整備終了:{mainteEnd.Count}件\n" +
-                            $"整備中:{mainteing.Count}件\n" +
+            LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}:{sw.Elapsed.ToString()}\n" +
+                            ((toWorkingTest.Count > 0) ? $"テストレジが稼働:{toWorkingTest.Count}件\n" : string.Empty) +
+                            ((toWorking0.Count > 0) ? $"予約登録が稼働:{toWorking0.Count}件\n" : string.Empty) +
+                            ((toWorking1.Count > 0) ? $"製造中が稼働:{toWorking1.Count}件\n" : string.Empty) +
+                            ((toWorking2.Count > 0) ? $"デリバリーが稼働:{toWorking2.Count}件\n" : string.Empty) +
+                            ((toWorking3.Count > 0) ? $"運用中非稼働が稼働:{toWorking3.Count}件\n" : string.Empty) +
+                            ((toWorking3.Count > 0) ? $"退役未抹消が稼働:{toWorking7.Count}件\n" : string.Empty) +
+                            ((toNotWorking.Count > 0) ? $"稼働が非稼働:{toNotWorking.Count}件\n" : string.Empty) +
+                            ((mainteStart.Count > 0) ? $"整備入り:{mainteStart.Count}件\n" : string.Empty) +
+                            ((mainteEnd.Count > 0) ? $"整備終了:{mainteEnd.Count}件\n" : string.Empty) +
+                            ((mainteEnd.Count > 0) ? $"整備中:{mainteEnd.Count}件\n" : string.Empty) +
                             $@"https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}", HttpClientManager.GetInstance());
 
             Processing = false;
