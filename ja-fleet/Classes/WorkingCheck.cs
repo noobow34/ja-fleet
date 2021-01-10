@@ -48,6 +48,7 @@ namespace jafleet
 
         public async Task ExecuteCheckAsync()
         {
+            int intervalSum = 0;
             var sw = new Stopwatch();
             sw.Start();
             Processing = true;
@@ -203,6 +204,7 @@ namespace jafleet
                             Console.WriteLine($"{a.RegistrationNumber}:データなし");
                         }
                         int interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
+                        intervalSum += interval;
                         Console.WriteLine($"{interval}ミリ秒待機");
                         Thread.Sleep(interval);
 
@@ -224,6 +226,7 @@ namespace jafleet
                                 }
                             }
                             interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
+                            intervalSum += interval;
                             Console.WriteLine($"{interval}ミリ秒待機");
                             Thread.Sleep(interval);
                         }
@@ -324,7 +327,8 @@ namespace jafleet
                 Thread.Sleep(Convert.ToInt32((NOTIFY_TIME - DateTime.Now.TimeOfDay).TotalMilliseconds));
             }
 
-            LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}:{sw.Elapsed.ToString()}\n" +
+            LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
+                            $"処理時間:{sw.Elapsed},待機秒数:{intervalSum/1000.0}" + 
                             ((toWorkingTest.Count > 0) ? $"テストレジが稼働:{toWorkingTest.Count}件\n" : string.Empty) +
                             ((toWorking0.Count > 0) ? $"予約登録が稼働:{toWorking0.Count}件\n" : string.Empty) +
                             ((toWorking1.Count > 0) ? $"製造中が稼働:{toWorking1.Count}件\n" : string.Empty) +
