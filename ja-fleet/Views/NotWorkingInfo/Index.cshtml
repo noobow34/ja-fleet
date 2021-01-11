@@ -75,7 +75,12 @@
                     },
                     { data: 'flightDate', className: 'dt-center' },
                     { data: 'registrationNumber', className: 'dt-center' },
-                    { data: 'typeDetailName', className: 'dt-center' },
+                    {
+                        data: '', className: 'dt-center'
+                        , render: function (data, type, row) {
+                            return row.typeDetailName.replace('(','<br />(');
+                        }
+                    },
                     { data: 'fromAp', className: 'dt-center' },
                     { data: 'toAp', className: 'dt-center' },
                     { data: 'flightNumber', className: 'dt-center' },
