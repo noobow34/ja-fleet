@@ -16,16 +16,7 @@ else
 },
     {data: null
     ,render: function( data, type, row ) {
-                    if(row.typeDetailName != null){
-                        let spTypeDetail = row.typeDetailName.split('(');
-                        if(spTypeDetail.length == 2){
-                            return spTypeDetail[0] + "<br />(" + spTypeDetail[1];
-                        }else{
-                            return row.typeDetailName;
-                        }
-                    }else{
-                        return row.typeName;
-                    }
+                    return row.typeDetailName.replace('(','<br />(');
                 }
         ,className: 'dt-center'
         ,createdCell: function (td, cellData, rowData, row, col) {
