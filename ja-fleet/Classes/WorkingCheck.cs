@@ -321,14 +321,15 @@ namespace jafleet
 
             context.SaveChanges();
             sw.Stop();
+            DateTime endTime = DateTime.Now;
             if(DateTime.Now.TimeOfDay < NOTIFY_TIME)
             {
                 //通知時間まで待機
                 Thread.Sleep(Convert.ToInt32((NOTIFY_TIME - DateTime.Now.TimeOfDay).TotalMilliseconds));
             }
 
-            LineUtil.PushMe($"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
-                            $"処理時間:{sw.Elapsed},待機秒数:{intervalSum/1000.0}" + 
+            LineUtil.PushMe($"WorkingCheck正常終了:{endTime:yyyy/MM/dd HH:mm:ss}\n" +
+                            $"処理時間:{sw.Elapsed},待機秒数:{intervalSum/1000.0}\n" + 
                             ((toWorkingTest.Count > 0) ? $"テストレジが稼働:{toWorkingTest.Count}件\n" : string.Empty) +
                             ((toWorking0.Count > 0) ? $"予約登録が稼働:{toWorking0.Count}件\n" : string.Empty) +
                             ((toWorking1.Count > 0) ? $"製造中が稼働:{toWorking1.Count}件\n" : string.Empty) +
