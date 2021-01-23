@@ -7,21 +7,19 @@
     <script tyep="text/javascript">
     $(function () {
         $('#eButton').click(function () {
-            moveE();
+            location.href = 'https://ja-fleet.noobow.me/E/JA' + $('#reg').val().toUpperCase();
         });
         $('#adButton').click(function () {
-            moveAD();
+            location.href = 'https://ja-fleet.noobow.me/AD/JA' + $('#reg').val().toUpperCase();
+        });
+        $('#logButton').click(function () {
+            location.href = 'https://ja-fleet.noobow.me/log';
         });
     });
-        function moveE() {
-            location.href = 'https://ja-fleet.noobow.me/E/JA' + $('#reg').val().toUpperCase();
-        }
-        function moveAD() {
-            location.href = 'https://ja-fleet.noobow.me/AD/JA' + $('#reg').val().toUpperCase();
-        }
     </script>
 </head>
 <body>
-    <input type="text" id="reg"><input id="eButton" type="button" value="E"><input id="adButton" type="button" value="AD">
+    <input type="text" id="reg"><input id="eButton" type="button" value="E"><input id="adButton" type="button" value="AD"><br />
+    <input id="logButton" type="button" value="log">
 </body>
 </html>
