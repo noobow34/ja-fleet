@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>クイックリンク</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+    <script tyep="text/javascript">
+    $(function () {
+        $('#eButton').click(function () {
+            moveE();
+        });
+        $('#adButton').click(function () {
+            moveAD();
+        });
+    });
+        function moveE() {
+            location.href = 'https://ja-fleet.noobow.me/E/JA' + $('#reg').val().toUpperCase();
+        }
+        function moveAD() {
+            location.href = 'https://ja-fleet.noobow.me/AD/JA' + $('#reg').val().toUpperCase();
+        }
+    </script>
+</head>
+<body>
+    <input type="text" id="reg"><input id="eButton" type="button" value="E"><input id="adButton" type="button" value="AD">
+</body>
+</html>
