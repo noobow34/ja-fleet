@@ -1,6 +1,7 @@
 ﻿using jafleet.Commons.EF;
 using jafleet.Manager;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,6 +9,13 @@ namespace jafleet.Controllers
 {
     public class MasterController : Controller
     {
+        private readonly jafleetContext _context;
+
+        public MasterController(jafleetContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult AirlineType(string id)
         {
             if(id == null)
@@ -36,6 +44,11 @@ namespace jafleet.Controllers
             }
 
             return Json(q.ToArray());
+        }
+
+        public IActionResult GetAllReg()
+        {
+            return Json(_context.Aircraft.AsNoTracking().Select(a => a.RegistrationNumber.Substring(2)).ToArray());
         }
     }
 }
