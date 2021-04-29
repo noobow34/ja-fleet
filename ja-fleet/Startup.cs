@@ -46,19 +46,11 @@ namespace jafleet
 #if DEBUG
             var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
             services.AddDbContextPool<jafleetContext>(
-                options => options.UseLoggerFactory(loggerFactory).EnableSensitiveDataLogging().UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-                    mySqlOptions =>
-                    {
-                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
-                    }
+                options => options.UseLoggerFactory(loggerFactory).EnableSensitiveDataLogging().UseMySql(Configuration.GetConnectionString("DefaultConnection"), new MariaDbServerVersion(new Version(10, 4))
             ));
 #else
             services.AddDbContextPool<jafleetContext>(
-                options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-                    mySqlOptions =>
-                    {
-                        mySqlOptions.ServerVersion(new Version(10, 4), ServerType.MariaDb);
-                    }
+                options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),new MariaDbServerVersion(new Version(10, 4))
             ));
 #endif
             services.Configure<WebEncoderOptions>(options => {
@@ -66,7 +58,6 @@ namespace jafleet
             });
 
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddMvc().AddNewtonsoftJson();
         }
 
