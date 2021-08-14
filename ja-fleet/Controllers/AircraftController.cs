@@ -125,6 +125,11 @@ namespace jafleet.Controllers
 
         public async System.Threading.Tasks.Task<IActionResult> Photo(string id,[FromQuery] bool force)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest();
+            }
+
             var photo = _context.AircraftPhoto.Where(p => p.RegistrationNumber == id).SingleOrDefault();
             Aircraft a = null;
             if(photo != null && DateTime.Now.Date == photo.LastAccess.Date && !force)
