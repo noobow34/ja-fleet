@@ -54,7 +54,12 @@ namespace jafleet.Controllers
                     //取得したjsonから復元
                     var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(sce.SearchConditionJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
                     //modelにコピー
-                    Mapper.Map(scm, model);
+                    var configuration = new MapperConfiguration(cfg =>
+                    {
+                        cfg.CreateMap<SearchConditionInModel, SearchModel>();
+                    });
+                    var mapper = configuration.CreateMapper();
+                    model = mapper.Map<SearchModel>(scm);
                     model.IsDirect = true;
                 }
             }
@@ -213,8 +218,12 @@ namespace jafleet.Controllers
             }
 
             //検索条件保持用クラスにコピー
-            var scm = new SearchConditionInModel();
-            Mapper.Map(model, scm);
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<SearchConditionInModel, SearchModel>();
+            });
+            var mapper = configuration.CreateMapper();
+            var scm = mapper.Map<SearchModel>(model);
 
             //検索条件保持用クラスをJsonにシリアライズ
             string scjson = scm.ToString();
@@ -260,16 +269,6 @@ namespace jafleet.Controllers
                                 sc.FirstSearchDate = sc.LastSearchDate;
                             }
                         }
-
-                        //ログ用にTypeDetailをIDからNAMEに置換
-                        var scm2 = new SearchConditionInModel();
-                        Mapper.Map(model, scm2);
-                        var typeDetails = MasterManager.TypeDetailGroup.Where(td => typeDetail.Contains(td.TypeDetailId)).ToArray();
-                        if (typeDetail.Count() > 0)
-                        {
-                            scm2.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
-                        }
-                        var scjson2 = scm2.ToString();
 
                         //ログ
                         Log log = new Log

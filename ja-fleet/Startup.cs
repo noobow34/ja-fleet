@@ -24,13 +24,6 @@ namespace jafleet
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<SearchModel, SearchConditionInModel>();
-                cfg.CreateMap<SearchConditionInModel, SearchModel>();
-                cfg.CreateMap<Aircraft, AircraftHistory>();
-            });
-
         }
 
         public IConfiguration Configuration { get; }

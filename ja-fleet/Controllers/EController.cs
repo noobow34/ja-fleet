@@ -94,9 +94,14 @@ namespace jafleet.Controllers
                     if (!model.NotUpdateDate)
                     {
                         //Historyにコピー
-                        var ah = new AircraftHistory();
-                        Mapper.Map(origin, ah);
+                        var configuration = new MapperConfiguration(cfg =>
+                        {
+                            cfg.CreateMap<Aircraft, AircraftHistory>();
+                        });
+                        var mapper = configuration.CreateMapper();
+                        var ah = mapper.Map<AircraftHistory>(origin);
                         ah.HistoryRegisterAt = storeDate;
+
                         //HistoryのSEQのMAXを取得
                         var maxseq = _context.AircraftHistory.AsNoTracking().Where(ahh => ahh.RegistrationNumber == ah.RegistrationNumber).GroupBy(ahh => ahh.RegistrationNumber)
                                                 .Select(ahh => new { maxseq = ahh.Max(x => x.Seq) }).FirstOrDefault();
