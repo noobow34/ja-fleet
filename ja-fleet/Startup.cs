@@ -1,15 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using jafleet.Manager;
-using AutoMapper;
-using jafleet.Models;
 using jafleet.Commons.EF;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using Microsoft.Extensions.Logging;
 using System.Text.Encodings.Web;
