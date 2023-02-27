@@ -39,11 +39,6 @@ namespace jafleet.Controllers
         {
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
-            model.AirlineList = MasterManager.AllAirline;
-            model.TypeDetailList = MasterManager.TypeDetailGroup;
-            model.OperationList = MasterManager.Operation;
-            model.WiFiList = MasterManager.Wifi;
-
             if (!string.IsNullOrEmpty(sc))
             {
                 //GETパラメーターで検索条件キーが指定されたら
@@ -63,6 +58,11 @@ namespace jafleet.Controllers
                     model.IsDirect = true;
                 }
             }
+
+            model.AirlineList = MasterManager.AllAirline;
+            model.TypeDetailList = MasterManager.TypeDetailGroup;
+            model.OperationList = MasterManager.Operation;
+            model.WiFiList = MasterManager.Wifi;
 
             return View(model);
         }
@@ -220,10 +220,10 @@ namespace jafleet.Controllers
             //検索条件保持用クラスにコピー
             var configuration = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<SearchConditionInModel, SearchModel>();
+                cfg.CreateMap<SearchModel,SearchConditionInModel>();
             });
             var mapper = configuration.CreateMapper();
-            var scm = mapper.Map<SearchModel>(model);
+            var scm = mapper.Map<SearchConditionInModel>(model);
 
             //検索条件保持用クラスをJsonにシリアライズ
             string scjson = scm.ToString();
