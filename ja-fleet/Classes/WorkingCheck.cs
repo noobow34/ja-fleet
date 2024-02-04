@@ -36,7 +36,7 @@ namespace jafleet
                 Options = new DbContextOptionsBuilder<jafleetContext>();
                 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
                 var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-                Options.UseLoggerFactory(loggerFactory).UseMySql(config.GetConnectionString("DefaultConnection"), new MariaDbServerVersion(new Version(10, 4)));
+                Options.UseLoggerFactory(loggerFactory).UseNpgsql(config.GetConnectionString("DefaultConnection"));
             }
         }
 
