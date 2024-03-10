@@ -17,12 +17,17 @@ namespace jafleet.Controllers
         }
         public IActionResult Index(string id)
         {
-            if(id == null)
+            DateTime searchDate;
+            if(string.IsNullOrEmpty(id))
             {
-                id = DateTime.Now.ToString("yyyyMMdd");
+                searchDate = DateTime.Now.Date;
+            }
+            else
+            {
+                DateTime.TryParseExact(id,"yyyyMMdd", null,System.Globalization.DateTimeStyles.None, out searchDate);
             }
 
-            string log = string.Join("-----------------",_context.Log.Where(l => l.LogDateYyyyMmDd == id && l.LogType == LogType.WORKING_INFO)
+            string log = string.Join("-----------------",_context.Log.Where(l => l.LogDate.Value.Date == searchDate && l.LogType == LogType.WORKING_INFO)
                         .AsNoTracking().OrderByDescending(l => l.LogDate).Select(l => l.LogDetail));
 
             return Content(log);
