@@ -132,7 +132,26 @@ namespace jafleet.Controllers
 
             var photo = _context.AircraftPhoto.Where(p => p.RegistrationNumber == id).SingleOrDefault();
             Aircraft a = null;
-            if(photo != null && DateTime.Now.Date == photo.LastAccess.Date && !force)
+
+            //Jetphotos暫定
+            if (photo?.PhotoUrl != null)
+            {
+                return Redirect($"https://www.jetphotos.com{photo.PhotoUrl}");
+            }
+            else
+            {
+                a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
+                if (string.IsNullOrEmpty(a.LinkUrl))
+                {
+                    return Redirect("/nophoto.html");
+                }
+                else
+                {
+                    return ReturnLinkUrl(a.LinkUrl);
+                }
+            }
+
+            /*if (photo != null && DateTime.Now.Date == photo.LastAccess.Date && !force)
             {
                 if(photo.PhotoUrl != null)
                 {
@@ -216,7 +235,7 @@ namespace jafleet.Controllers
             catch
             {
                 return Redirect($"/failphotoload.html?reg={id}");
-            }
+            }*/
         }
 
         private IActionResult ReturnLinkUrl(string linkUrl)
