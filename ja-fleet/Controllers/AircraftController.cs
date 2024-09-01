@@ -12,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Noobow.Commons.Utils;
 using System;
+using AngleSharp;
+using AngleSharp.XPath;
+using AngleSharp.Html.Dom;
 
 namespace jafleet.Controllers
 {
@@ -132,31 +135,12 @@ namespace jafleet.Controllers
 
             var photo = _context.AircraftPhoto.Where(p => p.RegistrationNumber == id).SingleOrDefault();
             Aircraft a = null;
-
-            //Jetphotos暫定
-            if (photo?.PhotoUrl != null)
-            {
-                return Redirect($"https://www.jetphotos.com{photo.PhotoUrl}");
-            }
-            else
-            {
-                a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
-                if (string.IsNullOrEmpty(a.LinkUrl))
-                {
-                    return Redirect("/nophoto.html");
-                }
-                else
-                {
-                    return ReturnLinkUrl(a.LinkUrl);
-                }
-            }
-
-            /*if (photo != null && DateTime.Now.Date == photo.LastAccess.Date && !force)
+            if (photo != null && DateTime.Now.Date == photo.LastAccess.Date && !force)
             {
                 if(photo.PhotoUrl != null)
                 {
                     //1日以内のキャッシュがあれば、キャッシュから返す
-                    return Redirect($"https://www.jetphotos.com{photo.PhotoUrl}");
+                    return Redirect(photo.PhotoUrl);
                 }
                 else
                 {
@@ -174,35 +158,39 @@ namespace jafleet.Controllers
                 }
             }
 
-            string jetphotoUrl = string.Format("https://www.jetphotos.com/showphotos.php?keywords-type=reg&keywords={0}&search-type=Advanced&keywords-contain=0&sort-order=2", id);
+            string photoUrl = $"https://www.airliners.net/search?keywords={id}&sortBy=datePhotographedYear&sortOrder=desc&perPage=1";
             if(a == null)
             {
                 a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
             }
-            var parser = new HtmlParser();
+            IBrowsingContext bContext = BrowsingContext.New(Configuration.Default.WithDefaultLoader().WithXPath());
             try
             {
-                var htmlDocument = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(jetphotoUrl));
-                var photos = htmlDocument.GetElementsByClassName("result__photoLink");
-                if (photos.Length != 0)
+                var htmlDocument = await bContext.OpenAsync(photoUrl);
+                var photos = htmlDocument.Body.SelectNodes(@"//*[@id='layout-page']/div[2]/section/section/section/div/section[2]/div/div[1]/div/div[1]/div[1]/div[1]/a");
+                if (photos.Count != 0)
                 {
-                    //Jetphotosに写真があった場合
-                    string newestPhotoLink = photos[0].GetAttribute("href");
-                    var photoTag = htmlDocument.GetElementsByClassName("result__photo");
-                    string directUrl = null;
-                    if (photoTag.Length != 0)
+                    //写真があった場合
+                    string photoNumber = photos[0].TextContent.Replace("\n", string.Empty).Replace(" ", string.Empty).Replace("#", string.Empty);
+                    string newestPhotoLink = $"https://www.airliners.net/photo/{photoNumber}";
+  
+                    _ = Task.Run(async () =>
                     {
-                        directUrl = photoTag[0].GetAttribute("src").Replace("//cdn.jetphotos.com/400", string.Empty);
-                    }
-
-                    _ = Task.Run(() =>
-                    {
+                        IBrowsingContext bContext2 = BrowsingContext.New(Configuration.Default.WithDefaultLoader().WithXPath());
+                        var htmlDocument2 = await bContext.OpenAsync(newestPhotoLink);
+                        var photos2 = htmlDocument2.Body.SelectNodes(@"//*[@id='layout-page']/div[5]/section/section/section/div/div/div[1]/div/a[1]/img");
+                        string directUrl = null;
+                        if (photos2.Count != 0)
+                        {
+                            Uri photoUri = new(((IHtmlImageElement)photos2[0]).Source);
+                            directUrl = photoUri.OriginalString.Replace(photoUri.Query,string.Empty);
+                        }
                         //写真をキャッシュに登録する
                         using var serviceScope = _services.CreateScope();
                         using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
                         if (!string.IsNullOrEmpty(a.LinkUrl))
                         {
-                            //Jetphotosから取得できるのにDBにも登録されている場合は、DBから消す
+                            //取得できるのにDBにも登録されている場合は、DBから消す
                             a.LinkUrl = null;
                             a.ActualUpdateTime = DateTime.Now;
                             context.Aircraft.Update(a);
@@ -210,7 +198,7 @@ namespace jafleet.Controllers
                         }
                         StoreAircraftPhoto(context, photo, newestPhotoLink, id, directUrl);
                     });
-                    return Redirect($"https://www.jetphotos.com{newestPhotoLink}");
+                    return Redirect(newestPhotoLink);
                 }
                 else
                 {
@@ -232,10 +220,11 @@ namespace jafleet.Controllers
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                LineUtil.PushMe($"写真処理エラー\n{ex}", HttpClientManager.GetInstance());
                 return Redirect($"/failphotoload.html?reg={id}");
-            }*/
+            }
         }
 
         private IActionResult ReturnLinkUrl(string linkUrl)
