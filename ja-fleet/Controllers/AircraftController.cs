@@ -177,7 +177,7 @@ namespace jafleet.Controllers
                     _ = Task.Run(async () =>
                     {
                         IBrowsingContext bContext2 = BrowsingContext.New(Configuration.Default.WithDefaultLoader().WithXPath());
-                        var htmlDocument2 = await bContext.OpenAsync(newestPhotoLink);
+                        var htmlDocument2 = await bContext2.OpenAsync(newestPhotoLink);
                         var photos2 = htmlDocument2.Body.SelectNodes(@"//*[@id='layout-page']/div[5]/section/section/section/div/div/div[1]/div/a[1]/img");
                         string directUrl = null;
                         if (photos2.Count != 0)
