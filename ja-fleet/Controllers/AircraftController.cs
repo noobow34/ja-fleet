@@ -158,7 +158,7 @@ namespace jafleet.Controllers
                 }
             }
 
-            string photoUrl = $"https://www.airliners.net/search?keywords={id}&sortBy=datePhotographedYear&sortOrder=desc&perPage=1";
+            string photoUrl = $"https://www.airliners.net/search?registrationActual={id}&sortBy=datePhotographedYear&sortOrder=desc&perPage=1";
             if(a == null)
             {
                 a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
