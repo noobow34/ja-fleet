@@ -229,7 +229,11 @@
                         history.pushState(null, null, "/Search?sc=" + d.searchConditionKey);
                     }
                     isDirect = false;
-                    if (d.resultList.length == 0 && !isLoading) {
+                    if (d.errorMessage != null){
+                        $('#modalMessage').text(d.errorMessage);
+                        $("#modalPart").modal();
+                    }
+                    else if (d.resultList.length == 0 && !isLoading) {
                         $('#modalMessage').text("検索結果は0件です。");
                         $("#modalPart").modal();
                     }

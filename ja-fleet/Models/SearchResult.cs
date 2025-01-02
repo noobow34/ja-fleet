@@ -6,5 +6,7 @@ namespace jafleet.Models
     {
         public string SearchConditionKey { get; set; }
         public AircraftView[] ResultList { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 }

@@ -206,7 +206,16 @@ namespace jafleet.Controllers
                 query = query.Where(p => regList.Contains(p.RegistrationNumber));
             }
 
-            searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
+            try
+            {
+                searchResult = query.OrderBy(p => p.DisplayOrder).ToArray();
+            }
+            catch (Npgsql.PostgresException ex)
+            {
+                if (ex.Message.Contains("invalid regular expression")){
+                    return Json(new SearchResult { ErrorMessage = "不正な正規表現が指定されました。正規表現を修正してください。正しい正規表現にもかかわらずこのメッセージが表示される場合は管理人にご連絡ください。" });
+                }
+            }
 
             //履歴から検索している場合、その旨追記
             foreach(var reg in addSpecialLiveryReg)
