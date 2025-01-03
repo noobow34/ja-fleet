@@ -7,6 +7,8 @@ using jafleet.Manager;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Noobow.Commons.Constants;
+using EnumStringValues;
 
 namespace jafleet.Controllers
 {
@@ -29,13 +31,14 @@ namespace jafleet.Controllers
             return View();
         }
 
-        public IActionResult Send(MessageModel model)
+        public async Task<IActionResult> SendAsync(MessageModel model)
         {
-            LineUtil.PushMe("【JA-Fleet from web】\n"+
+            await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), "【JA-Fleet from web】\n" +
                 $"名前：{model.Name}\n" +
                 $"返信先：{model.Replay}\n" +
-                $"{model.Message}",HttpClientManager.GetInstance());
-            Task.Run(() => {
+                $"{model.Message}");
+            _ = Task.Run(() =>
+            {
                 using (var serviceScope = _services.CreateScope())
                 {
                     using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())

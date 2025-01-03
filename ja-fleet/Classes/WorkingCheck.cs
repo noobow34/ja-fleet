@@ -1,10 +1,12 @@
 ﻿using AngleSharp.Html.Parser;
+using EnumStringValues;
 using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Manager;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Noobow.Commons.Constants;
 using Noobow.Commons.Utils;
 using System;
 using System.Collections.Generic;
@@ -236,8 +238,8 @@ namespace jafleet
                 if(failCount > 5)
                 {
                     Console.WriteLine(exBack?.ToString());
-                    LineUtil.PushMe($"WorkingCheck異常終了:{DateTime.Now}\n", HttpClientManager.GetInstance());
-                    LineUtil.PushMe(exBack?.ToString(), HttpClientManager.GetInstance());
+                    await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(),$"WorkingCheck異常終了:{DateTime.Now}\n");
+                    await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), exBack?.ToString());
                     Processing = false;
                     return;
                 }
@@ -322,7 +324,7 @@ namespace jafleet
                 Thread.Sleep(Convert.ToInt32((NOTIFY_TIME - DateTime.Now.TimeOfDay).TotalMilliseconds));
             }
 
-            LineUtil.PushMe($"WorkingCheck正常終了:{endTime:yyyy/MM/dd HH:mm:ss}\n" +
+            await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(),$"WorkingCheck正常終了:{endTime:yyyy/MM/dd HH:mm:ss}\n" +
                             $"処理時間:{sw.Elapsed},待機秒数:{intervalSum/1000.0}\n" + 
                             ((toWorkingTest.Count > 0) ? $"テストレジが稼働:{toWorkingTest.Count}件\n" : string.Empty) +
                             ((toWorking0.Count > 0) ? $"予約登録が稼働:{toWorking0.Count}件\n" : string.Empty) +
@@ -334,7 +336,7 @@ namespace jafleet
                             ((mainteStart.Count > 0) ? $"整備入り:{mainteStart.Count}件\n" : string.Empty) +
                             ((mainteEnd.Count > 0) ? $"整備終了:{mainteEnd.Count}件\n" : string.Empty) +
                             ((mainteing.Count > 0) ? $"整備中:{mainteing.Count}件\n" : string.Empty) +
-                            $@"https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}", HttpClientManager.GetInstance());
+                            $@"https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}");
 
             Processing = false;
         }

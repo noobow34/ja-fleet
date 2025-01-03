@@ -15,6 +15,8 @@ using System;
 using AngleSharp;
 using AngleSharp.XPath;
 using AngleSharp.Html.Dom;
+using Noobow.Commons.Constants;
+using EnumStringValues;
 
 namespace jafleet.Controllers
 {
@@ -194,7 +196,7 @@ namespace jafleet.Controllers
                             a.LinkUrl = null;
                             a.ActualUpdateTime = DateTime.Now;
                             context.Aircraft.Update(a);
-                            LineUtil.PushMe($"{id}のLinkUrlを削除しました", HttpClientManager.GetInstance());
+                            await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(),$"{id}のLinkUrlを削除しました");
                         }
                         StoreAircraftPhoto(context, photo, newestPhotoLink, id, directUrl);
                     });
@@ -222,7 +224,7 @@ namespace jafleet.Controllers
             }
             catch (Exception ex)
             {
-                LineUtil.PushMe($"写真処理エラー\n{ex}", HttpClientManager.GetInstance());
+                await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"写真処理エラー\n{ex}");
                 return Redirect($"/failphotoload.html?reg={id}");
             }
         }

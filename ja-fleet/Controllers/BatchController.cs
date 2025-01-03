@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EnumStringValues;
 using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Manager;
@@ -9,6 +10,7 @@ using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Noobow.Commons.Constants;
 using Noobow.Commons.Utils;
 
 namespace jafleet.Controllers
@@ -32,7 +34,7 @@ namespace jafleet.Controllers
             return Content("OK!");
         }
 
-        public IActionResult WorkingCheck(int? interval)
+        public async Task<IActionResult> WorkingCheckAsync(int? interval)
         {
             if (!CookieUtil.IsAdmin(HttpContext))
             {
@@ -41,7 +43,7 @@ namespace jafleet.Controllers
 
             if (jafleet.WorkingCheck.Processing)
             {
-                LineUtil.PushMe("WorkingCheck 二重起動を検出", HttpClientManager.GetInstance());
+                await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), "WorkingCheck 二重起動を検出");
                 return Content("Now Processing!!");
             }
 

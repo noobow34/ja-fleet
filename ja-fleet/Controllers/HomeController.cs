@@ -9,6 +9,9 @@ using jafleet.Commons.Constants;
 using Microsoft.Extensions.Configuration;
 using Noobow.Commons.Utils;
 using jafleet.Manager;
+using Noobow.Commons.Constants;
+using EnumStringValues;
+using System.Threading.Tasks;
 
 namespace jafleet.Controllers
 {
@@ -30,16 +33,16 @@ namespace jafleet.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> ErrorAsync()
         {
             var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>().Error;
             ErrorViewModel model = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
             model.Ex = ex;
 
-            LineUtil.PushMe($"【エラー発生】\n" +
+            await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"【エラー発生】\n" +
                             $"{ex.ToString().Split(Environment.NewLine)[0]}\n" +
-                            $"{ex.ToString().Split(Environment.NewLine)[1]}",HttpClientManager.GetInstance());
+                            $"{ex.ToString().Split(Environment.NewLine)[1]}");
 
             Log log = new Log
             {

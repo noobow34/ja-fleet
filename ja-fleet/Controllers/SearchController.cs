@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.RegularExpressions;
 using Noobow.Commons.Utils;
+using Noobow.Commons.Constants;
+using EnumStringValues;
 
 namespace jafleet.Controllers
 {
@@ -354,7 +356,7 @@ namespace jafleet.Controllers
 
             _context.SaveChanges();
             MasterManager.ReloadNamedSearchCondition(_context);
-            _ = Task.Run(() => { LineUtil.PushMe($"検索条件が登録されました。\n{searchConditionName}\n{scjson}", HttpClientManager.GetInstance()); });
+            _ = Task.Run(async () => { await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"検索条件が登録されました。\n{searchConditionName}\n{scjson}"); });
 
             return Content(sc.SearchConditionKey);
         }
