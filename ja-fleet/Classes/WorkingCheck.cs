@@ -336,7 +336,7 @@ namespace jafleet
                             ((mainteStart.Count > 0) ? $"整備入り:{mainteStart.Count}件\n" : string.Empty) +
                             ((mainteEnd.Count > 0) ? $"整備終了:{mainteEnd.Count}件\n" : string.Empty) +
                             ((mainteing.Count > 0) ? $"整備中:{mainteing.Count}件\n" : string.Empty) +
-                            $@"https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}");
+                            $@"<https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}|リンク>");
 
             Processing = false;
         }
