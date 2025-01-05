@@ -150,14 +150,6 @@
 }
 @section ScriptsPartial{
     <script>
-        @if (Context.Request.Host.ToString().Contains("sakura.ne.jp"))
-        {
-            @:new ClipboardJS('.btn', {
-                @:text: function () {
-                    @:return document.querySelector('input[type=hidden]').value;
-                @:}
-            @:});
-        }
         $(function () {
             recreateTypeList();
             if (location.hash == "#donate") {
