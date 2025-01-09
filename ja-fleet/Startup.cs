@@ -38,9 +38,8 @@ namespace jafleet
             services.Configure<WebEncoderOptions>(options => {
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
             });
-
+            services.AddControllersWithViews();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddMvc().AddNewtonsoftJson();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,jafleetContext context)
