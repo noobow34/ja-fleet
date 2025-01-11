@@ -55,7 +55,7 @@ namespace jafleet.Controllers
             }
             else
             {
-                var av = _context.AircraftView.Find(id.ToUpper());
+                var av = _context.AircraftView.Where(av => av.RegistrationNumber == id.ToUpper()).SingleOrDefault();
                 model.LinkPage = $"https://ja-fleet.noobow.me/AD/{av.RegistrationNumber}";
             }
             var type = MasterManager.TypeDetailGroup.Where(td => td.TypeDetailId == model.Aircraft.TypeDetailId).FirstOrDefault()?.TypeCode;
