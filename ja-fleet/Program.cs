@@ -26,6 +26,7 @@ builder.Services.Configure<WebEncoderOptions>(options => {
     options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
 });
 builder.Services.AddControllersWithViews();
+builder.Services.AddProgressiveWebApp();
 builder.Services.AddSingleton<IConfiguration>(config);
 
 var app = builder.Build();

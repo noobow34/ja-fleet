@@ -1,0 +1,17 @@
+{
+  "name": "JA-Fleet【本邦航空会社機材一覧サイト】",
+  "short_name": "JA-Fleet",
+  "description": "JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。",
+  "icons": [
+    {
+      "src": "/images/logo192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/logo512.png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone",
+  "start_url": "/"
+}
