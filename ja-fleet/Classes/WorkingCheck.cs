@@ -325,7 +325,7 @@ namespace jafleet
             }
 
             await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(),$"WorkingCheck正常終了:{endTime:yyyy/MM/dd HH:mm:ss}\n" +
-                            $"処理時間:{sw.Elapsed},待機秒数:{intervalSum/1000.0}\n" + 
+                            $"処理時間: {sw.Elapsed},待機秒数: {intervalSum/1000.0}\n" + 
                             ((toWorkingTest.Count > 0) ? $"テストレジが稼働:{toWorkingTest.Count}件\n" : string.Empty) +
                             ((toWorking0.Count > 0) ? $"予約登録が稼働:{toWorking0.Count}件\n" : string.Empty) +
                             ((toWorking1.Count > 0) ? $"製造中が稼働:{toWorking1.Count}件\n" : string.Empty) +
