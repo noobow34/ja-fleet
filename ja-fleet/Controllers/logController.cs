@@ -39,9 +39,8 @@ namespace jafleet.Controllers
             }
             else if(id.Length == 6)
             {
-                DateTime outDate;
                 id = "20" + id;
-                DateTime.TryParseExact(id, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out outDate);
+                DateTime.TryParseExact(id, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime outDate);
                 targetDate = outDate;
             }else if(id == "y")
             {

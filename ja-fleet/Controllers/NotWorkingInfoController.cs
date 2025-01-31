@@ -23,8 +23,7 @@ namespace jafleet.Controllers
 
         public IActionResult GetInfo(string fromDate)
         {
-            DateTime searchFromDate;
-            if(!DateTime.TryParse(fromDate, out searchFromDate))
+            if (!DateTime.TryParse(fromDate, out DateTime searchFromDate))
             {
                 searchFromDate = DateTime.Now.AddDays(-3).Date;
             }
