@@ -9,7 +9,8 @@ namespace jafleet.Manager
     public static class MasterManager
     {
 
-        public static void ReadAll(jafleetContext context) {
+        public static void ReadAll(jafleetContext context)
+        {
             var tempaa = context.Airline.Where(a => !a.Deleted).OrderBy(p => p.DisplayOrder).ToList();
             tempaa.ForEach(aa =>
             {
@@ -44,34 +45,38 @@ namespace jafleet.Manager
             AppInfo = context.AppInfo.SingleOrDefault();
             ReloadNamedSearchCondition(context);
             var tempop = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
-            tempop.ForEach(o => {
-                if(OperationCode.PRE_OPERATION.Contains(o.Key))
+            tempop.ForEach(o =>
+            {
+                if (OperationCode.PRE_OPERATION.Contains(o.Key))
                 {
                     o.OptGroup = "運用前";
-                }else if(OperationCode.IN_OPERATION.Contains(o.Key))
+                }
+                else if (OperationCode.IN_OPERATION.Contains(o.Key))
                 {
                     o.OptGroup = "運用中";
-                }else if(OperationCode.RETIRE.Contains(o.Key))
+                }
+                else if (OperationCode.RETIRE.Contains(o.Key))
                 {
                     o.OptGroup = "退役";
-                }else if (OperationCode.OTHERS.Contains(o.Key))
+                }
+                else if (OperationCode.OTHERS.Contains(o.Key))
                 {
                     o.OptGroup = "その他";
                 }
             });
             _operation = tempop.ToArray();
 
-            var airlineType = context.AircraftView.AsNoTracking().Select(av => new { av.Airline, av.TypeCode}).Distinct().OrderBy(av => av.Airline).ToList();
+            var airlineType = context.AircraftView.AsNoTracking().Select(av => new { av.Airline, av.TypeCode }).Distinct().OrderBy(av => av.Airline).ToList();
             _airlineType = new Dictionary<string, List<Type>>();
             string currentAirline = airlineType[0].Airline;
             var typelist = new List<Type>();
-            foreach(var at in airlineType)
+            foreach (var at in airlineType)
             {
-                if(currentAirline != at.Airline)
+                if (currentAirline != at.Airline)
                 {
                     _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
                     currentAirline = at.Airline;
-                    typelist  = new List<Type>();
+                    typelist = new List<Type>();
                 }
                 typelist.Add(_type.Where(t => t.TypeCode == at.TypeCode).SingleOrDefault());
             }

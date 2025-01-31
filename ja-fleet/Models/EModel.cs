@@ -3,7 +3,7 @@ using jafleet.Commons.EF;
 
 namespace jafleet.Models
 {
-    public class EditModel:BaseModel
+    public class EditModel : BaseModel
     {
         public Aircraft Aircraft { get; set; }
         public bool IsNew { get; set; } = false;

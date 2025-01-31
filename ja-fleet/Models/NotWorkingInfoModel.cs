@@ -1,6 +1,6 @@
 ﻿namespace jafleet.Models
 {
-    public class NotWorkingInfoModel:BaseModel
+    public class NotWorkingInfoModel : BaseModel
     {
     }
 }

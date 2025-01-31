@@ -12,11 +12,13 @@ namespace jafleet.Controllers
 
         public IActionResult Index()
         {
-            try{
+            try
+            {
                 MasterManager.ReadAll(_context);
                 return Content("Success");
             }
-            catch(Exception ex){
+            catch (Exception ex)
+            {
                 return Content(ex.ToString());
             }
         }

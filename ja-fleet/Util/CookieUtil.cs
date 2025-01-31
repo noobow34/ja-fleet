@@ -4,12 +4,13 @@ namespace jafleet.Util
     public static class CookieUtil
     {
         private static readonly string IS_ADMIN_KEY = "IsAdmin";
-        public static bool IsAdmin(HttpContext context){
+        public static bool IsAdmin(HttpContext context)
+        {
             string isAdminString = context.Request.Cookies[IS_ADMIN_KEY];
             bool isAdmin = MasterManager.AdminUser.Contains(isAdminString);
 
             //Cookie延長
-            if(isAdmin)
+            if (isAdmin)
             {
                 var cOptions = new CookieOptions()
                 {

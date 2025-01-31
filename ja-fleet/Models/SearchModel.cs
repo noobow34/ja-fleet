@@ -5,7 +5,7 @@ using jafleet.Manager;
 
 namespace jafleet.Models
 {
-    public class SearchModel:BaseModel
+    public class SearchModel : BaseModel
     {
         [Display(Name = "保存済検索条件")]
         public SearchCondition[] PresetSearchConditionList { get; set; } = MasterManager.NamedSearchCondition;

@@ -26,7 +26,7 @@ namespace jafleet.Controllers
 
         // GET api/values/5
         [HttpGet("{id}/{id2?}")]
-        public ActionResult<string> Get(string id, string id2, [FromQuery]bool includeRetire)
+        public ActionResult<string> Get(string id, string id2, [FromQuery] bool includeRetire)
         {
             List<AircraftView> list;
             String[] ids = id.ToUpper().Split(",");
@@ -36,7 +36,8 @@ namespace jafleet.Controllers
             {
                 q = q.Where(p => p.TypeCode == id2);
             }
-            if (!includeRetire){
+            if (!includeRetire)
+            {
                 q = q.Where(p => p.OperationCode != OperationCode.RETIRE_UNREGISTERED);
             }
             list = q.OrderBy(p => p.DisplayOrder).ToList();

@@ -32,7 +32,7 @@ namespace jafleet.Controllers
         /// <param name="model"></param>
         /// <param name="sc"></param>
         /// <returns></returns>
-        public IActionResult Index(SearchModel model,[FromQuery]string sc)
+        public IActionResult Index(SearchModel model, [FromQuery] string sc)
         {
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
 
@@ -71,9 +71,10 @@ namespace jafleet.Controllers
         /// <returns></returns>
         public IActionResult DoSearch(SearchModel model)
         {
-            if(model.IsLoading && !model.IsDirect){
+            if (model.IsLoading && !model.IsDirect)
+            {
                 //初回ロードかつダイレクト指定ではない場合は空リストを返す
-                return Json(new SearchResult {ResultList = new AircraftView[] { },SearchConditionKey = string.Empty});
+                return Json(new SearchResult { ResultList = new AircraftView[] { }, SearchConditionKey = string.Empty });
             }
             AircraftView[] searchResult = null;
             var regList = new List<string>();
@@ -84,9 +85,11 @@ namespace jafleet.Controllers
             string registrationDate;
             var addSpecialLiveryReg = new List<string>();
 
-            if (model.RegistrationNumber != null){
+            if (model.RegistrationNumber != null)
+            {
                 //|区切りで複数件を処理
-                foreach(string r in model.RegistrationNumber.ToUpper().Split("|")){
+                foreach (string r in model.RegistrationNumber.ToUpper().Split("|"))
+                {
                     string reg = string.Empty;
                     if (!r.StartsWith("JA"))
                     {
@@ -150,7 +153,8 @@ namespace jafleet.Controllers
             else if (model.Remarks == "2")
             {
                 query = query.Where(p => !String.IsNullOrEmpty(p.Remarks));
-            }else if (model.Remarks == "3")
+            }
+            else if (model.Remarks == "3")
             {
                 query = query.Where(p => p.Remarks.Contains(model.RemarksKeyword));
             }
@@ -167,7 +171,7 @@ namespace jafleet.Controllers
             {
                 query = query.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword));
             }
-            else if(model.SpecialLivery == "4")
+            else if (model.SpecialLivery == "4")
             {
                 //あり（履歴含む）
                 //一旦履歴テーブルを検索して、履歴の中の該当のレジを取得
@@ -209,16 +213,18 @@ namespace jafleet.Controllers
             }
             catch (Npgsql.PostgresException ex)
             {
-                if (ex.Message.Contains("invalid regular expression")){
+                if (ex.Message.Contains("invalid regular expression"))
+                {
                     return Json(new SearchResult { ErrorMessage = "不正な正規表現が指定されました。正規表現を修正してください。正しい正規表現にもかかわらずこのメッセージが表示される場合は管理人にご連絡ください。" });
                 }
             }
 
             //履歴から検索している場合、その旨追記
-            foreach(var reg in addSpecialLiveryReg)
+            foreach (var reg in addSpecialLiveryReg)
             {
                 var addTarget = searchResult.Where(s => s.RegistrationNumber == reg).SingleOrDefault();
-                if (addTarget != null) {
+                if (addTarget != null)
+                {
                     addTarget.SpecialLivery += "（履歴あり）";
                 }
             }
@@ -226,7 +232,7 @@ namespace jafleet.Controllers
             //検索条件保持用クラスにコピー
             var configuration = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<SearchModel,SearchConditionInModel>();
+                cfg.CreateMap<SearchModel, SearchConditionInModel>();
             });
             var mapper = configuration.CreateMapper();
             var scm = mapper.Map<SearchConditionInModel>(model);
@@ -288,7 +294,7 @@ namespace jafleet.Controllers
                 context.SaveChanges();
             });
 
-            return Json(new SearchResult { ResultList = searchResult,SearchConditionKey = schash });
+            return Json(new SearchResult { ResultList = searchResult, SearchConditionKey = schash });
         }
 
         /// <summary>
@@ -322,14 +328,14 @@ namespace jafleet.Controllers
             return Content(sc?.SearchConditionName);
         }
 
-        public IActionResult RegisterNamedSearchCondition(SearchConditionInModel scm,string searchConditionName)
+        public IActionResult RegisterNamedSearchCondition(SearchConditionInModel scm, string searchConditionName)
         {
             string scjson = scm.ToString();
             string schash = HashUtil.CalcCRC32(scjson);
 
             var sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == schash).SingleOrDefault();
 
-            if(sc != null)
+            if (sc != null)
             {
                 sc.SearchConditionName = searchConditionName;
             }

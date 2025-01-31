@@ -43,9 +43,12 @@ namespace jafleet.Controllers
             Log log = new()
             {
                 LogDate = DateTime.Now
-                ,LogType = LogType.EXCEPTION
-                ,LogDetail = ex.ToString()
-                ,UserId = CookieUtil.IsAdmin(HttpContext).ToString()
+                ,
+                LogType = LogType.EXCEPTION
+                ,
+                LogDetail = ex.ToString()
+                ,
+                UserId = CookieUtil.IsAdmin(HttpContext).ToString()
             };
             _context.Log.Add(log);
             _context.SaveChanges();

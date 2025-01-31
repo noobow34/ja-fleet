@@ -13,7 +13,7 @@ namespace jafleet.Controllers
 
         public IActionResult AirlineType(string id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return Json(MasterManager.AirlineType.Values);
             }
@@ -25,7 +25,7 @@ namespace jafleet.Controllers
             return Json(MasterManager.NamedSearchCondition);
         }
 
-        public IActionResult SeatConfiguration(string airline,int typeDetailId)
+        public IActionResult SeatConfiguration(string airline, int typeDetailId)
         {
             var type = MasterManager.TypeDetailGroup.Where(td => td.TypeDetailId == typeDetailId).FirstOrDefault()?.TypeCode;
             IEnumerable<SeatConfiguration> q = MasterManager.SeatConfiguration;

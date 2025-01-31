@@ -24,7 +24,7 @@ namespace jafleet.Controllers
             list.Add(latest);
             list.AddRange(history);
 
-            for (int i = 0 ; i <= list.Count - 2 ; i++)
+            for (int i = 0; i <= list.Count - 2; i++)
             {
                 list[i].getDifferenceWith(list[i + 1]);
             }

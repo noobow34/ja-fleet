@@ -1,6 +1,6 @@
 ﻿namespace jafleet.Models
 {
-    public class ErrorViewModel:BaseModel
+    public class ErrorViewModel : BaseModel
     {
         public string RequestId { get; set; }
 

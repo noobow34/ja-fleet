@@ -17,7 +17,8 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 builder.Services.AddDbContextPool<jafleetContext>(
     options => options.UseNpgsql(config.GetConnectionString("DefaultConnection"))
 );
-builder.Services.Configure<WebEncoderOptions>(options => {
+builder.Services.Configure<WebEncoderOptions>(options =>
+{
     options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
 });
 builder.Services.AddControllersWithViews();
@@ -83,7 +84,7 @@ app.MapControllerRoute(
 
 var options = new DbContextOptionsBuilder<jafleetContext>();
 options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
-using jafleetContext context = new (options.Options);
+using jafleetContext context = new(options.Options);
 MasterManager.ReadAll(context);
 
 app.Run();

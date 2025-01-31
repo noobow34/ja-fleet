@@ -34,12 +34,13 @@ namespace jafleet.Controllers
             {
                 targetDate = DateTime.Now.Date;
             }
-            else if(id.Length == 6)
+            else if (id.Length == 6)
             {
                 id = "20" + id;
                 DateTime.TryParseExact(id, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime outDate);
                 targetDate = outDate;
-            }else if(id == "y")
+            }
+            else if (id == "y")
             {
                 targetDate = DateTime.Now.AddDays(-1).Date;
             }
@@ -51,10 +52,10 @@ namespace jafleet.Controllers
             var scCache = GetSearchConditionDisps(logScKeys);
 
             var retsb = new StringBuilder();
-            foreach(var log in logs)
+            foreach (var log in logs)
             {
                 string logDetail;
-                if(log.LogType == LogType.SEARCH)
+                if (log.LogType == LogType.SEARCH)
                 {
                     logDetail = scCache[log.LogDetail] + log.Additional;
                 }

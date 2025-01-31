@@ -16,17 +16,17 @@ namespace jafleet
         private IEnumerable<AircraftView> _targetRegistrationNumber;
         private int _interval;
         private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
-        private readonly static TimeSpan CompareTargetTimeSpan = new(2,0,0,0);
-        private static readonly string[] MAINTE_PLACE = new string[] {"TPE","MNL","XSP","QPG","XMN","SIN","TNA","HKG","OKA","TNN" };
-        private static readonly TimeSpan NOTIFY_TIME = new(06,45,00);
+        private readonly static TimeSpan CompareTargetTimeSpan = new(2, 0, 0, 0);
+        private static readonly string[] MAINTE_PLACE = new string[] { "TPE", "MNL", "XSP", "QPG", "XMN", "SIN", "TNA", "HKG", "OKA", "TNN" };
+        private static readonly TimeSpan NOTIFY_TIME = new(06, 45, 00);
         public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
         public static bool Processing { get; set; } = false;
 
-        public WorkingCheck(IEnumerable<AircraftView> targetRegistrationNumber,int interval)
+        public WorkingCheck(IEnumerable<AircraftView> targetRegistrationNumber, int interval)
         {
             _targetRegistrationNumber = targetRegistrationNumber;
             _interval = interval;
-            if(Options == null)
+            if (Options == null)
             {
                 Options = new DbContextOptionsBuilder<jafleetContext>();
                 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
@@ -47,7 +47,7 @@ namespace jafleet
             var toWorkingTest = new SortedDictionary<string, string>();  //テストレジが飛行した（テスト飛行した）
             var toWorking0 = new SortedDictionary<string, string>(); //予約登録かつ非稼働が稼働した（テスト飛行した）
             var toWorking1 = new SortedDictionary<string, string>(); //製造中かつ非稼働が稼働した（テスト飛行継続）
-            var toWorking2 = new SortedDictionary<string,string>(); //デリバリーかつ非稼働が稼働した（営業運航投入）
+            var toWorking2 = new SortedDictionary<string, string>(); //デリバリーかつ非稼働が稼働した（営業運航投入）
             var toWorking3 = new SortedDictionary<string, string>(); //運用中で非稼働が稼働した
             var toWorking7 = new SortedDictionary<string, string>(); //退役で非稼働が稼働した（退役フェリーされた）
             var toNotWorking = new SortedDictionary<string, string>(); //非稼働になった
@@ -61,7 +61,7 @@ namespace jafleet
                 bool success = false;
                 int failCount = 0;
                 Exception exBack = null;
-                while(!success && failCount <= 5)
+                while (!success && failCount <= 5)
                 {
                     try
                     {
@@ -206,7 +206,7 @@ namespace jafleet
                             {
                                 string timestamp = rowTest[0].GetAttribute("data-timestamp");
                                 DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
-                                if(!status.TestFlightDate.HasValue || status.TestFlightDate.Value < latestDate)
+                                if (!status.TestFlightDate.HasValue || status.TestFlightDate.Value < latestDate)
                                 {
                                     //テストフライトしている
                                     var previousTestFilight = status.TestFlightDate.HasValue ? $" ← {status.TestFlightDate.Value:yyyy/MM/dd HH:mm}" : string.Empty;
@@ -228,10 +228,10 @@ namespace jafleet
                         Thread.Sleep(60 * 1000); //Exceptionになったら1分待機
                     }
                 }
-                if(failCount > 5)
+                if (failCount > 5)
                 {
                     Console.WriteLine(exBack?.ToString());
-                    await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(),$"WorkingCheck異常終了:{DateTime.Now}\n");
+                    await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"WorkingCheck異常終了:{DateTime.Now}\n");
                     await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), exBack?.ToString());
                     Processing = false;
                     return;
@@ -281,7 +281,7 @@ namespace jafleet
                 allLog.AppendJoin("\n", toNotWorking.Values);
                 allLog.Append("\n");
             }
-            if(mainteStart.Count > 0)
+            if (mainteStart.Count > 0)
             {
                 allLog.Append("--------整備入り--------\n");
                 allLog.AppendJoin("\n", mainteStart.Values);
@@ -311,14 +311,14 @@ namespace jafleet
             context.SaveChanges();
             sw.Stop();
             DateTime endTime = DateTime.Now;
-            if(DateTime.Now.TimeOfDay < NOTIFY_TIME)
+            if (DateTime.Now.TimeOfDay < NOTIFY_TIME)
             {
                 //通知時間まで待機
                 Thread.Sleep(Convert.ToInt32((NOTIFY_TIME - DateTime.Now.TimeOfDay).TotalMilliseconds));
             }
 
-            await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(),$"WorkingCheck正常終了:{endTime:yyyy/MM/dd HH:mm:ss}\n" +
-                            $"処理時間: {sw.Elapsed},待機秒数: {intervalSum/1000.0}\n" + 
+            await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"WorkingCheck正常終了:{endTime:yyyy/MM/dd HH:mm:ss}\n" +
+                            $"処理時間: {sw.Elapsed},待機秒数: {intervalSum / 1000.0}\n" +
                             ((toWorkingTest.Count > 0) ? $"テストレジが稼働:{toWorkingTest.Count}件\n" : string.Empty) +
                             ((toWorking0.Count > 0) ? $"予約登録が稼働:{toWorking0.Count}件\n" : string.Empty) +
                             ((toWorking1.Count > 0) ? $"製造中が稼働:{toWorking1.Count}件\n" : string.Empty) +

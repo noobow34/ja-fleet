@@ -13,7 +13,8 @@ namespace jafleet.Controllers
         public IActionResult Index()
         {
             //速くリダイレクトするため、ログの書き込みは非同期
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 using var serviceScope = _services.CreateScope();
                 using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
                 var lineLinklog = new Log

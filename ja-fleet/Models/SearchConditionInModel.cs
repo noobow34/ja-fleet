@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace jafleet.Models
 {
-    public class SearchConditionInModel:BaseModel
+    public class SearchConditionInModel : BaseModel
     {
         [DefaultValue(null)]
         public string RegistrationNumber { get; set; }

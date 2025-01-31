@@ -9,7 +9,8 @@ namespace jafleet.Controllers
             return View();
         }
 
-        public IActionResult Ex(){
+        public IActionResult Ex()
+        {
             throw new System.Exception();
         }
 

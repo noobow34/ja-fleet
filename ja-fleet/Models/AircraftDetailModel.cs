@@ -2,7 +2,7 @@
 
 namespace jafleet.Models
 {
-    public class AircraftDetailModel:BaseModel
+    public class AircraftDetailModel : BaseModel
     {
         public bool NeedBack { get; set; }
         public string Reg { get; set; }

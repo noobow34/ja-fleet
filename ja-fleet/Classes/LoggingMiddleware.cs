@@ -10,7 +10,7 @@ namespace jafleet.Classes
         private readonly RequestDelegate _next;
         private readonly IServiceScopeFactory _services;
 
-        private static string[] EXCLUDE_LIST = new string[] { ".CSS", ".JS", ".PNG",".JPG", ".JPEG", ".GIF", ".ICO" , "/CHECK"};
+        private static string[] EXCLUDE_LIST = new string[] { ".CSS", ".JS", ".PNG", ".JPG", ".JPEG", ".GIF", ".ICO", "/CHECK" };
 
         public LoggingMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
         {

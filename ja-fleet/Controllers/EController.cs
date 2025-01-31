@@ -16,7 +16,7 @@ namespace jafleet.Controllers
 
         public EController(jafleetContext context) => _context = context;
 
-        public IActionResult Index(string id,EditModel model, [FromQuery]bool nohead)
+        public IActionResult Index(string id, EditModel model, [FromQuery] bool nohead)
         {
             if (!CookieUtil.IsAdmin(HttpContext))
             {
@@ -41,7 +41,8 @@ namespace jafleet.Controllers
                 model.Aircraft = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
             }
 
-            if(model.Aircraft == null){
+            if (model.Aircraft == null)
+            {
                 model.Aircraft = new Aircraft();
                 model.Aircraft.RegistrationNumber = id.ToUpper();
                 model.IsNew = true;
@@ -68,12 +69,15 @@ namespace jafleet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Store(EditModel model){
-            try{
+        public IActionResult Store(EditModel model)
+        {
+            try
+            {
                 DateTime storeDate = DateTime.Now;
                 string reg = model.Aircraft.RegistrationNumber;
                 var origin = _context.Aircraft.AsNoTracking().Where(a => a.RegistrationNumber == reg).FirstOrDefault();
-                if (!model.NotUpdateDate || model.IsNew){
+                if (!model.NotUpdateDate || model.IsNew)
+                {
                     model.Aircraft.UpdateTime = storeDate;
                 }
                 model.Aircraft.ActualUpdateTime = storeDate;
@@ -109,7 +113,9 @@ namespace jafleet.Controllers
                     model.Aircraft.TestRegistration = null;
                 }
                 _context.SaveChanges();
-            }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
                 model.ex = ex;
             }
 
