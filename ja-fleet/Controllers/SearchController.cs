@@ -74,12 +74,12 @@ namespace jafleet.Controllers
             if (model.IsLoading && !model.IsDirect)
             {
                 //初回ロードかつダイレクト指定ではない場合は空リストを返す
-                return Json(new SearchResult { ResultList = new AircraftView[] { }, SearchConditionKey = string.Empty });
+                return Json(new SearchResult { ResultList = [], SearchConditionKey = string.Empty });
             }
             AircraftView[] searchResult = null;
             var regList = new List<string>();
             String[] airline;
-            int[] typeDetail = new int[] { };
+            int[] typeDetail = [];
             String[] operation;
             String[] wifi;
             string registrationDate;
