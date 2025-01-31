@@ -78,10 +78,10 @@ namespace jafleet.Controllers
             }
             AircraftView[] searchResult = null;
             var regList = new List<string>();
-            String[] airline;
+            string[] airline;
             int[] typeDetail = [];
-            String[] operation;
-            String[] wifi;
+            string[] operation;
+            string[] wifi;
             string registrationDate;
             var addSpecialLiveryReg = new List<string>();
 

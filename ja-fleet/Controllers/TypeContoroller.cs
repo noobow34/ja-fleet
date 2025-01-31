@@ -28,7 +28,7 @@ namespace jafleet.Controllers
         public ActionResult<string> Get(string id, [FromQuery] bool includeRetire)
         {
             List<AircraftView> list;
-            String[] ids = id.ToUpper().Split(",");
+            string[] ids = id.ToUpper().Split(",");
             var q = _context.AircraftView.AsNoTracking().Where(p => ids.Contains(p.TypeCode));
             if (!includeRetire)
             {

@@ -28,7 +28,7 @@ namespace jafleet.Controllers
         public ActionResult<string> Get(string id)
         {
             List<AircraftView> list;
-            String[] ids = id.ToUpper().Split(",");
+            string[] ids = id.ToUpper().Split(",");
             list = _context.AircraftView.AsNoTracking().Where(p => ids.Contains(p.RegistrationNumber)).OrderBy(p => p.DisplayOrder).ToList();
 
             return Json(list);
