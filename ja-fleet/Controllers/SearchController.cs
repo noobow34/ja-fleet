@@ -286,7 +286,7 @@ namespace jafleet.Controllers
                     LogDate = DateTime.Now,
                     LogType = LogType.SEARCH,
                     LogDetail = schash,
-                    Additional = $"{model.IsDirect},{searchResult.Length.ToString()}",
+                    Additional = $"{model.IsDirect},{searchResult.Length}",
                     UserId = isAdmin.ToString()
                 };
                 context.Log.Add(log);
