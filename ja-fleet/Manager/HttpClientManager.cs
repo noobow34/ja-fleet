@@ -2,11 +2,8 @@
 {
     public static class HttpClientManager
     {
-        private static HttpClient _client = new();
+        private static readonly HttpClient _client = new();
 
-        public static HttpClient GetInstance()
-        {
-            return _client;
-        }
+        public static HttpClient GetInstance() => _client;
     }
 }
