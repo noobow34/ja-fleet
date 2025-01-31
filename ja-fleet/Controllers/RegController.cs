@@ -11,10 +11,7 @@ namespace jafleet.Controllers
 
         private readonly jafleetContext _context;
 
-        public RegController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public RegController(jafleetContext context) => _context = context;
 
         // GET api/values
         [HttpGet]

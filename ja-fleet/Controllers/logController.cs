@@ -15,10 +15,7 @@ namespace jafleet.Controllers
 
         private readonly jafleetContext _context;
 
-        public logController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public logController(jafleetContext context) => _context = context;
 
         public IActionResult Yesterday()
         {

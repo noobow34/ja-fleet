@@ -7,10 +7,7 @@ namespace jafleet.Controllers
     {
         private readonly jafleetContext _context;
 
-        public CheckController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public CheckController(jafleetContext context) => _context = context;
 
         public IActionResult Index()
         {

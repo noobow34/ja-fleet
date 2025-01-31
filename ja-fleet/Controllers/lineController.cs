@@ -8,10 +8,7 @@ namespace jafleet.Controllers
     public class lineController : Controller
     {
         private readonly IServiceScopeFactory _services;
-        public lineController(IServiceScopeFactory serviceScopeFactory)
-        {
-            _services = serviceScopeFactory;
-        }
+        public lineController(IServiceScopeFactory serviceScopeFactory) => _services = serviceScopeFactory;
 
         public IActionResult Index()
         {

@@ -9,10 +9,7 @@ namespace jafleet.Controllers
     {
         private readonly jafleetContext _context;
 
-        public WorkingCheckLogController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public WorkingCheckLogController(jafleetContext context) => _context = context;
         public IActionResult Index(string id)
         {
             DateTime searchDate;

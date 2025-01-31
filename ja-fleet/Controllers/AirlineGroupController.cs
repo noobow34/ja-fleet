@@ -12,10 +12,7 @@ namespace jafleet.Controllers
 
         private readonly jafleetContext _context;
 
-        public AirlineGroupController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public AirlineGroupController(jafleetContext context) => _context = context;
 
         // GET api/values
         [HttpGet]

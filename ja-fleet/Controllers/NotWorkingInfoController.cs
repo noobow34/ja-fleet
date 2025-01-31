@@ -9,10 +9,7 @@ namespace jafleet.Controllers
     {
         private readonly jafleetContext _context;
 
-        public NotWorkingInfoController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public NotWorkingInfoController(jafleetContext context) => _context = context;
 
         public IActionResult Index(NotWorkingInfoModel model)
         {

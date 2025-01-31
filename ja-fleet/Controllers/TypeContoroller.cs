@@ -12,10 +12,7 @@ namespace jafleet.Controllers
 
         private readonly jafleetContext _context;
 
-        public TypeController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public TypeController(jafleetContext context) => _context = context;
 
         // GET api/values
         [HttpGet]

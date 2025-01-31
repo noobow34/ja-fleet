@@ -11,10 +11,7 @@ namespace jafleet.Controllers
 
         private readonly jafleetContext _context;
 
-        public AircraftWithHistoryController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public AircraftWithHistoryController(jafleetContext context) => _context = context;
 
         // GET api/values/5
         [HttpGet("{id}")]

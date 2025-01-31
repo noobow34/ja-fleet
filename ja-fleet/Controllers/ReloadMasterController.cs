@@ -8,10 +8,7 @@ namespace jafleet.Controllers
     {
         private readonly jafleetContext _context;
 
-        public ReloadMasterController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public ReloadMasterController(jafleetContext context) => _context = context;
 
         public IActionResult Index()
         {

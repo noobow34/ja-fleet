@@ -14,10 +14,7 @@ namespace jafleet.Controllers
 
         private readonly jafleetContext _context;
 
-        public EController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public EController(jafleetContext context) => _context = context;
 
         public IActionResult Index(string id,EditModel model, [FromQuery]bool nohead)
         {

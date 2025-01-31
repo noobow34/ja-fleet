@@ -13,10 +13,7 @@ namespace jafleet.Controllers
 
         private readonly IServiceScopeFactory _services;
 
-        public BatchController(IServiceScopeFactory serviceScopeFactory)
-        {
-            _services = serviceScopeFactory;
-        }
+        public BatchController(IServiceScopeFactory serviceScopeFactory) => _services = serviceScopeFactory;
 
         public IActionResult Index()
         {

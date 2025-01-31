@@ -9,10 +9,7 @@ namespace jafleet.Controllers
     {
         private readonly jafleetContext _context;
 
-        public MasterController(jafleetContext context)
-        {
-            _context = context;
-        }
+        public MasterController(jafleetContext context) => _context = context;
 
         public IActionResult AirlineType(string id)
         {
