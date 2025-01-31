@@ -1,13 +1,9 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using jafleet.Commons.EF;
-using System;
 using jafleet.Util;
 using jafleet.Commons.Constants;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 namespace jafleet.Controllers

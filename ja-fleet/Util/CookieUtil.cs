@@ -1,6 +1,4 @@
-﻿using System;
-using jafleet.Manager;
-using Microsoft.AspNetCore.Http;
+﻿using jafleet.Manager;
 namespace jafleet.Util
 {
     public static class CookieUtil

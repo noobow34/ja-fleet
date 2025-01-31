@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using jafleet.Commons.EF;
-using Microsoft.Extensions.Configuration;
 using Noobow.Commons.Utils;
-using jafleet.Manager;
-using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Noobow.Commons.Constants;
 using EnumStringValues;
 

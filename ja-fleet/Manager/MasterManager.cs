@@ -1,8 +1,5 @@
-﻿using System;
-using jafleet.Commons.EF;
+﻿using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
-using System.Linq;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Type = jafleet.Commons.EF.Type;
 using Microsoft.AspNetCore.Mvc.Rendering;

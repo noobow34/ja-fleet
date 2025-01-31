@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EnumStringValues;
-using jafleet.Commons.Constants;
+﻿using EnumStringValues;
 using jafleet.Commons.EF;
-using jafleet.Manager;
 using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Noobow.Commons.Constants;
 using Noobow.Commons.Utils;
 

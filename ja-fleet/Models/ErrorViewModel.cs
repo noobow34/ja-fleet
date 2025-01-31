@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace jafleet.Models
+﻿namespace jafleet.Models
 {
     public class ErrorViewModel:BaseModel
     {

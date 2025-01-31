@@ -1,13 +1,8 @@
 ﻿using jafleet.Classes;
 using jafleet.Commons.EF;
 using jafleet.Manager;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.WebEncoders;
-using System;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 

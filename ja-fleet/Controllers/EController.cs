@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using jafleet.Manager;
 using jafleet.Models;
 using jafleet.Commons.EF;
@@ -8,7 +6,6 @@ using jafleet.Util;
 using jafleet.Commons.Constants;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace jafleet.Controllers
 {

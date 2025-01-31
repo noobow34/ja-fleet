@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using jafleet.Commons.Constants;
+﻿using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using jafleet.Commons.EF;
 using jafleet.Manager;
@@ -9,9 +6,7 @@ using jafleet.Util;
 using jafleet.Commons.Constants;
 using AutoMapper;
 using Newtonsoft.Json;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System.Text.RegularExpressions;
 using Noobow.Commons.Utils;
 using Noobow.Commons.Constants;

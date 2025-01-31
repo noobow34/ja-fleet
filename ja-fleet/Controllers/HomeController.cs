@@ -2,16 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using Microsoft.AspNetCore.Diagnostics;
-using System;
 using jafleet.Util;
 using jafleet.Commons.EF;
 using jafleet.Commons.Constants;
-using Microsoft.Extensions.Configuration;
 using Noobow.Commons.Utils;
-using jafleet.Manager;
 using Noobow.Commons.Constants;
 using EnumStringValues;
-using System.Threading.Tasks;
 
 namespace jafleet.Controllers
 {

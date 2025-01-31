@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace jafleet.Manager
+﻿namespace jafleet.Manager
 {
     public static class HttpClientManager
     {

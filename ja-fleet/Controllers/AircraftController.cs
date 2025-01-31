@@ -1,17 +1,12 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using jafleet.Models;
 using jafleet.Commons.EF;
 using jafleet.Manager;
-using AngleSharp.Html.Parser;
 using jafleet.Util;
 using Microsoft.EntityFrameworkCore;
 using jafleet.Commons.Constants;
-using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 using Noobow.Commons.Utils;
-using System;
 using AngleSharp;
 using AngleSharp.XPath;
 using AngleSharp.Html.Dom;

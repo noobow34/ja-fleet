@@ -2,9 +2,6 @@
 using jafleet.Commons.EF;
 using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading.Tasks;
 
 namespace jafleet.Controllers
 {

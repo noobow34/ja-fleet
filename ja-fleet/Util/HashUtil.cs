@@ -1,5 +1,4 @@
 ﻿using Force.Crc32;
-using System;
 using System.Text;
 
 namespace jafleet.Util

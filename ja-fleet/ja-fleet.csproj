@@ -3,6 +3,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>jafleet</RootNamespace>
     <PrepareForBuildDependsOn>BundleMinify;$(PrepareForBuildDependsOn)</PrepareForBuildDependsOn>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.2.0" />
