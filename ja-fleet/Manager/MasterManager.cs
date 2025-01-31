@@ -67,7 +67,7 @@ namespace jafleet.Manager
             _operation = tempop.ToArray();
 
             var airlineType = context.AircraftView.AsNoTracking().Select(av => new { av.Airline, av.TypeCode }).Distinct().OrderBy(av => av.Airline).ToList();
-            _airlineType = new Dictionary<string, List<Type>>();
+            _airlineType = [];
             string currentAirline = airlineType[0].Airline;
             var typelist = new List<Type>();
             foreach (var at in airlineType)
@@ -76,7 +76,7 @@ namespace jafleet.Manager
                 {
                     _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
                     currentAirline = at.Airline;
-                    typelist = new List<Type>();
+                    typelist = [];
                 }
                 typelist.Add(_type.Where(t => t.TypeCode == at.TypeCode).SingleOrDefault());
             }
@@ -124,7 +124,7 @@ namespace jafleet.Manager
         private static Dictionary<string, List<Type>> _airlineType;
         public static Dictionary<string, List<Type>> AirlineType { get { return _airlineType; } }
 
-        private static Dictionary<string, string> _searchCondition = new();
+        private static Dictionary<string, string> _searchCondition = [];
 
         public static SearchCondition[] _namedSearchCondition = null;
         public static SearchCondition[] NamedSearchCondition { get { return _namedSearchCondition; } }
@@ -134,23 +134,23 @@ namespace jafleet.Manager
         public static AppInfo AppInfo { get; set; }
         public static DateTime LaunchDate { get; private set; } = DateTime.Now;
 
-        public static List<SelectListItem> EXIST_SELECTION = new()
-        { new SelectListItem { Value = "1", Text = "なし" }
+        public static List<SelectListItem> EXIST_SELECTION =
+        [ new SelectListItem { Value = "1", Text = "なし" }
                                         , new SelectListItem { Value = "2", Text = "あり" }
-                                        , new SelectListItem { Value = "3", Text = "キーワード指定" }};
+                                        , new SelectListItem { Value = "3", Text = "キーワード指定" }];
 
-        public static List<SelectListItem> EXIST_SELECTION_HISTORY = new()
-        { new SelectListItem { Value = "1", Text = "なし" }
+        public static List<SelectListItem> EXIST_SELECTION_HISTORY =
+        [ new SelectListItem { Value = "1", Text = "なし" }
                                         , new SelectListItem { Value = "2", Text = "あり" }
                                         , new SelectListItem { Value = "3", Text = "キーワード指定" }
                                         , new SelectListItem { Value = "4", Text = "あり（履歴含む）" }
-                                        , new SelectListItem { Value = "5", Text = "キーワード指定（履歴含む）" }};
+                                        , new SelectListItem { Value = "5", Text = "キーワード指定（履歴含む）" }];
 
-        public static List<SelectListItem> PERIOD_SELECTION = new()
-        {
+        public static List<SelectListItem> PERIOD_SELECTION =
+        [
             new SelectListItem{Value = "0",Text = "と等しい"}
                                        , new SelectListItem { Value = "1", Text = "以前" }
-                                        , new SelectListItem { Value = "2", Text = "以降" }};
+                                        , new SelectListItem { Value = "2", Text = "以降" }];
 
     }
 }
