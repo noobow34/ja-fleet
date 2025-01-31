@@ -17,21 +17,17 @@ namespace jafleet.Controllers
         {
             //速くリダイレクトするため、ログの書き込みは非同期
             Task.Run(() => {
-                using (var serviceScope = _services.CreateScope())
+                using var serviceScope = _services.CreateScope();
+                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                var lineLinklog = new Log
                 {
-                    using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
-                    {
-                        var lineLinklog = new Log
-                        {
-                            LogType = LogType.LINE_LINK,
-                            UserId = CookieUtil.IsAdmin(HttpContext).ToString(),
-                            LogDate = DateTime.Now
-                        };
+                    LogType = LogType.LINE_LINK,
+                    UserId = CookieUtil.IsAdmin(HttpContext).ToString(),
+                    LogDate = DateTime.Now
+                };
 
-                        context.Log.Add(lineLinklog);
-                        context.SaveChanges();
-                    }
-                }
+                context.Log.Add(lineLinklog);
+                context.SaveChanges();
             });
             return Redirect("https://line.me/R/ti/p/BTy1CuBCzF");
         }

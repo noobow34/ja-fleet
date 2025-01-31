@@ -240,56 +240,52 @@ namespace jafleet.Controllers
             //検索結果を速く返すためにログと検索条件のDB書き込みは非同期で行う
             Task.Run(() =>
             {
-                using (var serviceScope = _services.CreateScope())
+                using var serviceScope = _services.CreateScope();
+                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                //検索条件保存
+                var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
+                if (sc == null)
                 {
-                    using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
+                    sc = new SearchCondition
                     {
-                        //検索条件保存
-                        var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
-                        if (sc == null)
-                        {
-                            sc = new SearchCondition
-                            {
-                                SearchConditionKey = schash,
-                                SearchConditionJson = scjson,
-                                SearchCount = 0
-                            };
+                        SearchConditionKey = schash,
+                        SearchConditionJson = scjson,
+                        SearchCount = 0
+                    };
 
-                            //検索回数、検索日時は管理者じゃないい場合のみ
-                            if (!isAdmin)
-                            {
-                                sc.SearchCount = 1;
-                                sc.FirstSearchDate = DateTime.Now;
-                                sc.LastSearchDate = sc.FirstSearchDate;
-                            }
-                            context.SearchCondition.Add(sc);
-                        }
-                        else if (!isAdmin)
-                        {
-                            //管理者じゃない場合のみ検索回数、検索日時を更新
-                            sc.SearchCount++;
-                            sc.LastSearchDate = DateTime.Now;
-                            if (sc.FirstSearchDate == null)
-                            {
-                                //初回の検索が管理者だった場合に初回検索日時がセットされてないのでここでセット
-                                sc.FirstSearchDate = sc.LastSearchDate;
-                            }
-                        }
-
-                        //ログ
-                        Log log = new()
-                        {
-                            LogDate = DateTime.Now,
-                            LogType = LogType.SEARCH,
-                            LogDetail = schash,
-                            Additional = $"{model.IsDirect},{searchResult.Length.ToString()}",
-                            UserId = isAdmin.ToString()
-                        };
-                        context.Log.Add(log);
-
-                        context.SaveChanges();
+                    //検索回数、検索日時は管理者じゃないい場合のみ
+                    if (!isAdmin)
+                    {
+                        sc.SearchCount = 1;
+                        sc.FirstSearchDate = DateTime.Now;
+                        sc.LastSearchDate = sc.FirstSearchDate;
+                    }
+                    context.SearchCondition.Add(sc);
+                }
+                else if (!isAdmin)
+                {
+                    //管理者じゃない場合のみ検索回数、検索日時を更新
+                    sc.SearchCount++;
+                    sc.LastSearchDate = DateTime.Now;
+                    if (sc.FirstSearchDate == null)
+                    {
+                        //初回の検索が管理者だった場合に初回検索日時がセットされてないのでここでセット
+                        sc.FirstSearchDate = sc.LastSearchDate;
                     }
                 }
+
+                //ログ
+                Log log = new()
+                {
+                    LogDate = DateTime.Now,
+                    LogType = LogType.SEARCH,
+                    LogDetail = schash,
+                    Additional = $"{model.IsDirect},{searchResult.Length.ToString()}",
+                    UserId = isAdmin.ToString()
+                };
+                context.Log.Add(log);
+
+                context.SaveChanges();
             });
 
             return Json(new SearchResult { ResultList = searchResult,SearchConditionKey = schash });

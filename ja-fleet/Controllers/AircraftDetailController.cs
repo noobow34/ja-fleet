@@ -51,22 +51,18 @@ namespace jafleet.Controllers
             //ログは非同期で書き込み
             Task.Run(() =>
             {
-                using (var serviceScope = _services.CreateScope())
+                using var serviceScope = _services.CreateScope();
+                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                Log log = new()
                 {
-                    using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
-                    {
-                        Log log = new()
-                        {
-                            LogDate = DateTime.Now,
-                            LogType = LogType.DETAIL,
-                            LogDetail = id,
-                            UserId = isAdmin.ToString(),
-                        };
+                    LogDate = DateTime.Now,
+                    LogType = LogType.DETAIL,
+                    LogDetail = id,
+                    UserId = isAdmin.ToString(),
+                };
 
-                        context.Log.Add(log);
-                        context.SaveChanges();
-                    }
-                }
+                context.Log.Add(log);
+                context.SaveChanges();
             });
 
             return View("~/Views/AircraftDetail/index.cshtml",model);

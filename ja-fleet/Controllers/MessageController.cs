@@ -34,22 +34,18 @@ namespace jafleet.Controllers
                 $"{model.Message}");
             _ = Task.Run(() =>
             {
-                using (var serviceScope = _services.CreateScope())
+                using var serviceScope = _services.CreateScope();
+                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                var m = new Message
                 {
-                    using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
-                    {
-                        var m = new Message
-                        {
-                            Sender = model.Name,
-                            MessageDetail = model.Message,
-                            ReplayTo = model.Replay,
-                            MessageType = Commons.Constants.MessageType.WEB,
-                            RecieveDate = DateTime.Now
-                        };
-                        context.Messages.Add(m);
-                        context.SaveChanges();
-                    }
-                }
+                    Sender = model.Name,
+                    MessageDetail = model.Message,
+                    ReplayTo = model.Replay,
+                    MessageType = Commons.Constants.MessageType.WEB,
+                    RecieveDate = DateTime.Now
+                };
+                context.Messages.Add(m);
+                context.SaveChanges();
             });
             return Content("OK");
         }
