@@ -103,25 +103,25 @@ namespace jafleet.Controllers
 
             //検索
             IQueryable<AircraftView> query = _context.AircraftView.AsNoTracking();
-            if (!String.IsNullOrEmpty(model.Airline))
+            if (!string.IsNullOrEmpty(model.Airline))
             {
                 airline = model.Airline.Split("|");
                 query = query.Where(p => airline.Contains(p.Airline));
             }
 
-            if (!String.IsNullOrEmpty(model.TypeDetail))
+            if (!string.IsNullOrEmpty(model.TypeDetail))
             {
                 typeDetail = model.TypeDetail.Split("|").Select(t => Convert.ToInt32(t)).ToArray();
                 query = query.Where(p => typeDetail.Contains(p.TypeDetailId));
             }
 
-            if (!String.IsNullOrEmpty(model.WiFiCode))
+            if (!string.IsNullOrEmpty(model.WiFiCode))
             {
                 wifi = model.WiFiCode.Split("|");
                 query = query.Where(p => wifi.Contains(p.WifiCode));
             }
 
-            if (!String.IsNullOrEmpty(model.RegistrationDate))
+            if (!string.IsNullOrEmpty(model.RegistrationDate))
             {
                 registrationDate = model.RegistrationDate;
                 if (model.RegistrationSelection == "0")
@@ -140,7 +140,7 @@ namespace jafleet.Controllers
                 }
             }
 
-            if (!String.IsNullOrEmpty(model.OperationCode))
+            if (!string.IsNullOrEmpty(model.OperationCode))
             {
                 operation = model.OperationCode.Split("|");
                 query = query.Where(p => operation.Contains(p.OperationCode));
@@ -148,11 +148,11 @@ namespace jafleet.Controllers
 
             if (model.Remarks == "1")
             {
-                query = query.Where(p => String.IsNullOrEmpty(p.Remarks));
+                query = query.Where(p => string.IsNullOrEmpty(p.Remarks));
             }
             else if (model.Remarks == "2")
             {
-                query = query.Where(p => !String.IsNullOrEmpty(p.Remarks));
+                query = query.Where(p => !string.IsNullOrEmpty(p.Remarks));
             }
             else if (model.Remarks == "3")
             {
@@ -161,11 +161,11 @@ namespace jafleet.Controllers
 
             if (model.SpecialLivery == "1")
             {
-                query = query.Where(p => String.IsNullOrEmpty(p.SpecialLivery));
+                query = query.Where(p => string.IsNullOrEmpty(p.SpecialLivery));
             }
             else if (model.SpecialLivery == "2")
             {
-                query = query.Where(p => !String.IsNullOrEmpty(p.SpecialLivery));
+                query = query.Where(p => !string.IsNullOrEmpty(p.SpecialLivery));
             }
             else if (model.SpecialLivery == "3")
             {
@@ -175,9 +175,9 @@ namespace jafleet.Controllers
             {
                 //あり（履歴含む）
                 //一旦履歴テーブルを検索して、履歴の中の該当のレジを取得
-                addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => !String.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => !string.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
                 regList.AddRange(addSpecialLiveryReg);
-                regList.AddRange(_context.Aircraft.Where(p => !String.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                regList.AddRange(_context.Aircraft.Where(p => !string.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
             }
             else if (model.SpecialLivery == "5")
             {
