@@ -9,7 +9,7 @@ namespace jafleet.Models
         public string RegistrationNumber { get; set; }
 
         [DefaultValue(null)]
-        public string Airline { get; set; } = String.Empty;
+        public string Airline { get; set; } = string.Empty;
 
         [DefaultValue(null)]
         public string OperationCode { get; set; }
@@ -23,14 +23,14 @@ namespace jafleet.Models
         public string RegistrationSelection { get; set; }
 
         [DefaultValue(null)]
-        public string Remarks { get; set; } = String.Empty;
+        public string Remarks { get; set; } = string.Empty;
         [DefaultValue(null)]
-        public string RemarksKeyword { get; set; } = String.Empty;
+        public string RemarksKeyword { get; set; } = string.Empty;
 
         [DefaultValue(null)]
-        public string SpecialLivery { get; set; } = String.Empty;
+        public string SpecialLivery { get; set; } = string.Empty;
         [DefaultValue(null)]
-        public string SpecialLiveryKeyword { get; set; } = String.Empty;
+        public string SpecialLiveryKeyword { get; set; } = string.Empty;
 
         [DefaultValue(null)]
         public string TypeDetail { get; set; }

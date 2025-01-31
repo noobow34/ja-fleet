@@ -14,7 +14,7 @@ namespace jafleet.Models
 
         [Display(Name = "航空会社")]
         public Airline[] AirlineList { get; set; }
-        public string Airline { get; set; } = String.Empty;
+        public string Airline { get; set; } = string.Empty;
 
         [Display(Name = "型式")]
         public TypeDetailView[] TypeDetailList { get; set; }
@@ -34,13 +34,13 @@ namespace jafleet.Models
         public List<SelectListItem> RegistrationSelectionList { get; set; } = MasterManager.PERIOD_SELECTION;
 
         [Display(Name = "備考")]
-        public string Remarks { get; set; } = String.Empty;
-        public string RemarksKeyword { get; set; } = String.Empty;
+        public string Remarks { get; set; } = string.Empty;
+        public string RemarksKeyword { get; set; } = string.Empty;
         public List<SelectListItem> RemarksList { get; set; } = MasterManager.EXIST_SELECTION;
 
         [Display(Name = "特別塗装")]
-        public string SpecialLivery { get; set; } = String.Empty;
-        public string SpecialLiveryKeyword { get; set; } = String.Empty;
+        public string SpecialLivery { get; set; } = string.Empty;
+        public string SpecialLiveryKeyword { get; set; } = string.Empty;
         public List<SelectListItem> SpecialLiveryList { get; set; } = MasterManager.EXIST_SELECTION_HISTORY;
 
         public bool IsLoading { get; set; } = true;
