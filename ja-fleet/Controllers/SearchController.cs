@@ -277,7 +277,7 @@ namespace jafleet.Controllers
                         }
 
                         //ログ
-                        Log log = new Log
+                        Log log = new()
                         {
                             LogDate = DateTime.Now,
                             LogType = LogType.SEARCH,

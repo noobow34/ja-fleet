@@ -16,9 +16,9 @@ namespace jafleet
         private IEnumerable<AircraftView> _targetRegistrationNumber;
         private int _interval;
         private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
-        private readonly static TimeSpan CompareTargetTimeSpan = new TimeSpan(2,0,0,0);
+        private readonly static TimeSpan CompareTargetTimeSpan = new(2,0,0,0);
         private static readonly string[] MAINTE_PLACE = new string[] {"TPE","MNL","XSP","QPG","XMN","SIN","TNA","HKG","OKA","TNN" };
-        private static readonly TimeSpan NOTIFY_TIME = new TimeSpan(06,45,00);
+        private static readonly TimeSpan NOTIFY_TIME = new(06,45,00);
         public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
         public static bool Processing { get; set; } = false;
 

@@ -2,7 +2,7 @@
 {
     public static class HttpClientManager
     {
-        private static HttpClient _client = new HttpClient();
+        private static HttpClient _client = new();
 
         public static HttpClient GetInstance()
         {

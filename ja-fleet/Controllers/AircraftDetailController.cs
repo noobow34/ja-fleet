@@ -55,7 +55,7 @@ namespace jafleet.Controllers
                 {
                     using (var context = serviceScope.ServiceProvider.GetService<jafleetContext>())
                     {
-                        Log log = new Log
+                        Log log = new()
                         {
                             LogDate = DateTime.Now,
                             LogType = LogType.DETAIL,

@@ -32,7 +32,7 @@ namespace jafleet.Controllers
         public async Task<IActionResult> ErrorAsync()
         {
             var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>().Error;
-            ErrorViewModel model = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
+            ErrorViewModel model = new() { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
             model.Ex = ex;
 
@@ -40,7 +40,7 @@ namespace jafleet.Controllers
                             $"{ex.ToString().Split(Environment.NewLine)[0]}\n" +
                             $"{ex.ToString().Split(Environment.NewLine)[1]}");
 
-            Log log = new Log
+            Log log = new()
             {
                 LogDate = DateTime.Now
                 ,LogType = LogType.EXCEPTION
