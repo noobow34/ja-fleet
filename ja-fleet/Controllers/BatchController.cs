@@ -1,4 +1,5 @@
 ﻿using EnumStringValues;
+using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Util;
 using Microsoft.AspNetCore.Mvc;
@@ -43,11 +44,7 @@ namespace jafleet.Controllers
                 using var serviceScope = _services.CreateScope();
                 IEnumerable<AircraftView> targetReg;
                 using jafleetContext? context = serviceScope.ServiceProvider.GetService<jafleetContext>();
-#if DEBUG
-                targetReg = context!.AircraftView.Where(a => a.RegistrationNumber == "JA26LR").AsNoTracking().ToArray();
-#else
-                        targetReg = context!.AircraftView.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray().OrderBy(r => Guid.NewGuid());
-#endif
+                targetReg = context!.AircraftView.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray().OrderBy(r => Guid.NewGuid());
                 var check = new WorkingCheck(targetReg, interval ?? 15);
                 _ = check.ExecuteCheckAsync();
             });
