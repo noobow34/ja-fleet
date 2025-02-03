@@ -5,33 +5,33 @@ namespace jafleet.Models
 {
     public class EditModel : BaseModel
     {
-        public Aircraft Aircraft { get; set; }
+        public Aircraft? Aircraft { get; set; }
         public bool IsNew { get; set; } = false;
 
         //選択用リスト
         [Display(Name = "航空会社")]
-        public Airline[] AirlineList { get; set; }
+        public Airline[]? AirlineList { get; set; }
 
         [Display(Name = "型式")]
-        public jafleet.Commons.EF.Type[] TypeList { get; set; }
+        public jafleet.Commons.EF.Type[]? TypeList { get; set; }
 
         [Display(Name = "詳細型式")]
-        public jafleet.Commons.EF.TypeDetail[] TypeDetailList { get; set; }
+        public jafleet.Commons.EF.TypeDetail[]? TypeDetailList { get; set; }
 
         [Display(Name = "運用状況")]
-        public Code[] OperationList { get; set; }
+        public Code[]? OperationList { get; set; }
 
         [Display(Name = "WiFi")]
-        public Code[] WiFiList { get; set; }
+        public Code[]? WiFiList { get; set; }
 
         [Display(Name = "シートコンフィグ")]
-        public SeatConfiguration[] SeatConfigurationList { get; set; }
+        public SeatConfiguration[]? SeatConfigurationList { get; set; }
 
         [Display(Name = "履歴を作成しない")]
         public bool NotUpdateDate { get; set; } = false;
 
-        public Exception ex { get; set; }
+        public Exception? ex { get; set; }
 
-        public string LinkPage { get; set; }
+        public string? LinkPage { get; set; }
     }
 }

@@ -26,10 +26,10 @@ namespace jafleet.Controllers
 
         // GET api/values/5
         [HttpGet("{id}/{id2?}")]
-        public ActionResult<string> Get(string id, string id2, [FromQuery] bool includeRetire)
+        public ActionResult<string> Get(string? id, string? id2, [FromQuery] bool includeRetire)
         {
             List<AircraftView> list;
-            string[] ids = id.ToUpper().Split(",");
+            string[] ids = id?.ToUpper().Split(",")!;
             id2 = id2?.ToUpper();
             var q = _context.AircraftView.AsNoTracking().Where(p => ids.Contains(p.Airline));
             if (!string.IsNullOrEmpty(id2))

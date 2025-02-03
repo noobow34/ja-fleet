@@ -23,11 +23,11 @@ namespace jafleet.Controllers
                 return NotFound();
             }
 
-            model.AirlineList = MasterManager.AllAirline;
-            model.TypeList = MasterManager.Type;
+            model.AirlineList = MasterManager.AllAirline!;
+            model.TypeList = MasterManager.Type!;
             model.TypeDetailList = _context.TypeDetail.OrderBy(t => t.TypeDetailName).ToArray();
-            model.OperationList = MasterManager.Operation;
-            model.WiFiList = MasterManager.Wifi;
+            model.OperationList = MasterManager.Operation!;
+            model.WiFiList = MasterManager.Wifi!;
             model.NotUpdateDate = true;
             model.NoHead = nohead;
 
@@ -50,20 +50,23 @@ namespace jafleet.Controllers
             }
             else
             {
-                var av = _context.AircraftView.Where(av => av.RegistrationNumber == id.ToUpper()).SingleOrDefault();
-                model.LinkPage = $"https://ja-fleet.noobow.me/AD/{av.RegistrationNumber}";
+                AircraftView? av = _context.AircraftView.Where(av => av.RegistrationNumber == id.ToUpper()).SingleOrDefault();
+                if (av != null) 
+                {
+                    model.LinkPage = $"https://ja-fleet.noobow.me/AD/{av.RegistrationNumber}";
+                }
             }
-            var type = MasterManager.TypeDetailGroup.Where(td => td.TypeDetailId == model.Aircraft.TypeDetailId).FirstOrDefault()?.TypeCode;
-            IEnumerable<SeatConfiguration> q = MasterManager.SeatConfiguration;
+            var type = MasterManager.TypeDetailGroup?.Where(td => td.TypeDetailId == model.Aircraft.TypeDetailId).FirstOrDefault()?.TypeCode;
+            IEnumerable<SeatConfiguration>? q = MasterManager.SeatConfiguration;
             if (!string.IsNullOrEmpty(model.Aircraft.Airline))
             {
-                q = q.Where(sc => sc.Airline == model.Aircraft.Airline);
+                q = q?.Where(sc => sc.Airline == model.Aircraft.Airline);
             }
             if (!string.IsNullOrEmpty(type))
             {
-                q = q.Where(sc => sc.Type == type);
+                q = q?.Where(sc => sc.Type == type);
             }
-            model.SeatConfigurationList = q.ToArray();
+            model.SeatConfigurationList = q?.ToArray();
 
             return View(model);
         }
@@ -74,7 +77,7 @@ namespace jafleet.Controllers
             try
             {
                 DateTime storeDate = DateTime.Now;
-                string reg = model.Aircraft.RegistrationNumber;
+                string? reg = model.Aircraft!.RegistrationNumber;
                 var origin = _context.Aircraft.AsNoTracking().Where(a => a.RegistrationNumber == reg).FirstOrDefault();
                 if (!model.NotUpdateDate || model.IsNew)
                 {
@@ -119,10 +122,10 @@ namespace jafleet.Controllers
                 model.ex = ex;
             }
 
-            model.AirlineList = MasterManager.AllAirline;
-            model.TypeList = MasterManager.Type;
-            model.OperationList = MasterManager.Operation;
-            model.WiFiList = MasterManager.Wifi;
+            model.AirlineList = MasterManager.AllAirline!;
+            model.TypeList = MasterManager.Type!;
+            model.OperationList = MasterManager.Operation!;
+            model.WiFiList = MasterManager.Wifi!;
             string noheadString = string.Empty;
             if (model.NoHead)
             {
@@ -130,7 +133,7 @@ namespace jafleet.Controllers
             }
 
             //写真を更新
-            _ = HttpClientManager.GetInstance().GetStringAsync($"http://localhost:5000/Aircraft/Photo/{model.Aircraft.RegistrationNumber}?force=true");
+            _ = HttpClientManager.GetInstance().GetStringAsync($"http://localhost:5000/Aircraft/Photo/{model.Aircraft!.RegistrationNumber}?force=true");
 
             return Redirect("/E/" + model.Aircraft.RegistrationNumber + noheadString);
         }

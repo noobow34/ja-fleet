@@ -15,9 +15,9 @@ namespace jafleet.Controllers
         {
             if (id == null)
             {
-                return Json(MasterManager.AirlineType.Values);
+                return Json(MasterManager.AirlineType?.Values);
             }
-            return Json(MasterManager.AirlineType[id]);
+            return Json(MasterManager.AirlineType?[id]);
         }
 
         public IActionResult NamedSearchCondition()
@@ -27,23 +27,23 @@ namespace jafleet.Controllers
 
         public IActionResult SeatConfiguration(string airline, int typeDetailId)
         {
-            var type = MasterManager.TypeDetailGroup.Where(td => td.TypeDetailId == typeDetailId).FirstOrDefault()?.TypeCode;
-            IEnumerable<SeatConfiguration> q = MasterManager.SeatConfiguration;
+            var type = MasterManager.TypeDetailGroup?.Where(td => td.TypeDetailId == typeDetailId).FirstOrDefault()?.TypeCode;
+            IEnumerable<SeatConfiguration>? q = MasterManager.SeatConfiguration;
             if (!string.IsNullOrEmpty(airline))
             {
-                q = q.Where(sc => sc.Airline == airline);
+                q = q?.Where(sc => sc.Airline == airline);
             }
             if (!string.IsNullOrEmpty(type))
             {
-                q = q.Where(sc => sc.Type == type);
+                q = q?.Where(sc => sc.Type == type);
             }
 
-            return Json(q.ToArray());
+            return Json(q?.ToArray());
         }
 
         public IActionResult GetAllReg()
         {
-            return Json(_context.Aircraft.AsNoTracking().Select(a => a.RegistrationNumber.Substring(2)).ToArray());
+            return Json(_context.Aircraft.AsNoTracking().Select(a => a.RegistrationNumber!.Substring(2)).ToArray());
         }
     }
 }

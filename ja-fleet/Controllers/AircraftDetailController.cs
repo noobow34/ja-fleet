@@ -52,7 +52,7 @@ namespace jafleet.Controllers
             Task.Run(() =>
             {
                 using var serviceScope = _services.CreateScope();
-                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                using jafleetContext? context = serviceScope.ServiceProvider.GetService<jafleetContext>();
                 Log log = new()
                 {
                     LogDate = DateTime.Now,
@@ -61,7 +61,7 @@ namespace jafleet.Controllers
                     UserId = isAdmin.ToString(),
                 };
 
-                context.Log.Add(log);
+                context!.Log.Add(log);
                 context.SaveChanges();
             });
 

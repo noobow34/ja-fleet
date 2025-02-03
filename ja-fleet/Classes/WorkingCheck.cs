@@ -19,7 +19,7 @@ namespace jafleet
         private readonly static TimeSpan CompareTargetTimeSpan = new(2, 0, 0, 0);
         private static readonly string[] MAINTE_PLACE = ["TPE", "MNL", "XSP", "QPG", "XMN", "SIN", "TNA", "HKG", "OKA", "TNN"];
         private static readonly TimeSpan NOTIFY_TIME = new(06, 45, 00);
-        public static DbContextOptionsBuilder<jafleetContext> Options { get; set; }
+        public static DbContextOptionsBuilder<jafleetContext>? Options { get; set; }
         public static bool Processing { get; set; } = false;
 
         public WorkingCheck(IEnumerable<AircraftView> targetRegistrationNumber, int interval)
@@ -43,7 +43,7 @@ namespace jafleet
             Processing = true;
             var parser = new HtmlParser();
 
-            using var context = new jafleetContext(Options.Options);
+            using var context = new jafleetContext(Options!.Options);
             var toWorkingTest = new SortedDictionary<string, string>();  //テストレジが飛行した（テスト飛行した）
             var toWorking0 = new SortedDictionary<string, string>(); //予約登録かつ非稼働が稼働した（テスト飛行した）
             var toWorking1 = new SortedDictionary<string, string>(); //製造中かつ非稼働が稼働した（テスト飛行継続）
@@ -60,7 +60,7 @@ namespace jafleet
             {
                 bool success = false;
                 int failCount = 0;
-                Exception exBack = null;
+                Exception? exBack = null;
                 while (!success && failCount <= 5)
                 {
                     try
@@ -73,8 +73,8 @@ namespace jafleet
                         {
 
                             //rowがもつ日付
-                            string timestamp = row[0].GetAttribute("data-timestamp");
-                            DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
+                            string? timestamp = row[0].GetAttribute("data-timestamp");
+                            DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp!)).LocalDateTime;
                             var currentInfo = new StringBuilder();
                             string notifyMark = string.Empty;
                             if (!string.IsNullOrEmpty(a.SpecialLivery))
@@ -204,8 +204,8 @@ namespace jafleet
                             var rowTest = htmlDocumentTest.GetElementsByClassName("data-row");
                             if (rowTest!.Length != 0)
                             {
-                                string timestamp = rowTest[0].GetAttribute("data-timestamp");
-                                DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp)).LocalDateTime;
+                                string? timestamp = rowTest[0].GetAttribute("data-timestamp");
+                                DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp!)).LocalDateTime;
                                 if (!status.TestFlightDate.HasValue || status.TestFlightDate.Value < latestDate)
                                 {
                                     //テストフライトしている
@@ -232,7 +232,7 @@ namespace jafleet
                 {
                     Console.WriteLine(exBack?.ToString());
                     await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"WorkingCheck異常終了:{DateTime.Now}\n");
-                    await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), exBack?.ToString());
+                    await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), exBack!.ToString());
                     Processing = false;
                     return;
                 }

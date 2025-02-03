@@ -35,7 +35,7 @@ namespace jafleet.Controllers
             _ = Task.Run(() =>
             {
                 using var serviceScope = _services.CreateScope();
-                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>()!;
                 var m = new Message
                 {
                     Sender = model.Name,

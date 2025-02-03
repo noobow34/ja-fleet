@@ -31,7 +31,7 @@ namespace jafleet.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> ErrorAsync()
         {
-            var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>().Error;
+            var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>()?.Error!;
             ErrorViewModel model = new() { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
             model.IsAdmin = CookieUtil.IsAdmin(HttpContext);
             model.Ex = ex;

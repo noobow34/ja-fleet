@@ -20,8 +20,8 @@ namespace jafleet.Classes
 
         public async Task Invoke(HttpContext httpContext)
         {
-            bool loggingTarget = !EXCLUDE_LIST.Any(s => httpContext.Request.Path.Value.ToUpper().Contains(s));
-            AccessLog log = null;
+            bool loggingTarget = !EXCLUDE_LIST.Any(s => httpContext.Request.Path.Value!.ToUpper().Contains(s));
+            AccessLog? log = null;
             if (loggingTarget)
             {
                 log = new AccessLog
@@ -29,7 +29,7 @@ namespace jafleet.Classes
                     RequestTime = DateTime.Now
                     ,
                     RequestIp = httpContext.Request.Headers?["X-Forwarded-For"].FirstOrDefault() != null ?
-                                httpContext.Request.Headers["X-Forwarded-For"].First().Split(",")[0] : httpContext.Connection.RemoteIpAddress.MapToIPv4().ToString()
+                                httpContext.Request.Headers["X-Forwarded-For"].First()!.Split(",")[0] : httpContext.Connection.RemoteIpAddress!.MapToIPv4().ToString()
                     ,
                     RequestPath = httpContext.Request.Path
                     ,
@@ -37,31 +37,31 @@ namespace jafleet.Classes
                     ,
                     RequestCookies = httpContext.Request.Cookies.Count != 0 ? string.Concat(httpContext.Request.Cookies) : null
                     ,
-                    UserAgent = httpContext.Request.Headers["User-Agent"].FirstOrDefault()
+                    UserAgent = httpContext.Request.Headers?["User-Agent"].FirstOrDefault()
                     ,
-                    Referer = httpContext.Request.Headers["Referer"].FirstOrDefault()
+                    Referer = httpContext.Request.Headers?["Referer"].FirstOrDefault()
                     ,
                     IsAdmin = CookieUtil.IsAdmin(httpContext)
                 };
             }
-            Stopwatch sw = null;
+            Stopwatch? sw = null;
             if (loggingTarget) { sw = new Stopwatch(); sw.Start(); }
             await _next(httpContext);
             if (loggingTarget && log != null)
             {
-                sw.Stop();
+                sw!.Stop();
                 log.ResponseCode = httpContext.Response.StatusCode;
                 _ = Task.Run(() =>
                 {
                     log.ResponseTime = sw.ElapsedMilliseconds;
                     try
                     {
-                        log.RequestHostname = Dns.GetHostEntry(log.RequestIp).HostName;
+                        log.RequestHostname = Dns.GetHostEntry(log.RequestIp!).HostName;
                     }
                     catch { }
                     using var serviceScope = _services.CreateScope();
                     using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
-                    context.AccessLog.Add(log);
+                    context!.AccessLog.Add(log);
                     context.SaveChanges();
                 });
             }

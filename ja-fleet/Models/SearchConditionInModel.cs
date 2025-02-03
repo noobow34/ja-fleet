@@ -6,21 +6,21 @@ namespace jafleet.Models
     public class SearchConditionInModel : BaseModel
     {
         [DefaultValue(null)]
-        public string RegistrationNumber { get; set; }
+        public string? RegistrationNumber { get; set; }
 
         [DefaultValue(null)]
         public string Airline { get; set; } = string.Empty;
 
         [DefaultValue(null)]
-        public string OperationCode { get; set; }
+        public string? OperationCode { get; set; }
 
         [DefaultValue(null)]
-        public string WiFiCode { get; set; }
+        public string? WiFiCode { get; set; }
 
         [DefaultValue(null)]
-        public string RegistrationDate { get; set; }
+        public string? RegistrationDate { get; set; }
         [DefaultValue("0")]
-        public string RegistrationSelection { get; set; }
+        public string? RegistrationSelection { get; set; }
 
         [DefaultValue(null)]
         public string Remarks { get; set; } = string.Empty;
@@ -33,7 +33,7 @@ namespace jafleet.Models
         public string SpecialLiveryKeyword { get; set; } = string.Empty;
 
         [DefaultValue(null)]
-        public string TypeDetail { get; set; }
+        public string? TypeDetail { get; set; }
 
         public override string ToString()
         {

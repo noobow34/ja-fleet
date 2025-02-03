@@ -39,7 +39,7 @@ namespace jafleet.Manager
             _other = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.Other && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
             _type = context.Type.AsNoTracking().OrderBy(p => p.DisplayOrder).ToArray();
             _wifi = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
-            _adminUser = context.AdminUser.AsNoTracking().Select(e => e.UserId).ToList();
+            _adminUser = context.AdminUser.AsNoTracking().Select(e => e.UserId!).ToList();
             _typeDetailGroup = context.TypeDetailView.AsNoTracking().OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
             _seatConfiguration = context.SeatConfigration.AsNoTracking().OrderBy(p => p.Airline).ThenBy(p => p.Type).ToArray();
             AppInfo = context.AppInfo.SingleOrDefault();
@@ -68,17 +68,17 @@ namespace jafleet.Manager
 
             var airlineType = context.AircraftView.AsNoTracking().Select(av => new { av.Airline, av.TypeCode }).Distinct().OrderBy(av => av.Airline).ToList();
             _airlineType = [];
-            string currentAirline = airlineType[0].Airline;
+            string currentAirline = airlineType[0].Airline!;
             var typelist = new List<Type>();
             foreach (var at in airlineType)
             {
                 if (currentAirline != at.Airline)
                 {
-                    _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
-                    currentAirline = at.Airline;
+                    _airlineType.Add(currentAirline!, typelist.OrderBy(t => t.DisplayOrder).ToList());
+                    currentAirline = at.Airline!;
                     typelist = [];
                 }
-                typelist.Add(_type.Where(t => t.TypeCode == at.TypeCode).SingleOrDefault());
+                typelist.Add(_type.Where(t => t.TypeCode == at.TypeCode).SingleOrDefault()!);
             }
             //最後の1つを処理
             _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
@@ -90,48 +90,48 @@ namespace jafleet.Manager
         }
 
 
-        private static Code[] _wifi = null;
-        public static Code[] Wifi { get { return _wifi; } }
+        private static Code[]? _wifi = null;
+        public static Code[]? Wifi { get { return _wifi; } }
 
-        private static Code[] _operation = null;
-        public static Code[] Operation { get { return _operation; } }
+        private static Code[]? _operation = null;
+        public static Code[]? Operation { get { return _operation; } }
 
-        private static Airline[] _allAirline = null;
-        public static Airline[] AllAirline { get { return _allAirline; } }
+        private static Airline[]? _allAirline = null;
+        public static Airline[]? AllAirline { get { return _allAirline; } }
 
 
-        private static Airline[] _ana = null;
-        public static Airline[] ANA { get { return _ana; } }
+        private static Airline[]? _ana = null;
+        public static Airline[]? ANA { get { return _ana; } }
 
-        private static Airline[] _jal = null;
-        public static Airline[] JAL { get { return _jal; } }
+        private static Airline[]? _jal = null;
+        public static Airline[]? JAL { get { return _jal; } }
 
-        private static Airline[] _lcc = null;
-        public static Airline[] LCC { get { return _lcc; } }
+        private static Airline[]? _lcc = null;
+        public static Airline[]? LCC { get { return _lcc; } }
 
-        private static Airline[] _other = null;
-        public static Airline[] Other { get { return _other; } }
+        private static Airline[]? _other = null;
+        public static Airline[]? Other { get { return _other; } }
 
-        private static jafleet.Commons.EF.Type[] _type = null;
-        public static jafleet.Commons.EF.Type[] Type { get { return _type; } }
+        private static jafleet.Commons.EF.Type[]? _type = null;
+        public static jafleet.Commons.EF.Type[]? Type { get { return _type; } }
 
-        public static TypeDetailView[] _typeDetailGroup = null;
-        public static TypeDetailView[] TypeDetailGroup { get { return _typeDetailGroup; } }
+        public static TypeDetailView[]? _typeDetailGroup = null;
+        public static TypeDetailView[]? TypeDetailGroup { get { return _typeDetailGroup; } }
 
-        private static List<string> _adminUser = null;
-        public static List<string> AdminUser { get { return _adminUser; } }
+        private static List<string>? _adminUser = null;
+        public static List<string>? AdminUser { get { return _adminUser; } }
 
-        private static Dictionary<string, List<Type>> _airlineType;
-        public static Dictionary<string, List<Type>> AirlineType { get { return _airlineType; } }
+        private static Dictionary<string, List<Type>>? _airlineType;
+        public static Dictionary<string, List<Type>>? AirlineType { get { return _airlineType; } }
 
         private static Dictionary<string, string> _searchCondition = [];
 
-        public static SearchCondition[] _namedSearchCondition = null;
-        public static SearchCondition[] NamedSearchCondition { get { return _namedSearchCondition; } }
+        public static SearchCondition[]? _namedSearchCondition = null;
+        public static SearchCondition[]? NamedSearchCondition { get { return _namedSearchCondition; } }
 
-        public static SeatConfiguration[] _seatConfiguration = null;
-        public static SeatConfiguration[] SeatConfiguration { get { return _seatConfiguration; } }
-        public static AppInfo AppInfo { get; set; }
+        public static SeatConfiguration[]? _seatConfiguration = null;
+        public static SeatConfiguration[]? SeatConfiguration { get { return _seatConfiguration; } }
+        public static AppInfo? AppInfo { get; set; }
         public static DateTime LaunchDate { get; private set; } = DateTime.Now;
 
         public static List<SelectListItem> EXIST_SELECTION =

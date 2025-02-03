@@ -13,7 +13,7 @@
     <meta name="description" content="@(Model.Title)の詳細情報です。JA-Fleetは日本国内の航空会社が保有する機材（飛行機）を一覧表示や検索できるサイトです。">
     <meta name="referrer" content="no-referrer" />
 
-    @if (Model.OgImageUrl.Contains("jetphotos"))
+    @if (Model.OgImageUrl != null && Model.OgImageUrl!.Contains("airliners.net"))
     {
         <meta name="twitter:card" content="summary_large_image" />
     }
@@ -36,10 +36,10 @@
     <h2>@(Model.Title)</h2>
     if (!Model.NoHead)
     {
-        <input type="button" value="@Model.AirlineGroupNmae" onclick="location.href='/Aircraft/AirlineGroup/@Model.AV.AirlineGroupCode'" id="airline" class="btn btn-primary btn-xs" />
-        <input type="button" value="@Model.AV.AirlineNameJpShort" onclick="location.href='/Aircraft/Airline/@Model.AV.Airline'" id="airline" class="btn btn-primary btn-xs" />
-        <input type="button" value="@Model.AV.TypeName" onclick="location.href='/Aircraft/Type/@Model.AV.TypeCode'" id="type" class="btn btn-primary btn-xs" />
-        <input type="button" value="@(Model.AV.AirlineNameJpShort)・@(Model.AV.TypeName)" onclick="location.href='/Aircraft/Airline/@Model.AV.Airline/@Model.AV.TypeCode'" id="airlinetype" class="btn btn-primary btn-xs" />
+        <input type="button" value="@Model.AirlineGroupNmae" onclick="location.href='/Aircraft/AirlineGroup/@Model.AV?.AirlineGroupCode'" id="airline" class="btn btn-primary btn-xs" />
+        <input type="button" value="@Model.AV?.AirlineNameJpShort" onclick="location.href='/Aircraft/Airline/@Model.AV?.Airline'" id="airline" class="btn btn-primary btn-xs" />
+        <input type="button" value="@Model.AV?.TypeName" onclick="location.href='/Aircraft/Type/@Model.AV?.TypeCode'" id="type" class="btn btn-primary btn-xs" />
+        <input type="button" value="@(Model.AV?.AirlineNameJpShort)・@(Model.AV?.TypeName)" onclick="location.href='/Aircraft/Airline/@Model.AV?.Airline/@Model.AV?.TypeCode'" id="airlinetype" class="btn btn-primary btn-xs" />
     }
 }
 else
@@ -49,7 +49,7 @@ else
 }
 
 @await Html.PartialAsync("/Views/Shared/ResultDatatableHead.cshtml")
-<iframe src="/Aircraft/Photo/@(Model.Title)" id="photofr" width="100%" height="700px"></iframe>
+<iframe src="/Aircraft/Photo/@(Model.Title)" id="photofr" style="width: 100%;height: 700px"></iframe>
 
 @section ScriptsPartial{
     <script>

@@ -45,11 +45,11 @@ namespace jafleet.Controllers
                 targetDate = DateTime.Now.AddDays(-1).Date;
             }
 
-            List<Log> logs = null;
-            logs = _context.Log.AsNoTracking().Where(q => q.LogDate.Value.Date == targetDate.Value.Date && !MasterManager.AdminUser.Contains(q.UserId) && q.LogType != "8").OrderByDescending(q => q.LogId).ToList();
+            List<Log>? logs = null;
+            logs = _context.Log.AsNoTracking().Where(q => q.LogDate == targetDate && !MasterManager.AdminUser!.Contains(q.UserId ?? string.Empty) && q.LogType != "8").OrderByDescending(q => q.LogId).ToList();
 
             var logScKeys = logs.Where(sc => sc.LogType == LogType.SEARCH).Select(scc => scc.LogDetail).Distinct();
-            var scCache = GetSearchConditionDisps(logScKeys);
+            var scCache = GetSearchConditionDisps(logScKeys!);
 
             var retsb = new StringBuilder();
             foreach (var log in logs)
@@ -57,13 +57,13 @@ namespace jafleet.Controllers
                 string logDetail;
                 if (log.LogType == LogType.SEARCH)
                 {
-                    logDetail = scCache[log.LogDetail] + log.Additional;
+                    logDetail = scCache[log.LogDetail!] + log.Additional;
                 }
                 else
                 {
-                    logDetail = log.LogDetail;
+                    logDetail = log.LogDetail!;
                 }
-                retsb.Append($"[{log.LogDate.Value.ToString("HH:mm:ss")}][{LogType.GetLogTypeName(log.LogType)}]{logDetail}{Environment.NewLine}");
+                retsb.Append($"[{log.LogDate?.ToString("HH:mm:ss")}][{LogType.GetLogTypeName(log.LogType!)}]{logDetail}{Environment.NewLine}");
             }
 
             string head = DateTime.Now.ToString($"--HH:mm:ss--{Environment.NewLine}");
@@ -83,9 +83,9 @@ namespace jafleet.Controllers
                 scJson = sc.SearchConditionJson ?? string.Empty;
                 if (!string.IsNullOrEmpty(scJson) && scJson.Contains("TypeDetail"))
                 {
-                    var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(scJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
-                    var typeDetails = MasterManager.TypeDetailGroup.Where(td => scm.TypeDetail.Split("|").ToList().Contains(td.TypeDetailId.ToString()));
-                    scm.TypeDetail = string.Join("|", typeDetails.Select(td => td.TypeDetailName));
+                    var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(scJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate })!;
+                    var typeDetails = MasterManager.TypeDetailGroup?.Where(td => scm!.TypeDetail!.Split("|").ToList().Contains(td.TypeDetailId.ToString()));
+                    scm.TypeDetail = string.Join("|", typeDetails!.Select(td => td.TypeDetailName));
                     searchConditionDisp = scm.ToString();
                 }
                 else

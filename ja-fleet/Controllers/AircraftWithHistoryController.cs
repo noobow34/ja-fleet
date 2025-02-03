@@ -18,7 +18,7 @@ namespace jafleet.Controllers
         public ActionResult<string> Get(string id)
         {
             var list = new List<AircraftViewBase>();
-            var latest = _context.AircraftView.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
+            var latest = _context.AircraftView.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).First();
             var history = _context.AircraftHistoryView.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).OrderByDescending(p => p.Seq).ToList();
 
             list.Add(latest);

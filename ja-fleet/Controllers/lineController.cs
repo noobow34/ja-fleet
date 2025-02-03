@@ -16,7 +16,7 @@ namespace jafleet.Controllers
             Task.Run(() =>
             {
                 using var serviceScope = _services.CreateScope();
-                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                using jafleetContext context = serviceScope.ServiceProvider.GetService<jafleetContext>()!;
                 var lineLinklog = new Log
                 {
                     LogType = LogType.LINE_LINK,

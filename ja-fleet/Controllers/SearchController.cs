@@ -44,7 +44,7 @@ namespace jafleet.Controllers
                 if (sce != null)
                 {
                     //取得したjsonから復元
-                    var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(sce.SearchConditionJson, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
+                    var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(sce.SearchConditionJson!, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
                     //modelにコピー
                     var configuration = new MapperConfiguration(cfg =>
                     {
@@ -56,10 +56,10 @@ namespace jafleet.Controllers
                 }
             }
 
-            model.AirlineList = MasterManager.AllAirline;
-            model.TypeDetailList = MasterManager.TypeDetailGroup;
-            model.OperationList = MasterManager.Operation;
-            model.WiFiList = MasterManager.Wifi;
+            model.AirlineList = MasterManager.AllAirline!;
+            model.TypeDetailList = MasterManager.TypeDetailGroup!;
+            model.OperationList = MasterManager.Operation!;
+            model.WiFiList = MasterManager.Wifi!;
 
             return View(model);
         }
@@ -76,8 +76,8 @@ namespace jafleet.Controllers
                 //初回ロードかつダイレクト指定ではない場合は空リストを返す
                 return Json(new SearchResult { ResultList = [], SearchConditionKey = string.Empty });
             }
-            AircraftView[] searchResult = null;
-            var regList = new List<string>();
+            AircraftView[]? searchResult = null;
+            var regList = new List<string?>();
             string[] airline;
             int[] typeDetail = [];
             string[] operation;
@@ -126,17 +126,17 @@ namespace jafleet.Controllers
                 registrationDate = model.RegistrationDate;
                 if (model.RegistrationSelection == "0")
                 {
-                    query = query.Where(p => p.RegisterDate.StartsWith(registrationDate));
+                    query = query.Where(p => p.RegisterDate!.StartsWith(registrationDate));
                 }
                 else if (model.RegistrationSelection == "1")
                 {
                     registrationDate += "zzz";
-                    query = query.Where(p => p.RegisterDate.CompareTo(registrationDate) <= 0);
+                    query = query.Where(p => p.RegisterDate!.CompareTo(registrationDate) <= 0);
                 }
                 else if (model.RegistrationSelection == "2")
                 {
                     registrationDate += "   ";
-                    query = query.Where(p => p.RegisterDate.CompareTo(registrationDate) >= 0);
+                    query = query.Where(p => p.RegisterDate!.CompareTo(registrationDate) >= 0);
                 }
             }
 
@@ -156,7 +156,7 @@ namespace jafleet.Controllers
             }
             else if (model.Remarks == "3")
             {
-                query = query.Where(p => p.Remarks.Contains(model.RemarksKeyword));
+                query = query.Where(p => p.Remarks!.Contains(model.RemarksKeyword));
             }
 
             if (model.SpecialLivery == "1")
@@ -169,7 +169,7 @@ namespace jafleet.Controllers
             }
             else if (model.SpecialLivery == "3")
             {
-                query = query.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword));
+                query = query.Where(p => p.SpecialLivery!.Contains(model.SpecialLiveryKeyword));
             }
             else if (model.SpecialLivery == "4")
             {
@@ -183,17 +183,17 @@ namespace jafleet.Controllers
             {
                 //キーワード指定（履歴含む）
                 //一旦履歴テーブルを検索して、履歴の中の該当のレジを取得
-                addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => p.SpecialLivery!.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
                 regList.AddRange(addSpecialLiveryReg);
-                regList.AddRange(_context.Aircraft.Where(p => p.SpecialLivery.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                regList.AddRange(_context.Aircraft.Where(p => p.SpecialLivery!.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
             }
 
             if (regList.Count == 1)
             {
-                if (StringUtil.ContainsMetaCharacter(regList[0]))
+                if (StringUtil.ContainsMetaCharacter(regList[0]!))
                 {
                     //メタ文字を含む場合正規表現検索
-                    query = query.Where(a => Regex.IsMatch(a.RegistrationNumber, regList[0]));
+                    query = query.Where(a => Regex.IsMatch(a.RegistrationNumber, regList[0]!));
                 }
                 else
                 {
@@ -222,7 +222,7 @@ namespace jafleet.Controllers
             //履歴から検索している場合、その旨追記
             foreach (var reg in addSpecialLiveryReg)
             {
-                var addTarget = searchResult.Where(s => s.RegistrationNumber == reg).SingleOrDefault();
+                var addTarget = searchResult?.Where(s => s.RegistrationNumber == reg).SingleOrDefault();
                 if (addTarget != null)
                 {
                     addTarget.SpecialLivery += "（履歴あり）";
@@ -247,7 +247,7 @@ namespace jafleet.Controllers
             Task.Run(() =>
             {
                 using var serviceScope = _services.CreateScope();
-                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>()!;
                 //検索条件保存
                 var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
                 if (sc == null)
@@ -286,7 +286,7 @@ namespace jafleet.Controllers
                     LogDate = DateTime.Now,
                     LogType = LogType.SEARCH,
                     LogDetail = schash,
-                    Additional = $"{model.IsDirect},{searchResult.Length}",
+                    Additional = $"{model.IsDirect},{searchResult?.Length}",
                     UserId = isAdmin.ToString()
                 };
                 context.Log.Add(log);
@@ -294,7 +294,7 @@ namespace jafleet.Controllers
                 context.SaveChanges();
             });
 
-            return Json(new SearchResult { ResultList = searchResult, SearchConditionKey = schash });
+            return Json(new SearchResult { ResultList = searchResult!, SearchConditionKey = schash });
         }
 
         /// <summary>
@@ -309,8 +309,8 @@ namespace jafleet.Controllers
                 return BadRequest();
             }
 
-            SearchCondition sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == searchCondition).SingleOrDefault();
-            return Content(sc?.SearchConditionJson, "application/json");
+            SearchCondition sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == searchCondition).Single();
+            return Content(sc.SearchConditionJson!, "application/json");
         }
 
         /// <summary>
@@ -325,7 +325,7 @@ namespace jafleet.Controllers
 
             var sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == schash).AsNoTracking().SingleOrDefault();
 
-            return Content(sc?.SearchConditionName);
+            return Content(sc?.SearchConditionName!);
         }
 
         public IActionResult RegisterNamedSearchCondition(SearchConditionInModel scm, string searchConditionName)

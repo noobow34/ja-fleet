@@ -39,12 +39,12 @@ namespace jafleet.Controllers
             return View("~/Views/Aircraft/index.cshtml", model);
         }
 
-        public IActionResult AirlineGroup(string id, string id2, [FromQuery] bool includeRetire, AircraftModel model)
+        public IActionResult AirlineGroup(string? id, string? id2, [FromQuery] bool includeRetire, AircraftModel model)
         {
             id = id?.ToUpper();
             id2 = id2?.ToUpper();
 
-            string groupName;
+            string? groupName;
             groupName = _context.AirlineGroup.AsNoTracking().FirstOrDefault(p => p.AirlineGroupCode == id)?.AirlineGroupName;
 
             model.Title = groupName ?? "all";
@@ -52,7 +52,7 @@ namespace jafleet.Controllers
             model.api = "/api/airlinegroup/" + id;
             if (!string.IsNullOrEmpty(id2))
             {
-                var typeName = MasterManager.Type.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
+                var typeName = MasterManager.Type?.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
                 if (!string.IsNullOrEmpty(typeName))
                 {
                     model.Title += ("・" + typeName);
@@ -66,12 +66,12 @@ namespace jafleet.Controllers
             return View("~/Views/Aircraft/index.cshtml", model);
         }
 
-        public IActionResult Airline(string id, string id2, [FromQuery] bool includeRetire, AircraftModel model)
+        public IActionResult Airline(string? id, string? id2, [FromQuery] bool includeRetire, AircraftModel model)
         {
             id = id?.ToUpper();
             id2 = id2?.ToUpper();
 
-            string airlineName;
+            string? airlineName;
             airlineName = _context.Airline.AsNoTracking().FirstOrDefault(p => p.AirlineCode == id)?.AirlineNameJpShort;
 
             model.Title = airlineName ?? "all";
@@ -79,7 +79,7 @@ namespace jafleet.Controllers
             model.api = "/api/airline/" + id;
             if (!string.IsNullOrEmpty(id2))
             {
-                var typeName = MasterManager.Type.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
+                var typeName = MasterManager.Type?.Where(p => p.TypeCode == id2).FirstOrDefault()?.TypeName;
                 if (!string.IsNullOrEmpty(typeName))
                 {
                     model.Title += ("・" + typeName);
@@ -93,11 +93,11 @@ namespace jafleet.Controllers
             return View("~/Views/Aircraft/index.cshtml", model);
         }
 
-        public IActionResult Type(string id, [FromQuery] bool? includeRetire, AircraftModel model)
+        public IActionResult Type(string? id, [FromQuery] bool? includeRetire, AircraftModel model)
         {
             id = id?.ToUpper();
 
-            string typeName;
+            string? typeName;
             typeName = _context.Type.AsNoTracking().FirstOrDefault(p => p.TypeCode == id)?.TypeName;
 
             model.Title = typeName ?? "all";
@@ -131,7 +131,7 @@ namespace jafleet.Controllers
             }
 
             var photo = _context.AircraftPhoto.Where(p => p.RegistrationNumber == id).SingleOrDefault();
-            Aircraft a = null;
+            Aircraft? a = null;
             if (photo != null && DateTime.Now.Date == photo.LastAccess.Date && !force)
             {
                 if (photo.PhotoUrl != null)
@@ -144,7 +144,7 @@ namespace jafleet.Controllers
                     //キャッシュがNULLの場合は、リンクURLもNULLの場合のみnophotoを返す
                     //そうしないとキャッシュがNULLで、あとからLinkUrlを登録した場合に最大1日待つ必要が出る。
                     a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
-                    if (string.IsNullOrEmpty(a.LinkUrl))
+                    if (string.IsNullOrEmpty(a?.LinkUrl))
                     {
                         return Redirect("/nophoto.html");
                     }
@@ -176,24 +176,24 @@ namespace jafleet.Controllers
                         IBrowsingContext bContext2 = BrowsingContext.New(Configuration.Default.WithDefaultLoader().WithXPath());
                         var htmlDocument2 = await bContext2.OpenAsync(newestPhotoLink);
                         var photos2 = htmlDocument2.Body.SelectNodes(@"//*[@id='layout-page']/div[5]/section/section/section/div/div/div[1]/div/a[1]/img");
-                        string directUrl = null;
+                        string? directUrl = null;
                         if (photos2.Count != 0)
                         {
-                            Uri photoUri = new(((IHtmlImageElement)photos2[0]).Source);
+                            Uri photoUri = new(((IHtmlImageElement)photos2[0]).Source!);
                             directUrl = photoUri.OriginalString.Replace(photoUri.Query, string.Empty);
                         }
                         //写真をキャッシュに登録する
                         using var serviceScope = _services.CreateScope();
                         using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
-                        if (!string.IsNullOrEmpty(a.LinkUrl))
+                        if (!string.IsNullOrEmpty(a?.LinkUrl))
                         {
                             //取得できるのにDBにも登録されている場合は、DBから消す
                             a.LinkUrl = null;
                             a.ActualUpdateTime = DateTime.Now;
-                            context.Aircraft.Update(a);
+                            context?.Aircraft.Update(a);
                             await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"{id}のLinkUrlを削除しました");
                         }
-                        StoreAircraftPhoto(context, photo, newestPhotoLink, id, directUrl);
+                        StoreAircraftPhoto(context!, photo, newestPhotoLink, id, directUrl!);
                     });
                     return Redirect(newestPhotoLink);
                 }
@@ -207,7 +207,7 @@ namespace jafleet.Controllers
                             //写真がないという情報を登録する
                             using var serviceScope = _services.CreateScope();
                             using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
-                            StoreAircraftPhoto(context, photo, null, id, null);
+                            StoreAircraftPhoto(context!, photo, null, id, null);
                         });
                         return Redirect("/nophoto.html");
                     }
@@ -245,7 +245,7 @@ namespace jafleet.Controllers
 
         }
 
-        private void StoreAircraftPhoto(jafleetContext context, AircraftPhoto photo, string photoUrl, string reg, string directUrl)
+        private void StoreAircraftPhoto(jafleetContext context, AircraftPhoto? photo, string? photoUrl, string reg, string? directUrl)
         {
             if (photo != null)
             {
