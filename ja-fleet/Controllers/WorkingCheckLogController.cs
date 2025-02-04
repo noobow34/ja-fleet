@@ -22,7 +22,7 @@ namespace jafleet.Controllers
                 DateTime.TryParseExact(id, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out searchDate);
             }
 
-            string log = string.Join("-----------------", _context.Log.Where(l => l.LogDate! == searchDate && l.LogType == LogType.WORKING_INFO)
+            string log = string.Join("-----------------", _context.Log.Where(l => l.LogDate!.Value.Date == searchDate && l.LogType == LogType.WORKING_INFO)
                         .AsNoTracking().OrderByDescending(l => l.LogDate).Select(l => l.LogDetail));
 
             return Content(log);
