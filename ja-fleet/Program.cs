@@ -14,7 +14,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
-builder.Services.AddDbContextPool<jafleetContext>(
+builder.Services.AddDbContextPool<JafleetContext>(
     options => options.UseNpgsql(config.GetConnectionString("DefaultConnection"))
 );
 builder.Services.Configure<WebEncoderOptions>(options =>
@@ -82,9 +82,9 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}/{id2?}"
 );
 
-var options = new DbContextOptionsBuilder<jafleetContext>();
+var options = new DbContextOptionsBuilder<JafleetContext>();
 options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
-using jafleetContext context = new(options.Options);
+using JafleetContext context = new(options.Options);
 MasterManager.ReadAll(context);
 
 app.Run();

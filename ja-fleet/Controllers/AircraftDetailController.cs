@@ -11,10 +11,10 @@ namespace jafleet.Controllers
     public class AircraftDetailController : Controller
     {
 
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
         private readonly IServiceScopeFactory _services;
 
-        public AircraftDetailController(jafleetContext context, IServiceScopeFactory serviceScopeFactory)
+        public AircraftDetailController(JafleetContext context, IServiceScopeFactory serviceScopeFactory)
         {
             _context = context;
             _services = serviceScopeFactory;
@@ -33,7 +33,7 @@ namespace jafleet.Controllers
             model.Reg = id;
             model.NeedBack = needback;
 
-            model.AV = _context.AircraftView.AsNoTracking().Where(av => av.RegistrationNumber == id).FirstOrDefault();
+            model.AV = _context.AircraftViews.AsNoTracking().Where(av => av.RegistrationNumber == id).FirstOrDefault();
             model.OgImageUrl = (model.AV?.PhotoDirectUrl != null) ? $"https://cdn.jetphotos.com/full{model.AV?.PhotoDirectUrl}" : "https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png";
             if (model.AV == null)
             {
@@ -42,7 +42,7 @@ namespace jafleet.Controllers
             }
             if (!nohead)
             {
-                model.AirlineGroupNmae = _context.AirlineGroup.AsNoTracking().Where(ag => ag.AirlineGroupCode == model.AV.AirlineGroupCode).FirstOrDefault()?.AirlineGroupName;
+                model.AirlineGroupNmae = _context.AirlineGroups.AsNoTracking().Where(ag => ag.AirlineGroupCode == model.AV.AirlineGroupCode).FirstOrDefault()?.AirlineGroupName;
             }
 
             //非同期でCookieは取得できなくなるので退避
@@ -52,7 +52,7 @@ namespace jafleet.Controllers
             Task.Run(() =>
             {
                 using var serviceScope = _services.CreateScope();
-                using jafleetContext? context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                using JafleetContext? context = serviceScope.ServiceProvider.GetService<JafleetContext>();
                 Log log = new()
                 {
                     LogDate = DateTime.Now,
@@ -61,7 +61,7 @@ namespace jafleet.Controllers
                     UserId = isAdmin.ToString(),
                 };
 
-                context!.Log.Add(log);
+                context!.Logs.Add(log);
                 context.SaveChanges();
             });
 

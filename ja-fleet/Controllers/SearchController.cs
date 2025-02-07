@@ -17,10 +17,10 @@ namespace jafleet.Controllers
     public class SearchController : Controller
     {
 
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
         private readonly IServiceScopeFactory _services;
 
-        public SearchController(jafleetContext context, IServiceScopeFactory serviceScopeFactory)
+        public SearchController(JafleetContext context, IServiceScopeFactory serviceScopeFactory)
         {
             _context = context;
             _services = serviceScopeFactory;
@@ -40,7 +40,7 @@ namespace jafleet.Controllers
             {
                 //GETパラメーターで検索条件キーが指定されたら
                 //保存されている検索条件を取得
-                var sce = _context.SearchCondition.AsNoTracking().Where(e => e.SearchConditionKey == sc).FirstOrDefault();
+                var sce = _context.SearchConditions.AsNoTracking().Where(e => e.SearchConditionKey == sc).FirstOrDefault();
                 if (sce != null)
                 {
                     //取得したjsonから復元
@@ -102,7 +102,7 @@ namespace jafleet.Controllers
             }
 
             //検索
-            IQueryable<AircraftView> query = _context.AircraftView.AsNoTracking();
+            IQueryable<AircraftView> query = _context.AircraftViews.AsNoTracking();
             if (!string.IsNullOrEmpty(model.Airline))
             {
                 airline = model.Airline.Split("|");
@@ -175,17 +175,17 @@ namespace jafleet.Controllers
             {
                 //あり（履歴含む）
                 //一旦履歴テーブルを検索して、履歴の中の該当のレジを取得
-                addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => !string.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                addSpecialLiveryReg.AddRange(_context.AircraftHistories.Where(p => !string.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
                 regList.AddRange(addSpecialLiveryReg);
-                regList.AddRange(_context.Aircraft.Where(p => !string.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                regList.AddRange(_context.Aircrafts.Where(p => !string.IsNullOrEmpty(p.SpecialLivery)).Select(s => s.RegistrationNumber).Distinct().ToList());
             }
             else if (model.SpecialLivery == "5")
             {
                 //キーワード指定（履歴含む）
                 //一旦履歴テーブルを検索して、履歴の中の該当のレジを取得
-                addSpecialLiveryReg.AddRange(_context.AircraftHistory.Where(p => p.SpecialLivery!.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                addSpecialLiveryReg.AddRange(_context.AircraftHistories.Where(p => p.SpecialLivery!.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
                 regList.AddRange(addSpecialLiveryReg);
-                regList.AddRange(_context.Aircraft.Where(p => p.SpecialLivery!.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
+                regList.AddRange(_context.Aircrafts.Where(p => p.SpecialLivery!.Contains(model.SpecialLiveryKeyword)).Select(s => s.RegistrationNumber).Distinct().ToList());
             }
 
             if (regList.Count == 1)
@@ -247,9 +247,9 @@ namespace jafleet.Controllers
             Task.Run(() =>
             {
                 using var serviceScope = _services.CreateScope();
-                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>()!;
+                using var context = serviceScope.ServiceProvider.GetService<JafleetContext>()!;
                 //検索条件保存
-                var sc = context.SearchCondition.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
+                var sc = context.SearchConditions.Where(e => e.SearchConditionKey == schash).FirstOrDefault();
                 if (sc == null)
                 {
                     sc = new SearchCondition
@@ -266,7 +266,7 @@ namespace jafleet.Controllers
                         sc.FirstSearchDate = DateTime.Now;
                         sc.LastSearchDate = sc.FirstSearchDate;
                     }
-                    context.SearchCondition.Add(sc);
+                    context.SearchConditions.Add(sc);
                 }
                 else if (!isAdmin)
                 {
@@ -289,7 +289,7 @@ namespace jafleet.Controllers
                     Additional = $"{model.IsDirect},{searchResult?.Length}",
                     UserId = isAdmin.ToString()
                 };
-                context.Log.Add(log);
+                context.Logs.Add(log);
 
                 context.SaveChanges();
             });
@@ -309,7 +309,7 @@ namespace jafleet.Controllers
                 return BadRequest();
             }
 
-            SearchCondition sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == searchCondition).Single();
+            SearchCondition sc = _context.SearchConditions.Where(sc => sc.SearchConditionKey == searchCondition).Single();
             return Content(sc.SearchConditionJson!, "application/json");
         }
 
@@ -323,7 +323,7 @@ namespace jafleet.Controllers
             string scjson = scm.ToString();
             string schash = HashUtil.CalcCRC32(scjson);
 
-            var sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == schash).AsNoTracking().SingleOrDefault();
+            var sc = _context.SearchConditions.Where(sc => sc.SearchConditionKey == schash).AsNoTracking().SingleOrDefault();
 
             return Content(sc?.SearchConditionName!);
         }
@@ -333,7 +333,7 @@ namespace jafleet.Controllers
             string scjson = scm.ToString();
             string schash = HashUtil.CalcCRC32(scjson);
 
-            var sc = _context.SearchCondition.Where(sc => sc.SearchConditionKey == schash).SingleOrDefault();
+            var sc = _context.SearchConditions.Where(sc => sc.SearchConditionKey == schash).SingleOrDefault();
 
             if (sc != null)
             {
@@ -348,7 +348,7 @@ namespace jafleet.Controllers
                     SearchConditionName = searchConditionName,
                     SearchCount = 0
                 };
-                _context.SearchCondition.Add(sc);
+                _context.SearchConditions.Add(sc);
             }
 
             _context.SaveChanges();

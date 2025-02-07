@@ -19,7 +19,7 @@ namespace jafleet
         private readonly static TimeSpan CompareTargetTimeSpan = new(2, 0, 0, 0);
         private static readonly string[] MAINTE_PLACE = ["TPE", "MNL", "XSP", "QPG", "XMN", "SIN", "TNA", "HKG", "OKA", "TNN"];
         private static readonly TimeSpan NOTIFY_TIME = new(06, 45, 00);
-        public static DbContextOptionsBuilder<jafleetContext>? Options { get; set; }
+        public static DbContextOptionsBuilder<JafleetContext>? Options { get; set; }
         public static bool Processing { get; set; } = false;
 
         public WorkingCheck(IEnumerable<AircraftView> targetRegistrationNumber, int interval)
@@ -28,7 +28,7 @@ namespace jafleet
             _interval = interval;
             if (Options == null)
             {
-                Options = new DbContextOptionsBuilder<jafleetContext>();
+                Options = new DbContextOptionsBuilder<JafleetContext>();
                 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
                 var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
                 Options.UseLoggerFactory(loggerFactory).UseNpgsql(config.GetConnectionString("DefaultConnection"));
@@ -43,7 +43,7 @@ namespace jafleet
             Processing = true;
             var parser = new HtmlParser();
 
-            using var context = new jafleetContext(Options!.Options);
+            using var context = new JafleetContext(Options!.Options);
             var toWorkingTest = new SortedDictionary<string, string>();  //テストレジが飛行した（テスト飛行した）
             var toWorking0 = new SortedDictionary<string, string>(); //予約登録かつ非稼働が稼働した（テスト飛行した）
             var toWorking1 = new SortedDictionary<string, string>(); //製造中かつ非稼働が稼働した（テスト飛行継続）
@@ -67,7 +67,7 @@ namespace jafleet
                     {
                         var htmlDocument = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(FR24_DATA_URL + a.RegistrationNumber));
                         var row = htmlDocument.GetElementsByClassName("data-row");
-                        var status = context.WorkingStatus.Where(s => s.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
+                        var status = context.WorkingStatuses.Where(s => s.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
                         var r = new Random();
                         if (row!.Length != 0)
                         {
@@ -102,7 +102,7 @@ namespace jafleet
                                 {
                                     RegistrationNumber = a.RegistrationNumber
                                 };
-                                context.WorkingStatus.Add(status);
+                                context.WorkingStatuses.Add(status);
                             }
                             previousWorking = status.Working;
                             previousDate = status.FlightDate;
@@ -188,7 +188,7 @@ namespace jafleet
                                     RegistrationNumber = a.RegistrationNumber,
                                     Working = false
                                 };
-                                context.WorkingStatus.Add(status);
+                                context.WorkingStatuses.Add(status);
                             }
                             Console.WriteLine($"{a.RegistrationNumber}:データなし");
                         }
@@ -306,7 +306,7 @@ namespace jafleet
                 LogType = LogType.WORKING_INFO,
                 LogDetail = allLog.ToString(),
             };
-            context.Log.Add(workingCheckLog);
+            context.Logs.Add(workingCheckLog);
 
             context.SaveChanges();
             sw.Stop();

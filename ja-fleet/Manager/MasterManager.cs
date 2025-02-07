@@ -9,9 +9,9 @@ namespace jafleet.Manager
     public static class MasterManager
     {
 
-        public static void ReadAll(jafleetContext context)
+        public static void ReadAll(JafleetContext context)
         {
-            var tempaa = context.Airline.Where(a => !a.Deleted).OrderBy(p => p.DisplayOrder).ToList();
+            var tempaa = context.Airlines.Where(a => !a.Deleted).OrderBy(p => p.DisplayOrder).ToList();
             tempaa.ForEach(aa =>
             {
                 switch (aa.AirlineGroupCode)
@@ -33,18 +33,18 @@ namespace jafleet.Manager
             });
             _allAirline = tempaa.ToArray();
 
-            _ana = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
-            _jal = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
-            _lcc = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
-            _other = context.Airline.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.Other && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
-            _type = context.Type.AsNoTracking().OrderBy(p => p.DisplayOrder).ToArray();
-            _wifi = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
-            _adminUser = context.AdminUser.AsNoTracking().Select(e => e.UserId!).ToList();
-            _typeDetailGroup = context.TypeDetailView.AsNoTracking().OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
-            _seatConfiguration = context.SeatConfigration.AsNoTracking().OrderBy(p => p.Airline).ThenBy(p => p.Type).ToArray();
-            AppInfo = context.AppInfo.SingleOrDefault();
+            _ana = context.Airlines.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.ANAGroup && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
+            _jal = context.Airlines.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.JALGroup && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
+            _lcc = context.Airlines.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.LCC && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
+            _other = context.Airlines.AsNoTracking().Where(p => p.AirlineGroupCode == AirlineGroupCode.Other && !p.Deleted).OrderBy(p => p.DisplayOrder).ToArray();
+            _type = context.Types.AsNoTracking().OrderBy(p => p.DisplayOrder).ToArray();
+            _wifi = context.Codes.AsNoTracking().Where(p => p.CodeType == CodeType.WIFI).OrderBy(p => p.Key).ToArray();
+            _adminUser = context.AdminUsers.AsNoTracking().Select(e => e.UserId!).ToList();
+            _typeDetailGroup = context.TypeDetailViews.AsNoTracking().OrderBy(p => p.DisplayOrder).ThenBy(p => p.TypeDetailName).ToArray();
+            _seatConfiguration = context.SeatConfigrations.AsNoTracking().OrderBy(p => p.Airline).ThenBy(p => p.Type).ToArray();
+            AppInfo = context.AppInfos.SingleOrDefault();
             ReloadNamedSearchCondition(context);
-            var tempop = context.Code.AsNoTracking().Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
+            var tempop = context.Codes.AsNoTracking().Where(p => p.CodeType == CodeType.OPERATION_CODE).OrderBy(p => p.Key).ToList();
             tempop.ForEach(o =>
             {
                 if (OperationCode.PRE_OPERATION.Contains(o.Key))
@@ -66,7 +66,7 @@ namespace jafleet.Manager
             });
             _operation = tempop.ToArray();
 
-            var airlineType = context.AircraftView.AsNoTracking().Select(av => new { av.Airline, av.TypeCode }).Distinct().OrderBy(av => av.Airline).ToList();
+            var airlineType = context.AircraftViews.AsNoTracking().Select(av => new { av.Airline, av.TypeCode }).Distinct().OrderBy(av => av.Airline).ToList();
             _airlineType = [];
             string currentAirline = airlineType[0].Airline!;
             var typelist = new List<Type>();
@@ -84,9 +84,9 @@ namespace jafleet.Manager
             _airlineType.Add(currentAirline, typelist.OrderBy(t => t.DisplayOrder).ToList());
         }
 
-        public static void ReloadNamedSearchCondition(jafleetContext context)
+        public static void ReloadNamedSearchCondition(JafleetContext context)
         {
-            _namedSearchCondition = context.SearchCondition.AsNoTracking().Where(sc => !string.IsNullOrEmpty(sc.SearchConditionName)).OrderBy(sc => sc.SearchConditionName).ToArray();
+            _namedSearchCondition = context.SearchConditions.AsNoTracking().Where(sc => !string.IsNullOrEmpty(sc.SearchConditionName)).OrderBy(sc => sc.SearchConditionName).ToArray();
         }
 
 

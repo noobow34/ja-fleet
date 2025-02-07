@@ -13,9 +13,9 @@ namespace jafleet.Controllers
     public class logController : Controller
     {
 
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
 
-        public logController(jafleetContext context) => _context = context;
+        public logController(JafleetContext context) => _context = context;
 
         public IActionResult Yesterday()
         {
@@ -46,7 +46,7 @@ namespace jafleet.Controllers
             }
 
             List<Log>? logs = null;
-            logs = _context.Log.AsNoTracking().Where(q => q.LogDate == targetDate && !MasterManager.AdminUser!.Contains(q.UserId ?? string.Empty) && q.LogType != "8").OrderByDescending(q => q.LogId).ToList();
+            logs = _context.Logs.AsNoTracking().Where(q => q.LogDate == targetDate && !MasterManager.AdminUser!.Contains(q.UserId ?? string.Empty) && q.LogType != "8").OrderByDescending(q => q.LogId).ToList();
 
             var logScKeys = logs.Where(sc => sc.LogType == LogType.SEARCH).Select(scc => scc.LogDetail).Distinct();
             var scCache = GetSearchConditionDisps(logScKeys!);
@@ -75,7 +75,7 @@ namespace jafleet.Controllers
         public Dictionary<string, string> GetSearchConditionDisps(IEnumerable<string> scKeys)
         {
             var ret = new Dictionary<string, string>();
-            var scs = _context.SearchCondition.AsNoTracking().Where(sc => scKeys.Contains(sc.SearchConditionKey)).ToList();
+            var scs = _context.SearchConditions.AsNoTracking().Where(sc => scKeys.Contains(sc.SearchConditionKey)).ToList();
             foreach (var sc in scs)
             {
                 string scJson;

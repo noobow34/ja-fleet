@@ -9,17 +9,17 @@ namespace jafleet.Controllers
     public class AircraftWithHistoryController : Controller
     {
 
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
 
-        public AircraftWithHistoryController(jafleetContext context) => _context = context;
+        public AircraftWithHistoryController(JafleetContext context) => _context = context;
 
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(string id)
         {
             var list = new List<AircraftViewBase>();
-            var latest = _context.AircraftView.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).First();
-            var history = _context.AircraftHistoryView.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).OrderByDescending(p => p.Seq).ToList();
+            var latest = _context.AircraftViews.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).First();
+            var history = _context.AircraftHistoryViews.AsNoTracking().Where(p => p.RegistrationNumber == id.ToUpper()).OrderByDescending(p => p.Seq).ToList();
 
             list.Add(latest);
             list.AddRange(history);

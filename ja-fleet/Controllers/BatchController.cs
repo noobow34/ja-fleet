@@ -43,8 +43,8 @@ namespace jafleet.Controllers
 
                 using var serviceScope = _services.CreateScope();
                 IEnumerable<AircraftView> targetReg;
-                using jafleetContext? context = serviceScope.ServiceProvider.GetService<jafleetContext>();
-                targetReg = context!.AircraftView.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray().OrderBy(r => Guid.NewGuid());
+                using JafleetContext? context = serviceScope.ServiceProvider.GetService<JafleetContext>();
+                targetReg = context!.AircraftViews.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray().OrderBy(r => Guid.NewGuid());
                 var check = new WorkingCheck(targetReg, interval ?? 15);
                 _ = check.ExecuteCheckAsync();
             });

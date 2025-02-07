@@ -5,13 +5,13 @@ namespace jafleet.Controllers
 {
     public class CheckController : Controller
     {
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
 
-        public CheckController(jafleetContext context) => _context = context;
+        public CheckController(JafleetContext context) => _context = context;
 
         public IActionResult Index()
         {
-            return Content(_context.AircraftView.Count().ToString());
+            return Content(_context.AircraftViews.Count().ToString());
         }
     }
 }

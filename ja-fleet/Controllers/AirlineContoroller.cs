@@ -10,16 +10,16 @@ namespace jafleet.Controllers
     public class AirlineController : Controller
     {
 
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
 
-        public AirlineController(jafleetContext context) => _context = context;
+        public AirlineController(JafleetContext context) => _context = context;
 
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
             List<AircraftView> list;
-            list = _context.AircraftView.AsNoTracking().OrderBy(p => p.DisplayOrder).ToList();
+            list = _context.AircraftViews.AsNoTracking().OrderBy(p => p.DisplayOrder).ToList();
 
             return Json(list);
         }
@@ -31,7 +31,7 @@ namespace jafleet.Controllers
             List<AircraftView> list;
             string[] ids = id?.ToUpper().Split(",")!;
             id2 = id2?.ToUpper();
-            var q = _context.AircraftView.AsNoTracking().Where(p => ids.Contains(p.Airline));
+            var q = _context.AircraftViews.AsNoTracking().Where(p => ids.Contains(p.Airline));
             if (!string.IsNullOrEmpty(id2))
             {
                 q = q.Where(p => p.TypeCode == id2);

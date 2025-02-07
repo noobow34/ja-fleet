@@ -7,9 +7,9 @@ namespace jafleet.Controllers
 {
     public class MasterController : Controller
     {
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
 
-        public MasterController(jafleetContext context) => _context = context;
+        public MasterController(JafleetContext context) => _context = context;
 
         public IActionResult AirlineType(string id)
         {
@@ -43,7 +43,7 @@ namespace jafleet.Controllers
 
         public IActionResult GetAllReg()
         {
-            return Json(_context.Aircraft.AsNoTracking().Select(a => a.RegistrationNumber!.Substring(2)).ToArray());
+            return Json(_context.Aircrafts.AsNoTracking().Select(a => a.RegistrationNumber!.Substring(2)).ToArray());
         }
     }
 }

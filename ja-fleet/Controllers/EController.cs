@@ -12,9 +12,9 @@ namespace jafleet.Controllers
     public class EController : Controller
     {
 
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
 
-        public EController(jafleetContext context) => _context = context;
+        public EController(JafleetContext context) => _context = context;
 
         public IActionResult Index(string id, EditModel model, [FromQuery] bool nohead)
         {
@@ -25,7 +25,7 @@ namespace jafleet.Controllers
 
             model.AirlineList = MasterManager.AllAirline!;
             model.TypeList = MasterManager.Type!;
-            model.TypeDetailList = _context.TypeDetail.OrderBy(t => t.TypeDetailName).ToArray();
+            model.TypeDetailList = _context.TypeDetails.OrderBy(t => t.TypeDetailName).ToArray();
             model.OperationList = MasterManager.Operation!;
             model.WiFiList = MasterManager.Wifi!;
             model.NotUpdateDate = true;
@@ -38,7 +38,7 @@ namespace jafleet.Controllers
             }
             else
             {
-                model.Aircraft = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
+                model.Aircraft = _context.Aircrafts.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
             }
 
             if (model.Aircraft == null)
@@ -50,7 +50,7 @@ namespace jafleet.Controllers
             }
             else
             {
-                AircraftView? av = _context.AircraftView.Where(av => av.RegistrationNumber == id.ToUpper()).SingleOrDefault();
+                AircraftView? av = _context.AircraftViews.Where(av => av.RegistrationNumber == id.ToUpper()).SingleOrDefault();
                 if (av != null) 
                 {
                     model.LinkPage = $"https://ja-fleet.noobow.me/AD/{av.RegistrationNumber}";
@@ -78,7 +78,7 @@ namespace jafleet.Controllers
             {
                 DateTime storeDate = DateTime.Now;
                 string? reg = model.Aircraft!.RegistrationNumber;
-                var origin = _context.Aircraft.AsNoTracking().Where(a => a.RegistrationNumber == reg).FirstOrDefault();
+                var origin = _context.Aircrafts.AsNoTracking().Where(a => a.RegistrationNumber == reg).FirstOrDefault();
                 if (!model.NotUpdateDate || model.IsNew)
                 {
                     model.Aircraft.UpdateTime = storeDate;
@@ -87,7 +87,7 @@ namespace jafleet.Controllers
                 if (model.IsNew)
                 {
                     model.Aircraft.CreationTime = storeDate;
-                    _context.Aircraft.Add(model.Aircraft);
+                    _context.Aircrafts.Add(model.Aircraft);
                 }
                 else
                 {
@@ -103,10 +103,10 @@ namespace jafleet.Controllers
                         ah.HistoryRegisterAt = storeDate;
 
                         //HistoryのSEQのMAXを取得
-                        var maxseq = _context.AircraftHistory.AsNoTracking().Where(ahh => ahh.RegistrationNumber == ah.RegistrationNumber).GroupBy(ahh => ahh.RegistrationNumber)
+                        var maxseq = _context.AircraftHistories.AsNoTracking().Where(ahh => ahh.RegistrationNumber == ah.RegistrationNumber).GroupBy(ahh => ahh.RegistrationNumber)
                                                 .Select(ahh => new { maxseq = ahh.Max(x => x.Seq) }).FirstOrDefault();
                         ah.Seq = (maxseq?.maxseq ?? 0) + 1;
-                        _context.AircraftHistory.Add(ah);
+                        _context.AircraftHistories.Add(ah);
                     }
                     _context.Entry(model.Aircraft).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 }

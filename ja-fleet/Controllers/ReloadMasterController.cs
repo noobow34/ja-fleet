@@ -6,9 +6,9 @@ namespace jafleet.Controllers
 {
     public class ReloadMasterController : Controller
     {
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
 
-        public ReloadMasterController(jafleetContext context) => _context = context;
+        public ReloadMasterController(JafleetContext context) => _context = context;
 
         public IActionResult Index()
         {

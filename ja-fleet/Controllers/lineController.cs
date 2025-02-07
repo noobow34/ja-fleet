@@ -16,7 +16,7 @@ namespace jafleet.Controllers
             Task.Run(() =>
             {
                 using var serviceScope = _services.CreateScope();
-                using jafleetContext context = serviceScope.ServiceProvider.GetService<jafleetContext>()!;
+                using JafleetContext context = serviceScope.ServiceProvider.GetService<JafleetContext>()!;
                 var lineLinklog = new Log
                 {
                     LogType = LogType.LINE_LINK,
@@ -24,7 +24,7 @@ namespace jafleet.Controllers
                     LogDate = DateTime.Now
                 };
 
-                context.Log.Add(lineLinklog);
+                context.Logs.Add(lineLinklog);
                 context.SaveChanges();
             });
             return Redirect("https://line.me/R/ti/p/BTy1CuBCzF");

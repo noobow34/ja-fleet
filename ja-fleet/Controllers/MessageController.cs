@@ -10,11 +10,11 @@ namespace jafleet.Controllers
     public class MessageController : Controller
     {
 
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
         private readonly IConfiguration _configuration;
         private readonly IServiceScopeFactory _services;
 
-        public MessageController(jafleetContext context, IConfiguration configuration, IServiceScopeFactory serviceScopeFactory)
+        public MessageController(JafleetContext context, IConfiguration configuration, IServiceScopeFactory serviceScopeFactory)
         {
             _context = context;
             _configuration = configuration;
@@ -35,7 +35,7 @@ namespace jafleet.Controllers
             _ = Task.Run(() =>
             {
                 using var serviceScope = _services.CreateScope();
-                using var context = serviceScope.ServiceProvider.GetService<jafleetContext>()!;
+                using var context = serviceScope.ServiceProvider.GetService<JafleetContext>()!;
                 var m = new Message
                 {
                     Sender = model.Name,
@@ -44,7 +44,7 @@ namespace jafleet.Controllers
                     MessageType = Commons.Constants.MessageType.WEB,
                     RecieveDate = DateTime.Now
                 };
-                context.Messages.Add(m);
+                context.Messagess.Add(m);
                 context.SaveChanges();
             });
             return Content("OK");

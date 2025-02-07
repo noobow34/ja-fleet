@@ -14,10 +14,10 @@ namespace jafleet.Controllers
     public class HomeController : Controller
     {
 
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
         private readonly IConfiguration _configuration;
 
-        public HomeController(jafleetContext context, IConfiguration configuration)
+        public HomeController(JafleetContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
@@ -50,7 +50,7 @@ namespace jafleet.Controllers
                 ,
                 UserId = CookieUtil.IsAdmin(HttpContext).ToString()
             };
-            _context.Log.Add(log);
+            _context.Logs.Add(log);
             _context.SaveChanges();
 
             return View(model);

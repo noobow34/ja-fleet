@@ -60,8 +60,8 @@ namespace jafleet.Classes
                     }
                     catch { }
                     using var serviceScope = _services.CreateScope();
-                    using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
-                    context!.AccessLog.Add(log);
+                    using var context = serviceScope.ServiceProvider.GetService<JafleetContext>();
+                    context!.AccessLogs.Add(log);
                     context.SaveChanges();
                 });
             }

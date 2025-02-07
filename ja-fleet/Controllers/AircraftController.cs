@@ -18,10 +18,10 @@ namespace jafleet.Controllers
     public class AircraftController : Controller
     {
 
-        private readonly jafleetContext _context;
+        private readonly JafleetContext _context;
         private readonly IServiceScopeFactory _services;
 
-        public AircraftController(jafleetContext context, IServiceScopeFactory serviceScopeFactory)
+        public AircraftController(JafleetContext context, IServiceScopeFactory serviceScopeFactory)
         {
             _context = context;
             _services = serviceScopeFactory;
@@ -45,7 +45,7 @@ namespace jafleet.Controllers
             id2 = id2?.ToUpper();
 
             string? groupName;
-            groupName = _context.AirlineGroup.AsNoTracking().FirstOrDefault(p => p.AirlineGroupCode == id)?.AirlineGroupName;
+            groupName = _context.AirlineGroups.AsNoTracking().FirstOrDefault(p => p.AirlineGroupCode == id)?.AirlineGroupName;
 
             model.Title = groupName ?? "all";
             model.TableId = id ?? "all";
@@ -72,7 +72,7 @@ namespace jafleet.Controllers
             id2 = id2?.ToUpper();
 
             string? airlineName;
-            airlineName = _context.Airline.AsNoTracking().FirstOrDefault(p => p.AirlineCode == id)?.AirlineNameJpShort;
+            airlineName = _context.Airlines.AsNoTracking().FirstOrDefault(p => p.AirlineCode == id)?.AirlineNameJpShort;
 
             model.Title = airlineName ?? "all";
             model.TableId = id ?? "all";
@@ -98,14 +98,14 @@ namespace jafleet.Controllers
             id = id?.ToUpper();
 
             string? typeName;
-            typeName = _context.Type.AsNoTracking().FirstOrDefault(p => p.TypeCode == id)?.TypeName;
+            typeName = _context.Types.AsNoTracking().FirstOrDefault(p => p.TypeCode == id)?.TypeName;
 
             model.Title = typeName ?? "all";
             model.TableId = id ?? "all";
             model.api = "/api/type/" + id;
 
             //全機退役かどうか確認
-            int operatingCount = _context.AircraftView.AsNoTracking().Where(p => p.TypeCode == id && p.OperationCode != OperationCode.RETIRE_UNREGISTERED).Count();
+            int operatingCount = _context.AircraftViews.AsNoTracking().Where(p => p.TypeCode == id && p.OperationCode != OperationCode.RETIRE_UNREGISTERED).Count();
 
             if (operatingCount == 0 && !includeRetire.HasValue)
             {
@@ -130,7 +130,7 @@ namespace jafleet.Controllers
                 return BadRequest();
             }
 
-            var photo = _context.AircraftPhoto.Where(p => p.RegistrationNumber == id).SingleOrDefault();
+            var photo = _context.AircraftPhotos.Where(p => p.RegistrationNumber == id).SingleOrDefault();
             Aircraft? a = null;
             if (photo != null && DateTime.Now.Date == photo.LastAccess.Date && !force)
             {
@@ -143,7 +143,7 @@ namespace jafleet.Controllers
                 {
                     //キャッシュがNULLの場合は、リンクURLもNULLの場合のみnophotoを返す
                     //そうしないとキャッシュがNULLで、あとからLinkUrlを登録した場合に最大1日待つ必要が出る。
-                    a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
+                    a = _context.Aircrafts.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
                     if (string.IsNullOrEmpty(a?.LinkUrl))
                     {
                         return Redirect("/nophoto.html");
@@ -158,7 +158,7 @@ namespace jafleet.Controllers
             string photoUrl = $"https://www.airliners.net/search?registrationActual={id}&sortBy=datePhotographedYear&sortOrder=desc&perPage=1";
             if (a == null)
             {
-                a = _context.Aircraft.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
+                a = _context.Aircrafts.Where(p => p.RegistrationNumber == id.ToUpper()).FirstOrDefault();
             }
             IBrowsingContext bContext = BrowsingContext.New(Configuration.Default.WithDefaultLoader().WithXPath());
             try
@@ -184,13 +184,13 @@ namespace jafleet.Controllers
                         }
                         //写真をキャッシュに登録する
                         using var serviceScope = _services.CreateScope();
-                        using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                        using var context = serviceScope.ServiceProvider.GetService<JafleetContext>();
                         if (!string.IsNullOrEmpty(a?.LinkUrl))
                         {
                             //取得できるのにDBにも登録されている場合は、DBから消す
                             a.LinkUrl = null;
                             a.ActualUpdateTime = DateTime.Now;
-                            context?.Aircraft.Update(a);
+                            context?.Aircrafts.Update(a);
                             await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"{id}のLinkUrlを削除しました");
                         }
                         StoreAircraftPhoto(context!, photo, newestPhotoLink, id, directUrl!);
@@ -206,7 +206,7 @@ namespace jafleet.Controllers
                         {
                             //写真がないという情報を登録する
                             using var serviceScope = _services.CreateScope();
-                            using var context = serviceScope.ServiceProvider.GetService<jafleetContext>();
+                            using var context = serviceScope.ServiceProvider.GetService<JafleetContext>();
                             StoreAircraftPhoto(context!, photo, null, id, null);
                         });
                         return Redirect("/nophoto.html");
@@ -245,18 +245,18 @@ namespace jafleet.Controllers
 
         }
 
-        private void StoreAircraftPhoto(jafleetContext context, AircraftPhoto? photo, string? photoUrl, string reg, string? directUrl)
+        private void StoreAircraftPhoto(JafleetContext context, AircraftPhoto? photo, string? photoUrl, string reg, string? directUrl)
         {
             if (photo != null)
             {
                 photo.PhotoUrl = photoUrl;
                 photo.PhotoDirectUrl = directUrl;
                 photo.LastAccess = DateTime.Now;
-                context.AircraftPhoto.Update(photo);
+                context.AircraftPhotos.Update(photo);
             }
             else
             {
-                context.AircraftPhoto.Add(new AircraftPhoto { RegistrationNumber = reg, PhotoUrl = photoUrl, LastAccess = DateTime.Now });
+                context.AircraftPhotos.Add(new AircraftPhoto { RegistrationNumber = reg, PhotoUrl = photoUrl, LastAccess = DateTime.Now });
             }
             context.SaveChanges();
         }
