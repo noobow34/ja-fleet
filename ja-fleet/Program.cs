@@ -3,8 +3,11 @@ using jafleet.Commons.EF;
 using jafleet.Manager;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.WebEncoders;
+using Quartz;
+using Quartz.Impl;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Type = System.Type;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
@@ -86,5 +89,31 @@ var options = new DbContextOptionsBuilder<JafleetContext>();
 options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
 using JafleetContext context = new(options.Options);
 MasterManager.ReadAll(context);
+
+var schedulerFactory = new StdSchedulerFactory();
+IScheduler sch = await schedulerFactory.GetScheduler();
+await sch.Start();
+var scs = context.SchedulerDefs.Where(s => s.Enabled).AsNoTracking().ToArray();
+foreach (var sc in scs)
+{
+    Type? type = Type.GetType(sc.ClassName);
+
+    if (type is not null)
+    {
+        var jobDetail = JobBuilder.Create(type)
+                        .WithIdentity(sc.ClassName)
+                        .Build();
+
+        var trigger = TriggerBuilder.Create()
+            .WithIdentity(sc.ClassName)
+            .StartNow()
+            .WithCronSchedule(sc.CronDef)
+            .Build();
+
+        await sch.ScheduleJob(jobDetail, trigger);
+
+        Console.WriteLine($"【{sc.ClassName}:{sc.CronDef}】を登録しました。");
+    }
+}
 
 app.Run();
