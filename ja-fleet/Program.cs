@@ -1,10 +1,14 @@
-﻿using jafleet.Classes;
+﻿using jafleet;
+using jafleet.Classes;
 using jafleet.Commons.EF;
 using jafleet.Manager;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.WebEncoders;
+using Quartz;
+using Quartz.Impl;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Type = System.Type;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
@@ -86,5 +90,7 @@ var options = new DbContextOptionsBuilder<JafleetContext>();
 options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
 using JafleetContext context = new(options.Options);
 MasterManager.ReadAll(context);
+
+RootScheduler.CreateOrReloadRootScheduler();
 
 app.Run();
