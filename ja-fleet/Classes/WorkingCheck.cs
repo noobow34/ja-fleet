@@ -30,8 +30,7 @@ namespace jafleet
             {
                 Options = new DbContextOptionsBuilder<JafleetContext>();
                 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
-                var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-                Options.UseLoggerFactory(loggerFactory).UseNpgsql(config.GetConnectionString("DefaultConnection"));
+                Options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
             }
         }
 
