@@ -18,7 +18,6 @@ namespace jafleet
         private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
         private readonly static TimeSpan CompareTargetTimeSpan = new(2, 0, 0, 0);
         private static readonly string[] MAINTE_PLACE = ["TPE", "MNL", "XSP", "QPG", "XMN", "SIN", "TNA", "HKG", "OKA", "TNN"];
-        private static readonly TimeSpan NOTIFY_TIME = new(06, 45, 00);
         public static DbContextOptionsBuilder<JafleetContext>? Options { get; set; }
         public static bool Processing { get; set; } = false;
 
@@ -242,61 +241,61 @@ namespace jafleet
             {
                 allLog.Append("--------テストレジが稼働--------\n");
                 allLog.AppendJoin("\n", toWorkingTest.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
             if (toWorking0.Count > 0)
             {
                 allLog.Append("--------予約登録が稼働--------\n");
                 allLog.AppendJoin("\n", toWorking0.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
             if (toWorking1.Count > 0)
             {
                 allLog.Append("--------製造中が稼働--------\n");
                 allLog.AppendJoin("\n", toWorking1.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
             if (toWorking2.Count > 0)
             {
                 allLog.Append("--------デリバリーが稼働--------\n");
                 allLog.AppendJoin("\n", toWorking2.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
             if (toWorking3.Count > 0)
             {
                 allLog.Append("--------運用中非稼働が稼働--------\n");
                 allLog.AppendJoin("\n", toWorking3.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
             if (toWorking7.Count > 0)
             {
                 allLog.Append("--------退役未抹消が稼働--------\n");
                 allLog.AppendJoin("\n", toWorking7.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
             if (toNotWorking.Count > 0)
             {
                 allLog.Append("--------稼働が非稼働--------\n");
                 allLog.AppendJoin("\n", toNotWorking.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
             if (mainteStart.Count > 0)
             {
                 allLog.Append("--------整備入り--------\n");
                 allLog.AppendJoin("\n", mainteStart.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
             if (mainteEnd.Count > 0)
             {
                 allLog.Append("--------整備終了--------\n");
                 allLog.AppendJoin("\n", mainteEnd.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
             if (mainteing.Count > 0)
             {
                 allLog.Append("--------整備中--------\n");
                 allLog.AppendJoin("\n", mainteing.Values);
-                allLog.Append("\n");
+                allLog.Append('\n');
             }
 
             var workingCheckLog = new Log
@@ -307,16 +306,8 @@ namespace jafleet
             };
             context.Logs.Add(workingCheckLog);
 
-            context.SaveChanges();
             sw.Stop();
-            DateTime endTime = DateTime.Now;
-            if (DateTime.Now.TimeOfDay < NOTIFY_TIME)
-            {
-                //通知時間まで待機
-                Thread.Sleep(Convert.ToInt32((NOTIFY_TIME - DateTime.Now.TimeOfDay).TotalMilliseconds));
-            }
-
-            await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"WorkingCheck正常終了:{endTime:yyyy/MM/dd HH:mm:ss}\n" +
+            string nt = $"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
                             $"処理時間: {sw.Elapsed},待機秒数: {intervalSum / 1000.0}\n" +
                             ((toWorkingTest.Count > 0) ? $"テストレジが稼働:{toWorkingTest.Count}件\n" : string.Empty) +
                             ((toWorking0.Count > 0) ? $"予約登録が稼働:{toWorking0.Count}件\n" : string.Empty) +
@@ -328,7 +319,15 @@ namespace jafleet
                             ((mainteStart.Count > 0) ? $"整備入り:{mainteStart.Count}件\n" : string.Empty) +
                             ((mainteEnd.Count > 0) ? $"整備終了:{mainteEnd.Count}件\n" : string.Empty) +
                             ((mainteing.Count > 0) ? $"整備中:{mainteing.Count}件\n" : string.Empty) +
-                            $@"<https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}|リンク>");
+                            $@"<https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}|リンク>";
+
+            var wcNotify = new Log
+            {
+                LogDate = DateTime.Now,
+                LogType = LogType.WORKIN_NOTIFY_TEXT,
+                LogDetail = nt,
+            };
+            context.SaveChanges();
 
             Processing = false;
         }
