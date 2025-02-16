@@ -324,9 +324,10 @@ namespace jafleet
             var wcNotify = new Log
             {
                 LogDate = DateTime.Now,
-                LogType = LogType.WORKIN_NOTIFY_TEXT,
+                LogType = LogType.WORKING_NOTIFY_TEXT,
                 LogDetail = nt,
             };
+            context.Logs.Add(wcNotify);
             context.SaveChanges();
 
             Processing = false;

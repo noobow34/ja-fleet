@@ -16,7 +16,7 @@ namespace jafleet.Jobs
             var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
             Options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
             using JafleetContext jc = new (Options!.Options);
-            var log = jc.Logs.Where(l => l.LogType == LogType.WORKIN_NOTIFY_TEXT).OrderByDescending(l => l.LogId).FirstOrDefault();
+            var log = jc.Logs.Where(l => l.LogType == LogType.WORKING_NOTIFY_TEXT).OrderByDescending(l => l.LogId).FirstOrDefault();
             if (log != null) {
                 await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), log.LogDetail!);
             }
