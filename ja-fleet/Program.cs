@@ -4,11 +4,8 @@ using jafleet.Commons.EF;
 using jafleet.Manager;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.WebEncoders;
-using Quartz;
-using Quartz.Impl;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Type = System.Type;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
