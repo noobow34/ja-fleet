@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.2.0" />
     <PackageReference Include="AngleSharp.XPath" Version="2.0.5" />
+    <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.4.1" />
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="Crc32.NET" Version="1.2.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />

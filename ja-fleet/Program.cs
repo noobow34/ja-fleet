@@ -1,4 +1,5 @@
-﻿using jafleet;
+﻿using Auth0.AspNetCore.Authentication;
+using jafleet;
 using jafleet.Classes;
 using jafleet.Commons.EF;
 using jafleet.Manager;
@@ -24,6 +25,11 @@ builder.Services.Configure<WebEncoderOptions>(options =>
 });
 builder.Services.AddControllersWithViews();
 builder.Services.AddProgressiveWebApp();
+builder.Services.AddAuth0WebAppAuthentication(options =>
+{
+    options.Domain = builder.Configuration["Auth0:Domain"] ?? "";
+    options.ClientId = builder.Configuration["Auth0:ClientId"] ?? "";
+});
 builder.Services.AddSingleton<IConfiguration>(config);
 
 var app = builder.Build();
@@ -34,6 +40,8 @@ app.UseLoggingMiddleware();
 app.UseStaticFiles();
 app.UseCookiePolicy();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllerRoute(
     name: "EditStore",
     pattern: "E/Store",
