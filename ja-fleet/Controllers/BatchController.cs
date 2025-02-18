@@ -2,6 +2,7 @@
 using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Noobow.Commons.Constants;
@@ -22,16 +23,13 @@ namespace jafleet.Controllers
             {
                 return NotFound();
             }
-            return Content("OK!");
+            return View();
         }
 
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> WorkingCheckAsync(int? interval)
         {
-            if (!CookieUtil.IsAdmin(HttpContext))
-            {
-                return NotFound();
-            }
-
             if (jafleet.WorkingCheck.Processing)
             {
                 await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), "WorkingCheck 二重起動を検出");
@@ -40,7 +38,6 @@ namespace jafleet.Controllers
 
             _ = Task.Run(() =>
             {
-
                 using var serviceScope = _services.CreateScope();
                 IEnumerable<AircraftView> targetReg;
                 using JafleetContext? context = serviceScope.ServiceProvider.GetService<JafleetContext>();
