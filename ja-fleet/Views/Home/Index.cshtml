@@ -145,26 +145,19 @@
 @section ScriptsPartial{
     <script src="~/js/a.js" asp-append-version="true"></script>
     <script>
-        let tapCount = 0;
-        $(document).on("click", function() {
-          tapCount++;
-          if (tapCount >= 5) {
-            $("#login-link").fadeIn();
-          }
-          setTimeout(() => { tapCount = 0; }, 1000);
-        });
-
         $(function () {
             recreateTypeList();
             if (location.hash == "#donate") {
                 $('#donate').modal();
             }
         });
+
         $('#quick').click(function () {
             $.ajax('/Dummy?quick');
             let dest = '/Aircraft/Airline/' + $('#Airline').val() + '/' + $('#Type').val();
             window.location = dest;
         });
+
         $('#Airline').change(function () {
             recreateTypeList();
         });
