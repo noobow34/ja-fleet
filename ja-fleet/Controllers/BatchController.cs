@@ -43,7 +43,7 @@ namespace jafleet.Controllers
                 using JafleetContext? context = serviceScope.ServiceProvider.GetService<JafleetContext>();
                 targetReg = context!.AircraftViews.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray().OrderBy(r => Guid.NewGuid());
                 var check = new WorkingCheck(targetReg, interval ?? 15);
-                _ = check.ExecuteCheckAsync();
+                _ = check.ExecuteCheckAsync(true);
             });
 
             return Content("WorkingCheck Launch!");

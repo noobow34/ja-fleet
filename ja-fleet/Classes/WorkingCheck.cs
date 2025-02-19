@@ -33,7 +33,7 @@ namespace jafleet
             }
         }
 
-        public async Task ExecuteCheckAsync()
+        public async Task ExecuteCheckAsync(bool needsNotify = false)
         {
             int intervalSum = 0;
             var sw = new Stopwatch();
@@ -320,6 +320,11 @@ namespace jafleet
                             ((mainteEnd.Count > 0) ? $"整備終了:{mainteEnd.Count}件\n" : string.Empty) +
                             ((mainteing.Count > 0) ? $"整備中:{mainteing.Count}件\n" : string.Empty) +
                             $@"<https://ja-fleet.noobow.me/WorkingCheckLog/Index/{DateTime.Now:yyyyMMdd}|リンク>";
+
+            if (needsNotify)
+            {
+                await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), nt);
+            }
 
             var wcNotify = new Log
             {
