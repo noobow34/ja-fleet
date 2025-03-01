@@ -334,6 +334,7 @@ namespace jafleet.Controllers
             return Content(sc?.SearchConditionName!);
         }
 
+        [HttpPost]
         public IActionResult RegisterNamedSearchCondition(SearchConditionInModel scm, string searchConditionName)
         {
             string scjson = scm.ToString();
