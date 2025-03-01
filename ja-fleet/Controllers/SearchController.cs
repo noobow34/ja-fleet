@@ -71,6 +71,12 @@ namespace jafleet.Controllers
         /// <returns></returns>
         public IActionResult DoSearch(SearchModel model)
         {
+            //modelがnullのリクエストが来る対策
+            if (!model.IsLoading && model == null)
+            {
+                return Json(new SearchResult { ErrorMessage = "検索処理でエラーが発生しました。繰り返しエラーになる場合は管理人にご連絡ください。" });
+            }
+
             if (model.IsLoading && !model.IsDirect)
             {
                 //初回ロードかつダイレクト指定ではない場合は空リストを返す
