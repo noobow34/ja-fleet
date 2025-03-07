@@ -1,13 +1,18 @@
-﻿using AngleSharp.Html.Parser;
+﻿using AngleSharp;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
+using AngleSharp.XPath;
 using EnumStringValues;
 using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Manager;
 using Microsoft.EntityFrameworkCore;
 using Noobow.Commons.Constants;
+using Noobow.Commons.EF.Multi;
 using Noobow.Commons.Utils;
 using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace jafleet
 {
@@ -54,6 +59,8 @@ namespace jafleet
             var mainteing = new SortedDictionary<string, string>(); //整備中の疑い
             var allLog = new StringBuilder();
 
+            AngleSharp.IConfiguration? _config = Configuration.Default.WithDefaultLoader().WithDefaultCookies().WithXPath();
+            IBrowsingContext _context = BrowsingContext.New(_config);
             foreach (AircraftView a in _targetRegistrationNumber)
             {
                 bool success = false;
@@ -63,8 +70,49 @@ namespace jafleet
                 {
                     try
                     {
-                        var htmlDocument = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(FR24_DATA_URL + a.RegistrationNumber));
-                        var row = htmlDocument.GetElementsByClassName("data-row");
+                        string url = $"{FR24_DATA_URL}{a.RegistrationNumber}";
+                        var doc = await _context.OpenAsync(url);
+                        var row = doc?.Body?.GetElementsByClassName("data-row");
+
+                        string? jetphotos = RemoveQuery(((IHtmlAnchorElement?)doc?.Body?.SelectSingleNode("//*[@id=\"cnt-data-content\"]/div[1]/div[2]/div/div[1]/a"))?.Href);
+                        string? photoSmall = null;
+                        string? photoLarge = null;
+                        if (!string.IsNullOrEmpty(jetphotos))
+                        {
+                            photoSmall = RemoveQuery(((IHtmlImageElement?)doc?.Body?.SelectSingleNode("//*[@id=\"cnt-data-content\"]/div[1]/div[2]/div/div[1]/a/img"))?.Source);
+                            bool replaced = false;
+                            photoLarge = Regex.Replace(photoSmall!, @"/\d+/", match =>
+                            {
+                                if (!replaced)
+                                {
+                                    replaced = true;
+                                    return "/full/";
+                                }
+                                return match.Value;
+                            });
+                        }
+
+                        AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
+                        if (photo != null)
+                        {
+                            photo.PhotoUrl = jetphotos;
+                            photo.PhotoDirectLarge = photoLarge;
+                            photo.PhotoDirectSmall = photoSmall;
+                            photo.LastAccess = DateTime.Now;
+                        }
+                        else
+                        {
+                            photo = new AircraftPhoto()
+                            {
+                                RegistrationNumber = a.RegistrationNumber,
+                                PhotoUrl = jetphotos,
+                                PhotoDirectLarge = photoLarge,
+                                PhotoDirectSmall = photoSmall,
+                                LastAccess = DateTime.Now
+                            };
+                            context.AircraftPhotos.Add(photo);
+                        }
+
                         var status = context.WorkingStatuses.Where(s => s.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
                         var r = new Random();
                         if (row!.Length != 0)
@@ -336,6 +384,20 @@ namespace jafleet
             context.SaveChanges();
 
             Processing = false;
+        }
+        private string? RemoveQuery(string? url)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return url;
+            }
+
+            int queryIndex = url.IndexOf('?');
+            if (queryIndex >= 0)
+            {
+                return url.Substring(0, queryIndex);
+            }
+            return url;
         }
     }
 }
