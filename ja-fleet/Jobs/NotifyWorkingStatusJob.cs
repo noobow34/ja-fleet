@@ -8,7 +8,7 @@ using Quartz;
 
 namespace jafleet.Jobs
 {
-    public class WorkingCheckNotify : IJob
+    public class NotifyWorkingStatusJob : IJob
     {
         public async Task Execute(IJobExecutionContext context)
         {

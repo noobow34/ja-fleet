@@ -5,7 +5,7 @@ using Quartz;
 
 namespace jafleet.Jobs
 {
-    public class WorkingCheckJob : IJob
+    public class RefreshWorkingStatusAndPhotoJob : IJob
     {
         public async Task Execute(IJobExecutionContext context)
         {
@@ -14,7 +14,7 @@ namespace jafleet.Jobs
             options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
             using JafleetContext jContext = new(options.Options);
             var targetReg = jContext.AircraftViews.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray().OrderBy(r => Guid.NewGuid());
-            var check = new WorkingCheck(targetReg, 15);
+            var check = new RefreshWorkingStatusAndPhoto(targetReg, 15);
             await check.ExecuteCheckAsync();
         }
     }

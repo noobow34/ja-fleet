@@ -1,7 +1,5 @@
 ﻿using AngleSharp;
-using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
-using AngleSharp.XPath;
 using EnumStringValues;
 using jafleet.Commons.Aircraft;
 using jafleet.Commons.Constants;
@@ -9,15 +7,13 @@ using jafleet.Commons.EF;
 using jafleet.Manager;
 using Microsoft.EntityFrameworkCore;
 using Noobow.Commons.Constants;
-using Noobow.Commons.EF.Multi;
 using Noobow.Commons.Utils;
 using System.Diagnostics;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace jafleet
 {
-    public class WorkingCheck
+    public class RefreshWorkingStatusAndPhoto
     {
         private IEnumerable<AircraftView> _targetRegistrationNumber;
         private int _interval;
@@ -27,7 +23,7 @@ namespace jafleet
         public static DbContextOptionsBuilder<JafleetContext>? Options { get; set; }
         public static bool Processing { get; set; } = false;
 
-        public WorkingCheck(IEnumerable<AircraftView> targetRegistrationNumber, int interval)
+        public RefreshWorkingStatusAndPhoto(IEnumerable<AircraftView> targetRegistrationNumber, int interval)
         {
             _targetRegistrationNumber = targetRegistrationNumber;
             _interval = interval;

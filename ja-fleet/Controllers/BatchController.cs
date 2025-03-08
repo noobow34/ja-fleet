@@ -30,7 +30,7 @@ namespace jafleet.Controllers
         [HttpPost]
         public async Task<IActionResult> WorkingCheckAsync(int? interval)
         {
-            if (jafleet.WorkingCheck.Processing)
+            if (jafleet.RefreshWorkingStatusAndPhoto.Processing)
             {
                 await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), "WorkingCheck 二重起動を検出");
                 return Content("Now Processing!!");
@@ -42,7 +42,7 @@ namespace jafleet.Controllers
                 IEnumerable<AircraftView> targetReg;
                 using JafleetContext? context = serviceScope.ServiceProvider.GetService<JafleetContext>();
                 targetReg = context!.AircraftViews.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).AsNoTracking().ToArray().OrderBy(r => Guid.NewGuid());
-                var check = new WorkingCheck(targetReg, interval ?? 15);
+                var check = new RefreshWorkingStatusAndPhoto(targetReg, interval ?? 15);
                 _ = check.ExecuteCheckAsync(true);
             });
 
