@@ -17,7 +17,6 @@ namespace jafleet
     {
         private IEnumerable<AircraftView> _targetRegistrationNumber;
         private int _interval;
-        private const string FR24_DATA_URL = @"https://www.flightradar24.com/data/aircraft/";
         private readonly static TimeSpan CompareTargetTimeSpan = new(2, 0, 0, 0);
         private static readonly string[] MAINTE_PLACE = ["TPE", "MNL", "XSP", "QPG", "XMN", "SIN", "TNA", "HKG", "OKA", "TNN"];
         public static DbContextOptionsBuilder<JafleetContext>? Options { get; set; }
@@ -67,11 +66,10 @@ namespace jafleet
                 {
                     try
                     {
-                        string url = $"{FR24_DATA_URL}{a.RegistrationNumber}";
+                        string url = $"{FlightradarConstant.FR24_DATA_URL}{a.RegistrationNumber}";
                         var doc = await _context.OpenAsync(url);
                         var row = doc?.Body?.GetElementsByClassName("data-row");
                         var ap = AircraftDataExtractor.ExtractPhotoDataFromJetphotos(doc);
-
 
                         AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
                         if (photo != null)
@@ -227,7 +225,7 @@ namespace jafleet
                         //テストレジのチェック
                         if (!string.IsNullOrEmpty(a.TestRegistration))
                         {
-                            var htmlDocumentTest = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(FR24_DATA_URL + a.TestRegistration));
+                            var htmlDocumentTest = parser.ParseDocument(await HttpClientManager.GetInstance().GetStringAsync(FlightradarConstant.FR24_DATA_URL + a.TestRegistration));
                             var rowTest = htmlDocumentTest.GetElementsByClassName("data-row");
                             if (rowTest!.Length != 0)
                             {
@@ -258,14 +256,14 @@ namespace jafleet
                 if (failCount > 5)
                 {
                     Console.WriteLine(exBack?.ToString());
-                    await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"WorkingCheck異常終了:{DateTime.Now}\n");
+                    await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"RefreshWorkingStatus異常終了:{DateTime.Now}\n");
                     await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), exBack!.ToString());
                     Processing = false;
                     return;
                 }
             }
 
-            allLog.Append($"WorkingCheck正常終了:{DateTime.Now}\n");
+            allLog.Append($"RefreshWorkingStatus正常終了:{DateTime.Now}\n");
             if (toWorkingTest.Count > 0)
             {
                 allLog.Append("--------テストレジが稼働--------\n");
@@ -336,7 +334,7 @@ namespace jafleet
             context.Logs.Add(workingCheckLog);
 
             sw.Stop();
-            string nt = $"WorkingCheck正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
+            string nt = $"RefreshWorkingStatus正常終了:{DateTime.Now:yyyy/MM/dd HH:mm:ss}\n" +
                             $"処理時間: {sw.Elapsed},待機秒数: {intervalSum / 1000.0}\n" +
                             ((toWorkingTest.Count > 0) ? $"テストレジが稼働:{toWorkingTest.Count}件\n" : string.Empty) +
                             ((toWorking0.Count > 0) ? $"予約登録が稼働:{toWorking0.Count}件\n" : string.Empty) +
