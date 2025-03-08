@@ -15,18 +15,43 @@
     <script tyep="text/javascript">
         $(function () {
             $('#wcLunch').click(function () {
-                $.ajax({ url: '/Batch/WorkingCheck', type: "POST"})
+                $.ajax({ url: '/Batch/RefreshWorkingStatusAndPhoto', type: "POST"})
                 .done(function (data) {
                     $("#result").html(data);
                 })
             });
+
+            $('#photoAllLunch').click(function () {
+                $.ajax({ url: '/Batch/RefreshPhoto', type: "POST" ,data : {mode:1}})
+                .done(function (data) {
+                    $("#result").html(data);
+                })
+            });
+
+            $('#photoNotRetiredLunch').click(function () {
+                $.ajax({ url: '/Batch/RefreshPhoto', type: "POST",data : {mode:2}})
+                .done(function (data) {
+                    $("#result").html(data);
+                })
+            });
+
+            $('#photoRetiredLunch').click(function () {
+                $.ajax({ url: '/Batch/RefreshPhoto', type: "POST",data : {mode:3}})
+                .done(function (data) {
+                    $("#result").html(data);
+                })
+            });
+
         });
     </script>
 </head>
 <body>
     <div class="container">
         <div class="input-group" style="width:200px;margin-top:15px;">
-            <button id="wcLunch" type="button" class="btn">WC_Lunch</button><br />
+            <button id="wcLunch" type="button" class="btn">ステータス・写真更新通常ジョブ</button><br />
+            <button id="photoAllLunch" type="button" class="btn">写真更新（全部）</button><br />
+            <button id="photoNotRetiredLunch" type="button" class="btn">写真更新（退役以外）</button><br />
+            <button id="photoRetiredLunch" type="button" class="btn">写真更新（退役）</button><br />
             <div id="result" style="color:red"></div>
         </div>
     </div>

@@ -7,6 +7,7 @@ using jafleet.Commons.EF;
 using jafleet.Manager;
 using Microsoft.EntityFrameworkCore;
 using Noobow.Commons.Constants;
+using Noobow.Commons.Extensions;
 using Noobow.Commons.Utils;
 using System.Diagnostics;
 using System.Text;
@@ -57,6 +58,7 @@ namespace jafleet
 
             AngleSharp.IConfiguration? _config = Configuration.Default.WithDefaultLoader().WithDefaultCookies().WithXPath();
             IBrowsingContext _context = BrowsingContext.New(_config);
+            var r = new Random();
             foreach (AircraftView a in _targetRegistrationNumber)
             {
                 bool success = false;
@@ -93,7 +95,6 @@ namespace jafleet
                         }
 
                         var status = context.WorkingStatuses.Where(s => s.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
-                        var r = new Random();
                         if (row!.Length != 0)
                         {
 
@@ -190,7 +191,7 @@ namespace jafleet
                             {
                                 mainteing.Add(a.RegistrationNumber, currentInfo.ToString());
                             }
-                            Console.WriteLine(currentInfo);
+                            this.JournalWriteLine(currentInfo.ToString());
                         }
                         else
                         {
@@ -215,11 +216,11 @@ namespace jafleet
                                 };
                                 context.WorkingStatuses.Add(status);
                             }
-                            Console.WriteLine($"{a.RegistrationNumber}:データなし");
+                            this.JournalWriteLine($"{a.RegistrationNumber}:データなし");
                         }
                         int interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
                         intervalSum += interval;
-                        Console.WriteLine($"{interval}ミリ秒待機");
+                        this.JournalWriteLine($"{interval}ミリ秒待機");
                         Thread.Sleep(interval);
 
                         //テストレジのチェック
@@ -241,7 +242,7 @@ namespace jafleet
                             }
                             interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
                             intervalSum += interval;
-                            Console.WriteLine($"{interval}ミリ秒待機");
+                            this.JournalWriteLine($"{interval}ミリ秒待機");
                             Thread.Sleep(interval);
                         }
                         success = true;
@@ -255,7 +256,7 @@ namespace jafleet
                 }
                 if (failCount > 5)
                 {
-                    Console.WriteLine(exBack?.ToString());
+                    this.JournalWriteLine(exBack?.ToString() ?? string.Empty);
                     await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"RefreshWorkingStatus異常終了:{DateTime.Now}\n");
                     await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), exBack!.ToString());
                     Processing = false;
