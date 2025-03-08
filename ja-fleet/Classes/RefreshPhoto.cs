@@ -52,24 +52,28 @@ namespace jafleet
                         var ap = AircraftDataExtractor.ExtractPhotoDataFromJetphotos(doc);
 
                         AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
-                        if (photo != null)
+                        //写真が登録されているが今回取得できなかった場合はスキップ
+                        if (!(!string.IsNullOrEmpty(photo?.PhotoUrl) && string.IsNullOrEmpty(ap.PhotoUrl)))
                         {
-                            photo.PhotoUrl = ap.PhotoUrl;
-                            photo.PhotoDirectLarge = ap.PhotoDirectLarge;
-                            photo.PhotoDirectSmall = ap.PhotoDirectSmall;
-                            photo.LastAccess = DateTime.Now;
-                        }
-                        else
-                        {
-                            photo = new AircraftPhoto()
+                            if (photo != null)
                             {
-                                RegistrationNumber = a.RegistrationNumber,
-                                PhotoUrl = ap.PhotoUrl,
-                                PhotoDirectLarge = ap.PhotoDirectLarge,
-                                PhotoDirectSmall = ap.PhotoDirectSmall,
-                                LastAccess = DateTime.Now
-                            };
-                            context.AircraftPhotos.Add(photo);
+                                photo.PhotoUrl = ap.PhotoUrl;
+                                photo.PhotoDirectLarge = ap.PhotoDirectLarge;
+                                photo.PhotoDirectSmall = ap.PhotoDirectSmall;
+                                photo.LastAccess = DateTime.Now;
+                            }
+                            else
+                            {
+                                photo = new AircraftPhoto()
+                                {
+                                    RegistrationNumber = a.RegistrationNumber,
+                                    PhotoUrl = ap.PhotoUrl,
+                                    PhotoDirectLarge = ap.PhotoDirectLarge,
+                                    PhotoDirectSmall = ap.PhotoDirectSmall,
+                                    LastAccess = DateTime.Now
+                                };
+                                context.AircraftPhotos.Add(photo);
+                            }
                         }
                         if (!string.IsNullOrEmpty(ap.PhotoUrl))
                         {
