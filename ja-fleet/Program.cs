@@ -83,6 +83,11 @@ app.MapControllerRoute(
     defaults: new { controller = "AircraftDetail", action = "IndexNoheadBack" }
 );
 app.MapControllerRoute(
+    name: "AircraftDetail4",
+    pattern: "ADE/{id?}",
+    defaults: new { controller = "AircraftDetail", action = "Emb" }
+);
+app.MapControllerRoute(
     name: "Logy",
     pattern: "logy",
     defaults: new { controller = "log", action = "Yesterday" }

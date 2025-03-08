@@ -9,5 +9,6 @@ namespace jafleet.Models
         public AircraftView? AV { get; set; }
         public string? AirlineGroupNmae { get; set; }
         public string? OgImageUrl { get; set; }
+        public string PhotoUrl { get; set; } = string.Empty;
     }
 }

@@ -5,6 +5,9 @@ using jafleet.Commons.EF;
 using jafleet.Util;
 using jafleet.Commons.Constants;
 using Microsoft.EntityFrameworkCore;
+using Noobow.Commons.Constants;
+using Noobow.Commons.Utils;
+using EnumStringValues;
 
 namespace jafleet.Controllers
 {
@@ -20,7 +23,7 @@ namespace jafleet.Controllers
             _services = serviceScopeFactory;
         }
 
-        public IActionResult Index(string id, [FromQuery] bool nohead, [FromQuery] bool needback, AircraftDetailModel model)
+        public async Task<IActionResult> IndexAsync(string id, [FromQuery] bool nohead, [FromQuery] bool needback, AircraftDetailModel model)
         {
 
             model.Title = id;
@@ -34,7 +37,8 @@ namespace jafleet.Controllers
             model.NeedBack = needback;
 
             model.AV = _context.AircraftViews.AsNoTracking().Where(av => av.RegistrationNumber == id).FirstOrDefault();
-            model.OgImageUrl = (model.AV?.PhotoDirectUrl != null) ? $"https://cdn.jetphotos.com/full{model.AV?.PhotoDirectUrl}" : "https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png";
+            AircraftPhoto? photo = _context.AircraftPhotos.AsNoTracking().Where(ap => ap.RegistrationNumber == id).SingleOrDefault();
+            model.OgImageUrl = photo?.PhotoDirectLarge ?? "https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png";
             if (model.AV == null)
             {
                 //存在しないレジが指定された場合はNotFound
@@ -48,8 +52,28 @@ namespace jafleet.Controllers
             //非同期でCookieは取得できなくなるので退避
             bool isAdmin = CookieUtil.IsAdmin(HttpContext);
 
+            string linkUrl = model.AV.LinkUrl ?? string.Empty;
+            if (!string.IsNullOrEmpty(photo?.PhotoUrl) && !string.IsNullOrEmpty(linkUrl))
+            {
+                //写真取得できる場合は登録されている写真は削除
+                Aircraft a =  _context.Aircrafts.Where(a => a.RegistrationNumber == id).Single();
+                a.LinkUrl = null;
+                a.ActualUpdateTime = DateTime.Now;
+                _context.SaveChanges();
+                linkUrl = string.Empty;
+                await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), $"{id}のLinkUrlを削除しました");
+            }
+            if (!string.IsNullOrEmpty(linkUrl))
+            {
+                model.PhotoUrl = $"/ADE/{id}";
+            }
+            else
+            {
+                model.PhotoUrl = photo?.PhotoUrl ?? "/nophoto.html";
+            }
+
             //ログは非同期で書き込み
-            Task.Run(() =>
+            _ = Task.Run(() =>
             {
                 using var serviceScope = _services.CreateScope();
                 using JafleetContext? context = serviceScope.ServiceProvider.GetService<JafleetContext>();
@@ -68,14 +92,35 @@ namespace jafleet.Controllers
             return View("~/Views/AircraftDetail/index.cshtml", model);
         }
 
-        public IActionResult IndexNohead(string id, AircraftDetailModel model)
+        public IActionResult Emb(string id)
         {
-            return Index(id, true, false, model);
+            Aircraft a = _context.Aircrafts.Where(a => a.RegistrationNumber == id).Single();
+            if (a.LinkUrl!.StartsWith("<"))
+            {
+                ViewBag.Tag = a.LinkUrl!;
+                return View("~/Views/AircraftDetail/Emb.cshtml");
+            }
+            else if (a.LinkUrl!.Contains("x.com") || a.LinkUrl!.Contains("twitter.com"))
+            {
+                //ツイート埋め込みを登録している場合
+                ViewBag.TweetUrl = a.LinkUrl!.Replace("x.com","twitter.com");
+                return View("~/Views/AircraftDetail/Emb.cshtml");
+            }
+            else
+            {
+                //それ意外のサイトを登録している場合
+                return Redirect(a.LinkUrl!);
+            }
         }
 
-        public IActionResult IndexNoheadBack(string id, AircraftDetailModel model)
+        public Task<IActionResult> IndexNohead(string id, AircraftDetailModel model)
         {
-            return Index(id, true, true, model);
+            return IndexAsync(id, true, false, model);
+        }
+
+        public Task<IActionResult> IndexNoheadBack(string id, AircraftDetailModel model)
+        {
+            return IndexAsync(id, true, true, model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
