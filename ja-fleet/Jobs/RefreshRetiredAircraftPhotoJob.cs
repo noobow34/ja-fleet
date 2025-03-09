@@ -5,7 +5,7 @@ using Quartz;
 
 namespace jafleet.Jobs
 {
-    public class RefreshRetiredAircraftPhoto : IJob
+    public class RefreshRetiredAircraftPhotoJob : IJob
     {
         public async Task Execute(IJobExecutionContext context)
         {
