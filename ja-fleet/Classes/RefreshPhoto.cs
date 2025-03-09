@@ -53,8 +53,9 @@ namespace jafleet
 
                         AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
                         //写真が登録されているが今回取得できなかった場合はスキップ
-                        if (!(!string.IsNullOrEmpty(photo?.PhotoUrl) && string.IsNullOrEmpty(ap.PhotoUrl)))
+                        if (ap != null)
                         {
+                            logLine.Append($"{a.RegistrationNumber}:写真取得");
                             if (photo != null)
                             {
                                 photo.PhotoUrl = ap.PhotoUrl;
@@ -67,17 +68,13 @@ namespace jafleet
                                 photo = new AircraftPhoto()
                                 {
                                     RegistrationNumber = a.RegistrationNumber,
-                                    PhotoUrl = ap.PhotoUrl,
+                                    PhotoUrl = ap!.PhotoUrl,
                                     PhotoDirectLarge = ap.PhotoDirectLarge,
                                     PhotoDirectSmall = ap.PhotoDirectSmall,
                                     LastAccess = DateTime.Now
                                 };
                                 context.AircraftPhotos.Add(photo);
                             }
-                        }
-                        if (!string.IsNullOrEmpty(ap.PhotoUrl))
-                        {
-                            logLine.Append($"{a.RegistrationNumber}:写真取得");
                         }
                         else
                         {

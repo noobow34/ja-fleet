@@ -89,28 +89,27 @@ namespace jafleet
                         currentInfo.Append($"{a.RegistrationNumber}{notifyMark}({a.TypeDetailName}):{aircraftPage}");
 
                         AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
-                        if (photo != null)
-                        {
-                            photo.PhotoUrl = ap.PhotoUrl;
-                            photo.PhotoDirectLarge = ap.PhotoDirectLarge;
-                            photo.PhotoDirectSmall = ap.PhotoDirectSmall;
-                            photo.LastAccess = DateTime.Now;
-                        }
-                        else
-                        {
-                            photo = new AircraftPhoto()
-                            {
-                                RegistrationNumber = a.RegistrationNumber,
-                                PhotoUrl = ap.PhotoUrl,
-                                PhotoDirectLarge = ap.PhotoDirectLarge,
-                                PhotoDirectSmall = ap.PhotoDirectSmall,
-                                LastAccess = DateTime.Now
-                            };
-                            context.AircraftPhotos.Add(photo);
-                        }
-                        if (!string.IsNullOrEmpty(ap.PhotoUrl))
-                        {
+                        if (ap != null) {
                             currentInfo.Append($":写真あり");
+                            if (photo != null)
+                            {
+                                photo.PhotoUrl = ap.PhotoUrl;
+                                photo.PhotoDirectLarge = ap.PhotoDirectLarge;
+                                photo.PhotoDirectSmall = ap.PhotoDirectSmall;
+                                photo.LastAccess = DateTime.Now;
+                            }
+                            else
+                            {
+                                photo = new AircraftPhoto()
+                                {
+                                    RegistrationNumber = a.RegistrationNumber,
+                                    PhotoUrl = ap.PhotoUrl,
+                                    PhotoDirectLarge = ap.PhotoDirectLarge,
+                                    PhotoDirectSmall = ap.PhotoDirectSmall,
+                                    LastAccess = DateTime.Now
+                                };
+                                context.AircraftPhotos.Add(photo);
+                            }
                         }
                         else
                         {
