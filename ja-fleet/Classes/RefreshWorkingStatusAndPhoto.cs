@@ -1,4 +1,5 @@
 ﻿using AngleSharp;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using EnumStringValues;
 using jafleet.Commons.Aircraft;
@@ -74,7 +75,18 @@ namespace jafleet
                         var ap = AircraftDataExtractor.ExtractPhotoDataFromJetphotos(doc);
 
                         var currentInfo = new StringBuilder();
-                        currentInfo.Append($"{a.RegistrationNumber}:{doc?.StatusCode}");
+                        bool hasAircraftPage = doc?.BaseUri.ToUpper().Contains(a.RegistrationNumber.ToUpper()) ?? false;
+                        string aircraftPage = hasAircraftPage ? "ページあり" : "ページなし";
+                        string notifyMark = string.Empty;
+                        if (!string.IsNullOrEmpty(a.SpecialLivery))
+                        {
+                            notifyMark = "◎";
+                        }
+                        else if (a.MaintenanceNotify.HasValue && a.MaintenanceNotify.Value)
+                        {
+                            notifyMark = "☆";
+                        }
+                        currentInfo.Append($"{a.RegistrationNumber}{notifyMark}({a.TypeDetailName}):{aircraftPage}");
 
                         AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
                         if (photo != null)
@@ -111,16 +123,7 @@ namespace jafleet
                             //rowがもつ日付
                             string? timestamp = row[0].GetAttribute("data-timestamp");
                             DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp!)).LocalDateTime;
-                            string notifyMark = string.Empty;
-                            if (!string.IsNullOrEmpty(a.SpecialLivery))
-                            {
-                                notifyMark = "◎";
-                            }
-                            else if (a.MaintenanceNotify.HasValue && a.MaintenanceNotify.Value)
-                            {
-                                notifyMark = "☆";
-                            }
-                            currentInfo.Append($"{a.RegistrationNumber}{notifyMark}({a.TypeDetailName}):{latestDate:yyyy/MM/dd HH:mm} ");
+                            currentInfo.Append($":{latestDate:yyyy/MM/dd HH:mm}");
 
                             //tdの各値
                             var td = row[0].GetElementsByTagName("td");
@@ -200,7 +203,6 @@ namespace jafleet
                             {
                                 mainteing.Add(a.RegistrationNumber, currentInfo.ToString());
                             }
-                            currentInfo.Append($":{currentInfo}");
                         }
                         else
                         {
