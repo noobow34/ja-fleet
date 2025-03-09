@@ -73,6 +73,9 @@ namespace jafleet
                         var row = doc?.Body?.GetElementsByClassName("data-row");
                         var ap = AircraftDataExtractor.ExtractPhotoDataFromJetphotos(doc);
 
+                        var currentInfo = new StringBuilder();
+                        currentInfo.Append($"{a.RegistrationNumber}:{doc?.StatusCode}");
+
                         AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
                         if (photo != null)
                         {
@@ -93,15 +96,21 @@ namespace jafleet
                             };
                             context.AircraftPhotos.Add(photo);
                         }
+                        if (!string.IsNullOrEmpty(ap.PhotoUrl))
+                        {
+                            currentInfo.Append($":写真あり");
+                        }
+                        else
+                        {
+                            currentInfo.Append($":写真なし");
+                        }
 
                         var status = context.WorkingStatuses.Where(s => s.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
                         if (row!.Length != 0)
                         {
-
                             //rowがもつ日付
                             string? timestamp = row[0].GetAttribute("data-timestamp");
                             DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp!)).LocalDateTime;
-                            var currentInfo = new StringBuilder();
                             string notifyMark = string.Empty;
                             if (!string.IsNullOrEmpty(a.SpecialLivery))
                             {
@@ -191,7 +200,7 @@ namespace jafleet
                             {
                                 mainteing.Add(a.RegistrationNumber, currentInfo.ToString());
                             }
-                            this.JournalWriteLine(currentInfo.ToString());
+                            currentInfo.Append($":{currentInfo}");
                         }
                         else
                         {
@@ -216,11 +225,12 @@ namespace jafleet
                                 };
                                 context.WorkingStatuses.Add(status);
                             }
-                            this.JournalWriteLine($"{a.RegistrationNumber}:データなし");
+                            currentInfo.Append($":飛行データなし");
                         }
                         int interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
                         intervalSum += interval;
-                        this.JournalWriteLine($"{interval}ミリ秒待機");
+                        currentInfo.Append($":{interval}ミリ秒待機");
+                        this.JournalWriteLine(currentInfo.ToString());
                         Thread.Sleep(interval);
 
                         //テストレジのチェック
@@ -242,7 +252,7 @@ namespace jafleet
                             }
                             interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
                             intervalSum += interval;
-                            this.JournalWriteLine($"{interval}ミリ秒待機");
+                            this.JournalWriteLine($"テストレジあり:{interval}ミリ秒待機");
                             Thread.Sleep(interval);
                         }
                         success = true;
