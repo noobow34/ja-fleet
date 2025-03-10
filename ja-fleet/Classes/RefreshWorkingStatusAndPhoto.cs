@@ -151,6 +151,7 @@ namespace jafleet
                             status.ExistPage = existPage;
                             status.ExistPhoto = existPhoto;
                             status.ExistOperation = existOperation;
+                            status.UpdatedAt = DateTime.Now;
 
                             if ((!previousWorking.HasValue || !previousWorking.Value) && status.Working!.Value)
                             {
@@ -221,6 +222,7 @@ namespace jafleet
                                 status.ExistPage = existPage;
                                 status.ExistPhoto = existPhoto;
                                 status.ExistOperation = existOperation;
+                                status.UpdatedAt = DateTime.Now;
                             }
                             else
                             {
@@ -230,7 +232,8 @@ namespace jafleet
                                     Working = false,
                                     ExistPage = existPage,
                                     ExistPhoto = existPhoto,
-                                    ExistOperation = existOperation
+                                    ExistOperation = existOperation,
+                                    UpdatedAt = DateTime.Now
                                 };
                                 context.WorkingStatuses.Add(status);
                             }

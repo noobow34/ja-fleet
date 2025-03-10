@@ -51,11 +51,17 @@ namespace jafleet
                         var row = doc?.Body?.GetElementsByClassName("data-row");
                         var ap = AircraftDataExtractor.ExtractPhotoDataFromJetphotos(doc);
 
-                        AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
+                        AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).SingleOrDefault();
+                        WorkingStatus? ws = context.WorkingStatuses.Where(ws => ws.RegistrationNumber == a.RegistrationNumber).SingleOrDefault();
                         //写真が登録されているが今回取得できなかった場合はスキップ
                         if (ap != null)
                         {
                             logLine.Append($"{a.RegistrationNumber}:写真取得");
+                            if (ws != null)
+                            {
+                                ws.ExistPage = true;
+                                ws.UpdatedAt = DateTime.Now;
+                            }
                             if (photo != null)
                             {
                                 photo.PhotoUrl = ap.PhotoUrl;
@@ -79,6 +85,11 @@ namespace jafleet
                         else
                         {
                             logLine.Append($"{a.RegistrationNumber}:写真なし");
+                            if (ws != null)
+                            {
+                                ws.ExistPage = false;
+                                ws.UpdatedAt = DateTime.Now;
+                            }
                         }
                     }
                     catch (Exception ex)
