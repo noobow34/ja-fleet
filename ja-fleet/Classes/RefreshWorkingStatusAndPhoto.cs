@@ -65,6 +65,9 @@ namespace jafleet
                 bool success = false;
                 int failCount = 0;
                 Exception? exBack = null;
+                bool existPhoto = false;
+                bool existPage = false;
+                bool existOperation = false;
                 while (!success && failCount <= 5)
                 {
                     try
@@ -75,8 +78,7 @@ namespace jafleet
                         var ap = AircraftDataExtractor.ExtractPhotoDataFromJetphotos(doc);
 
                         var currentInfo = new StringBuilder();
-                        bool hasAircraftPage = doc?.BaseUri.ToUpper().Contains(a.RegistrationNumber.ToUpper()) ?? false;
-                        string aircraftPage = hasAircraftPage ? "ページあり" : "ページなし";
+                        existPage = doc?.BaseUri.ToUpper().Contains(a.RegistrationNumber.ToUpper()) ?? false;
                         string notifyMark = string.Empty;
                         if (!string.IsNullOrEmpty(a.SpecialLivery))
                         {
@@ -86,11 +88,11 @@ namespace jafleet
                         {
                             notifyMark = "☆";
                         }
-                        currentInfo.Append($"{a.RegistrationNumber}{notifyMark}({a.TypeDetailName}):{aircraftPage}");
+                        currentInfo.Append($"{a.RegistrationNumber}{notifyMark}({a.TypeDetailName})");
 
                         AircraftPhoto? photo = context.AircraftPhotos.Where(p => p.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
                         if (ap != null) {
-                            currentInfo.Append($":写真あり");
+                            existPhoto = true;
                             if (photo != null)
                             {
                                 photo.PhotoUrl = ap.PhotoUrl;
@@ -111,14 +113,11 @@ namespace jafleet
                                 context.AircraftPhotos.Add(photo);
                             }
                         }
-                        else
-                        {
-                            currentInfo.Append($":写真なし");
-                        }
 
                         var status = context.WorkingStatuses.Where(s => s.RegistrationNumber == a.RegistrationNumber).FirstOrDefault();
                         if (row!.Length != 0)
                         {
+                            existOperation = true;
                             //rowがもつ日付
                             string? timestamp = row[0].GetAttribute("data-timestamp");
                             DateTime latestDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(timestamp!)).LocalDateTime;
@@ -128,7 +127,7 @@ namespace jafleet
                             var td = row[0].GetElementsByTagName("td");
                             if (td!.Length != 0)
                             {
-                                currentInfo.Append($"{td[3].TextContent!.Trim()} {td[4].TextContent!.Trim()} {td[5].TextContent!.Trim()} {td[11].TextContent!.Trim()}");
+                                currentInfo.Append($":{td[3].TextContent!.Trim()} {td[4].TextContent!.Trim()} {td[5].TextContent!.Trim()} {td[11].TextContent!.Trim()}");
                             }
 
                             bool? previousWorking;
@@ -149,6 +148,9 @@ namespace jafleet
                             status.FlightNumber = td[5].TextContent!.Trim();
                             status.Status = td[11].TextContent!.Trim();
                             status.Working = (DateTime.Now.Date < latestDate.Date) || ((DateTime.Now.Date - latestDate.Date) <= CompareTargetTimeSpan);
+                            status.ExistPage = existPage;
+                            status.ExistPhoto = existPhoto;
+                            status.ExistOperation = existOperation;
 
                             if ((!previousWorking.HasValue || !previousWorking.Value) && status.Working!.Value)
                             {
@@ -216,21 +218,29 @@ namespace jafleet
                                     mainteing.Add(a.RegistrationNumber, $"{status.RegistrationNumber}({a.TypeDetailName}):{status.FlightDate} {status.FromAp} {status.ToAp} {status.FlightNumber} {status.Status}");
                                 }
                                 status.Working = false;
+                                status.ExistPage = existPage;
+                                status.ExistPhoto = existPhoto;
+                                status.ExistOperation = existOperation;
                             }
                             else
                             {
                                 status = new WorkingStatus()
                                 {
                                     RegistrationNumber = a.RegistrationNumber,
-                                    Working = false
+                                    Working = false,
+                                    ExistPage = existPage,
+                                    ExistPhoto = existPhoto,
+                                    ExistOperation = existOperation
                                 };
                                 context.WorkingStatuses.Add(status);
                             }
-                            currentInfo.Append($":飛行データなし");
                         }
                         int interval = Convert.ToInt32(r.NextDouble() * _interval * 1000);
                         intervalSum += interval;
-                        currentInfo.Append($":{interval}ミリ秒待機");
+                        string existPageString = existPage ? "ページあり" : "ページなし";
+                        string existPhotoString = existPhoto ? "写真あり" : "写真なし";
+                        string existOperationString = existOperation ? "運航情報あり" : "運航情報なし";
+                        currentInfo.Append($":{existPageString}:{existPhotoString}:{existOperationString}:{interval}ミリ秒待機");
                         this.JournalWriteLine(currentInfo.ToString());
                         Thread.Sleep(interval);
 
