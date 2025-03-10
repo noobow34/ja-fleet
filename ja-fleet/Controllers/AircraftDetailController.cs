@@ -37,8 +37,7 @@ namespace jafleet.Controllers
             model.NeedBack = needback;
 
             model.AV = _context.AircraftViews.AsNoTracking().Where(av => av.RegistrationNumber == id).FirstOrDefault();
-            AircraftPhoto? photo = _context.AircraftPhotos.AsNoTracking().Where(ap => ap.RegistrationNumber == id).SingleOrDefault();
-            model.OgImageUrl = photo?.PhotoDirectLarge ?? "https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png";
+            model.OgImageUrl = model.AV?.PhotoDirectLarge ?? "https://ja-fleet.noobow.me/images/JA-Fleet_1_og.png";
             if (model.AV == null)
             {
                 //存在しないレジが指定された場合はNotFound
@@ -53,7 +52,7 @@ namespace jafleet.Controllers
             bool isAdmin = CookieUtil.IsAdmin(HttpContext);
 
             string linkUrl = model.AV.LinkUrl ?? string.Empty;
-            if (!string.IsNullOrEmpty(photo?.PhotoUrl) && !string.IsNullOrEmpty(linkUrl))
+            if (!string.IsNullOrEmpty(model.AV?.PhotoUrl) && !string.IsNullOrEmpty(linkUrl))
             {
                 //写真取得できる場合は登録されている写真は削除
                 Aircraft a =  _context.Aircrafts.Where(a => a.RegistrationNumber == id).Single();
@@ -69,7 +68,7 @@ namespace jafleet.Controllers
             }
             else
             {
-                model.PhotoUrl = photo?.PhotoUrl ?? "/nophoto.html";
+                model.PhotoUrl = model.AV?.PhotoUrl ?? "/nophoto.html";
             }
 
             //ログは非同期で書き込み
