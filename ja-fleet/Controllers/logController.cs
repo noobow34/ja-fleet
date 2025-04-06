@@ -46,7 +46,7 @@ namespace jafleet.Controllers
             }
 
             List<Log>? logs = null;
-            logs = _context.Logs.AsNoTracking().Where(q => q.LogDate == targetDate && !MasterManager.AdminUser!.Contains(q.UserId ?? string.Empty) && q.LogType != "8").OrderByDescending(q => q.LogId).ToList();
+            logs = _context.Logs.AsNoTracking().Where(q => q.LogDate!.Value.Date == targetDate!.Value.Date && !MasterManager.AdminUser!.Contains(q.UserId ?? string.Empty) && q.LogType != "8").OrderByDescending(q => q.LogId).ToList();
 
             var logScKeys = logs.Where(sc => sc.LogType == LogType.SEARCH).Select(scc => scc.LogDetail).Distinct();
             var scCache = GetSearchConditionDisps(logScKeys!);
