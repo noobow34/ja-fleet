@@ -21,9 +21,8 @@ namespace jafleet
             sch = await schedulerFactory.GetScheduler();
             await sch.Start();
 
-            var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
             var options = new DbContextOptionsBuilder<JafleetContext>();
-            options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+            options.UseNpgsql(Environment.GetEnvironmentVariable("JAFLEET_CONNECTION_STRING") ?? "");
             using JafleetContext context = new(options.Options);
 
             var scs = context.SchedulerDefs.Where(s => s.Enabled).AsNoTracking().ToArray();

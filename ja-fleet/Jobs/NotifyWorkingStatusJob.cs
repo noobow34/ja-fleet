@@ -13,8 +13,7 @@ namespace jafleet.Jobs
         public async Task Execute(IJobExecutionContext context)
         {
             DbContextOptionsBuilder<JafleetContext>? Options = new();
-            var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
-            Options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+            Options.UseNpgsql(Environment.GetEnvironmentVariable("JAFLEET_CONNECTION_STRING") ?? "");
             using JafleetContext jc = new (Options!.Options);
             var log = jc.Logs.Where(l => l.LogType == LogType.WORKING_NOTIFY_TEXT && l.LogDate!.Value.Date == DateTime.Now.Date).OrderByDescending(l => l.LogId).FirstOrDefault();
             if (log != null) {

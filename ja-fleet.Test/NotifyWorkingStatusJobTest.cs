@@ -40,9 +40,8 @@ namespace ja_fleet.Test
         [TestMethod]
         public async Task ExecuteWithtRefreshAsync()
         {
-            var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
             var options = new DbContextOptionsBuilder<JafleetContext>();
-            options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+            options.UseNpgsql(Environment.GetEnvironmentVariable("JAFLEET_CONNECTION_STRING") ?? "");
             using JafleetContext jContext = new(options.Options);
             var targetReg = jContext.AircraftViews.Where(a => a.OperationCode != OperationCode.RETIRE_UNREGISTERED).Take(50).AsNoTracking().ToArray().OrderBy(r => Guid.NewGuid());
             var f = new RefreshWorkingStatusAndPhoto(targetReg, 15);

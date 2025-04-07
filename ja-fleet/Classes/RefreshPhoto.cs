@@ -25,8 +25,7 @@ namespace jafleet
             if (Options == null)
             {
                 Options = new DbContextOptionsBuilder<JafleetContext>();
-                var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
-                Options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+                Options.UseNpgsql(Environment.GetEnvironmentVariable("JAFLEET_CONNECTION_STRING") ?? "");
             }
         }
 

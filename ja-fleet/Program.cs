@@ -8,6 +8,14 @@ using Microsoft.Extensions.WebEncoders;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
+Console.WriteLine($"SLACK_BOT_TOKEN:{Environment.GetEnvironmentVariable("SLACK_BOT_TOKEN")?.Length ?? 0}");
+string connectionString = Environment.GetEnvironmentVariable("JAFLEET_CONNECTION_STRING") ?? "";
+Console.WriteLine($"JAFLEET_CONNECTION_STRING:{connectionString?.Length ?? 0}");
+string auth0Domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN") ?? "";
+string auth0ClientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID") ?? "";
+Console.WriteLine($"AUTH0_ISSUER:{auth0Domain.Length}");
+Console.WriteLine($"AUTH0_CLIENT_ID:{auth0ClientId.Length}");
+
 var builder = WebApplication.CreateBuilder(args);
 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
 
@@ -17,7 +25,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 builder.Services.AddDbContextPool<JafleetContext>(
-    options => options.UseNpgsql(config.GetConnectionString("DefaultConnection"))
+    options => options.UseNpgsql(connectionString)
 );
 builder.Services.Configure<WebEncoderOptions>(options =>
 {
@@ -27,8 +35,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddProgressiveWebApp();
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
-    options.Domain = builder.Configuration["Auth0:Domain"] ?? "";
-    options.ClientId = builder.Configuration["Auth0:ClientId"] ?? "";
+    options.Domain = auth0Domain;
+    options.ClientId = auth0ClientId;
 });
 builder.Services.AddSingleton<IConfiguration>(config);
 
@@ -98,7 +106,7 @@ app.MapControllerRoute(
 );
 
 var options = new DbContextOptionsBuilder<JafleetContext>();
-options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+options.UseNpgsql(connectionString);
 using JafleetContext context = new(options.Options);
 MasterManager.ReadAll(context);
 
