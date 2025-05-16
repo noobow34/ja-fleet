@@ -4,6 +4,7 @@ using jafleet.Commons.EF;
 using jafleet.Manager;
 using jafleet.Models;
 using jafleet.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -22,13 +23,9 @@ namespace jafleet.Controllers
             return Index("y");
         }
 
+        [Authorize]
         public IActionResult Index(string id)
         {
-            if (!CookieUtil.IsAdmin(HttpContext))
-            {
-                return NotFound();
-            }
-
             DateTime? targetDate = null;
             if (string.IsNullOrEmpty(id))
             {
