@@ -11,7 +11,7 @@
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Path.StartsWithSegments("/Account/Login") || context.User.Identity!.IsAuthenticated)
+            if (context.Request.Path.StartsWithSegments("/Account/Login") || context.User.Identity!.IsAuthenticated || context.Request.Path.StartsWithSegments("/SetCookie"))
             {
                 await _next(context);
                 return;
