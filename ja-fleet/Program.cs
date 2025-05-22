@@ -15,6 +15,8 @@ string auth0Domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN") ?? "";
 string auth0ClientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID") ?? "";
 Console.WriteLine($"AUTH0_ISSUER:{auth0Domain.Length}");
 Console.WriteLine($"AUTH0_CLIENT_ID:{auth0ClientId.Length}");
+string isAdminValue = Environment.GetEnvironmentVariable("IS_ADMIN") ?? "";
+Console.WriteLine($"IS_ADMIN:{isAdminValue.Length}");
 
 var builder = WebApplication.CreateBuilder(args);
 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
@@ -49,6 +51,7 @@ app.UseStaticFiles();
 app.UseCookiePolicy();
 app.UseRouting();
 app.UseAuthentication();
+app.UseMiddleware<ConditionalAuthRedirectMiddleware>();
 app.UseAuthorization();
 app.MapControllerRoute(
     name: "EditStore",
