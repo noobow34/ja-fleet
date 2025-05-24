@@ -21,7 +21,7 @@ namespace jafleet.Classes
                 || context.Request.Path.StartsWithSegments("/SetCookie")
                 || context.Request.Path.StartsWithSegments("/api")
                 || context.Request.Path.StartsWithSegments("/Master")
-                || loggingTarget)
+                || !loggingTarget)
             {
                 await _next(context);
                 return;
