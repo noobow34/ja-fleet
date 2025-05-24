@@ -21,11 +21,6 @@ Console.WriteLine($"IS_ADMIN:{isAdminValue.Length}");
 var builder = WebApplication.CreateBuilder(args);
 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
 
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-    options.CheckConsentNeeded = context => true;
-    options.MinimumSameSitePolicy = SameSiteMode.None;
-});
 builder.Services.AddDbContextPool<JafleetContext>(
     options => options.UseNpgsql(connectionString)
 );
@@ -48,7 +43,6 @@ app.UseExceptionHandler("/Home/Error");
 
 app.UseLoggingMiddleware();
 app.UseStaticFiles();
-app.UseCookiePolicy();
 app.UseRouting();
 app.UseAuthentication();
 app.UseMiddleware<ConditionalAuthRedirectMiddleware>();

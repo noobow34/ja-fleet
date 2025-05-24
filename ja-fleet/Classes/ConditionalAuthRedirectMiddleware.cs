@@ -1,8 +1,12 @@
-﻿namespace jafleet.Classes
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
+
+namespace jafleet.Classes
 {
     public class ConditionalAuthRedirectMiddleware
     {
         private readonly RequestDelegate _next;
+        private static string[] EXCLUDE_LIST = [".CSS", ".JS", ".PNG", ".JPG", ".JPEG", ".GIF", ".ICO", "/CHECK"];
 
         public ConditionalAuthRedirectMiddleware(RequestDelegate next)
         {
@@ -11,7 +15,13 @@
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Path.StartsWithSegments("/Account/Login") || context.User.Identity!.IsAuthenticated || context.Request.Path.StartsWithSegments("/SetCookie"))
+            bool loggingTarget = !EXCLUDE_LIST.Any(s => context.Request.Path.Value!.ToUpper().Contains(s));
+            if (context.Request.Path.StartsWithSegments("/Account/Login")
+                || context.User.Identity!.IsAuthenticated
+                || context.Request.Path.StartsWithSegments("/SetCookie")
+                || context.Request.Path.StartsWithSegments("/api")
+                || context.Request.Path.StartsWithSegments("/Master")
+                || loggingTarget)
             {
                 await _next(context);
                 return;
@@ -24,6 +34,10 @@
                 if (isAdmin == isAdminValue)
                 {
                     context.Response.Redirect("/Account/Login");
+                    context.Response.Cookies.Append("IS_ADMIN", isAdmin, new CookieOptions
+                    {
+                        Expires = DateTimeOffset.UtcNow.AddDays(365)
+                    });
                     return;
                 }
             }
