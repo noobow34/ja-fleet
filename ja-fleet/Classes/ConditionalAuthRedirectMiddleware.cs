@@ -6,7 +6,7 @@ namespace jafleet.Classes
     public class ConditionalAuthRedirectMiddleware
     {
         private readonly RequestDelegate _next;
-        private static string[] EXCLUDE_LIST = [".CSS", ".JS", ".PNG", ".JPG", ".JPEG", ".GIF", ".ICO", "/CHECK"];
+        private static string[] EXCLUDE_LIST = [".CSS", ".JS", ".PNG", ".JPG", ".JPEG", ".GIF", ".ICO", "/CHECK", "/ACCOUNT/LOGIN", "/SETCOOKIE", "/API", "/MASTER", "/LOG"];
         private static readonly string adminKey = Environment.GetEnvironmentVariable("admin_key") ?? "";
         private static readonly string adminValue = Environment.GetEnvironmentVariable("admin_value") ?? "";
 
@@ -17,13 +17,8 @@ namespace jafleet.Classes
 
         public async Task Invoke(HttpContext context)
         {
-            bool loggingTarget = !EXCLUDE_LIST.Any(s => context.Request.Path.Value!.ToUpper().Contains(s));
-            if (context.Request.Path.StartsWithSegments("/Account/Login")
-                || context.User.Identity!.IsAuthenticated
-                || context.Request.Path.StartsWithSegments("/SetCookie")
-                || context.Request.Path.StartsWithSegments("/api")
-                || context.Request.Path.StartsWithSegments("/Master")
-                || !loggingTarget)
+            bool autoLoginTarget = !EXCLUDE_LIST.Any(s => context.Request.Path.Value!.ToUpper().Contains(s));
+            if (context.User.Identity!.IsAuthenticated || !autoLoginTarget)
             {
                 await _next(context);
                 return;
@@ -35,7 +30,7 @@ namespace jafleet.Classes
                 context.Response.Redirect("/Account/Login");
                 context.Response.Cookies.Append(adminKey, adminCookieValue, new CookieOptions
                 {
-                    Expires = DateTimeOffset.UtcNow.AddDays(365)
+                    Expires = DateTimeOffset.UtcNow.AddYears(1)
                 });
                 return;
             }
