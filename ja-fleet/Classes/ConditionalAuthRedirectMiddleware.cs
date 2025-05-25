@@ -7,6 +7,8 @@ namespace jafleet.Classes
     {
         private readonly RequestDelegate _next;
         private static string[] EXCLUDE_LIST = [".CSS", ".JS", ".PNG", ".JPG", ".JPEG", ".GIF", ".ICO", "/CHECK"];
+        private static readonly string adminKey = Environment.GetEnvironmentVariable("admin_key") ?? "";
+        private static readonly string adminValue = Environment.GetEnvironmentVariable("admin_value") ?? "";
 
         public ConditionalAuthRedirectMiddleware(RequestDelegate next)
         {
@@ -27,19 +29,15 @@ namespace jafleet.Classes
                 return;
             }
 
-            context.Request.Cookies.TryGetValue("IS_ADMIN", out string? isAdmin);
-            if (!string.IsNullOrEmpty(isAdmin))
+            context.Request.Cookies.TryGetValue(adminKey, out string? adminCookieValue);
+            if (adminCookieValue == adminValue)
             {
-                string isAdminValue = Environment.GetEnvironmentVariable("IS_ADMIN") ?? "";
-                if (isAdmin == isAdminValue)
+                context.Response.Redirect("/Account/Login");
+                context.Response.Cookies.Append(adminKey, adminCookieValue, new CookieOptions
                 {
-                    context.Response.Redirect("/Account/Login");
-                    context.Response.Cookies.Append("IS_ADMIN", isAdmin, new CookieOptions
-                    {
-                        Expires = DateTimeOffset.UtcNow.AddDays(365)
-                    });
-                    return;
-                }
+                    Expires = DateTimeOffset.UtcNow.AddDays(365)
+                });
+                return;
             }
             
             await _next(context);

@@ -15,8 +15,10 @@ string auth0Domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN") ?? "";
 string auth0ClientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID") ?? "";
 Console.WriteLine($"AUTH0_ISSUER:{auth0Domain.Length}");
 Console.WriteLine($"AUTH0_CLIENT_ID:{auth0ClientId.Length}");
-string isAdminValue = Environment.GetEnvironmentVariable("IS_ADMIN") ?? "";
-Console.WriteLine($"IS_ADMIN:{isAdminValue.Length}");
+string adminKey = Environment.GetEnvironmentVariable("ADMIN_KEY") ?? "";
+Console.WriteLine($"ADMIN_KEY:{adminKey.Length}");
+string adminValue = Environment.GetEnvironmentVariable("ADMIN_VALUE") ?? "";
+Console.WriteLine($"ADMIN_VALUE:{adminValue.Length}");
 
 var builder = WebApplication.CreateBuilder(args);
 var config = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory).AddJsonFile("appsettings.json").Build();
