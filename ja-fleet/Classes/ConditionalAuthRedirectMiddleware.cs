@@ -7,6 +7,8 @@ namespace jafleet.Classes
     {
         private readonly RequestDelegate _next;
         private static string[] EXCLUDE_LIST = [".CSS", ".JS", ".PNG", ".JPG", ".JPEG", ".GIF", ".ICO", "/CHECK", "/ACCOUNT/LOGIN", "/SETCOOKIE", "/API", "/MASTER", "/LOG"];
+        private static readonly string adminKey = Environment.GetEnvironmentVariable("ADMIN_KEY") ?? "";
+        private static readonly string adminValue = Environment.GetEnvironmentVariable("ADMIN_VALUE") ?? "";
 
         public ConditionalAuthRedirectMiddleware(RequestDelegate next)
         {
@@ -22,8 +24,6 @@ namespace jafleet.Classes
                 return;
             }
 
-            string adminKey = Environment.GetEnvironmentVariable("admin_key") ?? "";
-            string adminValue = Environment.GetEnvironmentVariable("admin_value") ?? "";
             context.Request.Cookies.TryGetValue(adminKey, out string? adminCookieValue);
             Console.WriteLine($"Admin Key: {adminKey}[END]");
             Console.WriteLine($"Admin Value: {adminValue}[END]");
