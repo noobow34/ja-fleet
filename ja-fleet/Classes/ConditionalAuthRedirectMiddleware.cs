@@ -25,9 +25,6 @@ namespace jafleet.Classes
             }
 
             context.Request.Cookies.TryGetValue(adminKey, out string? adminCookieValue);
-            Console.WriteLine($"Admin Key: {adminKey}[END]");
-            Console.WriteLine($"Admin Value: {adminValue}[END]");
-            Console.WriteLine($"Admin Cookie Value: {adminCookieValue}[END]");
             if (adminCookieValue == adminValue)
             {
                 Console.WriteLine("Admin cookie value matches, redirecting to /Master/Index");
