@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
+using System.Text.Encodings.Web;
+using System.Web;
 
 namespace jafleet.Classes
 {
@@ -27,7 +29,8 @@ namespace jafleet.Classes
             context.Request.Cookies.TryGetValue(adminKey, out string? adminCookieValue);
             if (adminCookieValue == adminValue)
             {
-                context.Response.Redirect("/Account/Login");
+                string returnUrl = HttpUtility.UrlEncode(context.Request.Path);
+                context.Response.Redirect($"/Account/Login?ReturnUrl={returnUrl}");
                 context.Response.Cookies.Append(adminKey, adminCookieValue, new CookieOptions
                 {
                     Expires = DateTimeOffset.UtcNow.AddYears(1)
