@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json.Linq;
-using System.Text.Encodings.Web;
+﻿using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using System.Web;
 
 namespace jafleet.Classes
@@ -29,12 +28,19 @@ namespace jafleet.Classes
             context.Request.Cookies.TryGetValue(adminKey, out string? adminCookieValue);
             if (adminCookieValue == adminValue)
             {
-                string returnUrl = HttpUtility.UrlEncode(context.Request.Path);
-                context.Response.Redirect($"/Account/Login?ReturnUrl={returnUrl}");
+                string returnUrl = string.Empty;
+                if (context.Request.Path != "/")
+                {
+                    returnUrl = HttpUtility.UrlEncode(context.Request.Path);
+                }
                 context.Response.Cookies.Append(adminKey, adminCookieValue, new CookieOptions
                 {
                     Expires = DateTimeOffset.UtcNow.AddYears(1)
                 });
+                var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
+                    .WithRedirectUri(returnUrl)
+                    .Build();
+                await context.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
                 return;
             }
             
