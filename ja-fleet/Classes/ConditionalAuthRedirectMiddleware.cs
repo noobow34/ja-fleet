@@ -28,11 +28,7 @@ namespace jafleet.Classes
             context.Request.Cookies.TryGetValue(adminKey, out string? adminCookieValue);
             if (adminCookieValue == adminValue)
             {
-                string returnUrl = string.Empty;
-                if (context.Request.Path != "/")
-                {
-                    returnUrl = context.Request.Path;
-                }
+                string returnUrl = context.Request.Path;
                 context.Response.Cookies.Append(adminKey, adminCookieValue, new CookieOptions
                 {
                     Expires = DateTimeOffset.UtcNow.AddYears(1)
