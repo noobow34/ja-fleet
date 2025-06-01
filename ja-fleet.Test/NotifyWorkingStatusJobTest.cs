@@ -3,10 +3,8 @@ using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Jobs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Quartz;
 using Quartz.Impl;
-using System.Reflection.Metadata;
 
 namespace ja_fleet.Test
 {

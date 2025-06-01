@@ -1,5 +1,4 @@
-﻿using jafleet.Manager;
-namespace jafleet.Util
+﻿namespace jafleet.Util
 {
     public static class CookieUtil
     {

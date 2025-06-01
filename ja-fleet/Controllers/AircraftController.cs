@@ -6,12 +6,6 @@ using jafleet.Manager;
 using jafleet.Util;
 using Microsoft.EntityFrameworkCore;
 using jafleet.Commons.Constants;
-using Noobow.Commons.Utils;
-using AngleSharp;
-using AngleSharp.XPath;
-using AngleSharp.Html.Dom;
-using Noobow.Commons.Constants;
-using EnumStringValues;
 
 namespace jafleet.Controllers
 {

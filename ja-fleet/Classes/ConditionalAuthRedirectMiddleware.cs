@@ -1,6 +1,5 @@
 ﻿using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication;
-using System.Web;
 
 namespace jafleet.Classes
 {

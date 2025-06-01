@@ -3,7 +3,6 @@ using jafleet.Commons.Constants;
 using jafleet.Commons.EF;
 using jafleet.Manager;
 using jafleet.Models;
-using jafleet.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
