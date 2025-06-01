@@ -31,7 +31,7 @@ namespace jafleet.Classes
                 string returnUrl = string.Empty;
                 if (context.Request.Path != "/")
                 {
-                    returnUrl = HttpUtility.UrlEncode(context.Request.Path);
+                    returnUrl = context.Request.Path;
                 }
                 context.Response.Cookies.Append(adminKey, adminCookieValue, new CookieOptions
                 {
