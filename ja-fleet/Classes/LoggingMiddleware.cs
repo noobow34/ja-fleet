@@ -20,7 +20,7 @@ namespace jafleet.Classes
 
         public async Task Invoke(HttpContext httpContext)
         {
-            bool loggingTarget = !EXCLUDE_LIST.Any(s => httpContext.Request.Path.Value!.ToUpper().Contains(s));
+            bool loggingTarget = !EXCLUDE_LIST.Any(s => httpContext.Request.Path.Value!.Contains(s, StringComparison.CurrentCultureIgnoreCase));
             AccessLog? log = null;
             if (loggingTarget)
             {

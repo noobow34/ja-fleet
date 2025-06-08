@@ -17,7 +17,7 @@ namespace jafleet.Classes
 
         public async Task Invoke(HttpContext context)
         {
-            bool autoLoginTarget = !EXCLUDE_LIST.Any(s => context.Request.Path.Value!.ToUpper().Contains(s));
+            bool autoLoginTarget = !EXCLUDE_LIST.Any(s => context.Request.Path.Value!.Contains(s, StringComparison.CurrentCultureIgnoreCase));
             if (context.User.Identity!.IsAuthenticated || !autoLoginTarget)
             {
                 await _next(context);

@@ -76,7 +76,7 @@ namespace jafleet
                         var ap = AircraftDataExtractor.ExtractPhotoDataFromJetphotos(doc);
 
                         var currentInfo = new StringBuilder();
-                        existPage = doc?.BaseUri.ToUpper().Contains(a.RegistrationNumber.ToUpper()) ?? false;
+                        existPage = doc?.BaseUri.Contains(a.RegistrationNumber, StringComparison.CurrentCultureIgnoreCase) ?? false;
                         string notifyMark = string.Empty;
                         if (!string.IsNullOrEmpty(a.SpecialLivery))
                         {
