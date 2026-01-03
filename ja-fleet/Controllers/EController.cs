@@ -94,10 +94,11 @@ namespace jafleet.Controllers
                     if (!model.NotUpdateDate)
                     {
                         //Historyにコピー
+                        ILoggerFactory logger = LoggerFactory.Create(builder => builder.AddDebug());
                         var configuration = new MapperConfiguration(cfg =>
                         {
                             cfg.CreateMap<Aircraft, AircraftHistory>();
-                        });
+                        }, logger);
                         var mapper = configuration.CreateMapper();
                         var ah = mapper.Map<AircraftHistory>(origin);
                         ah.HistoryRegisterAt = storeDate;

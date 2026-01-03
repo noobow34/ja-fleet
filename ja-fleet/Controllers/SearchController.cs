@@ -46,10 +46,11 @@ namespace jafleet.Controllers
                     //取得したjsonから復元
                     var scm = JsonConvert.DeserializeObject<SearchConditionInModel>(sce.SearchConditionJson!, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate });
                     //modelにコピー
+                    ILoggerFactory logger = LoggerFactory.Create(builder => builder.AddDebug());
                     var configuration = new MapperConfiguration(cfg =>
                     {
                         cfg.CreateMap<SearchConditionInModel, SearchModel>();
-                    });
+                    },logger);
                     var mapper = configuration.CreateMapper();
                     model = mapper.Map<SearchModel>(scm);
                     model.IsDirect = true;
@@ -236,10 +237,11 @@ namespace jafleet.Controllers
             }
 
             //検索条件保持用クラスにコピー
+            ILoggerFactory logger = LoggerFactory.Create(builder => builder.AddDebug());
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<SearchModel, SearchConditionInModel>();
-            });
+            }, logger);
             var mapper = configuration.CreateMapper();
             var scm = mapper.Map<SearchConditionInModel>(model);
 
