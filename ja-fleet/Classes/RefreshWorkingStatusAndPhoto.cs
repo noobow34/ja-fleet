@@ -19,7 +19,7 @@ namespace jafleet
         private IEnumerable<AircraftView> _targetRegistrationNumber;
         private int _interval;
         private readonly static TimeSpan CompareTargetTimeSpan = new(2, 0, 0, 0);
-        private static readonly string[] MAINTE_PLACE = ["TPE", "MNL", "XSP", "QPG", "XMN", "SIN", "TNA", "HKG", "OKA", "TNN"];
+        private static readonly string[] MAINTE_PLACE = ["TPE", "MNL", "XSP", "QPG", "XMN", "SIN", "TNA", "HKG", "OKA", "TNN", "CTU"];
         public static DbContextOptionsBuilder<JafleetContext>? Options { get; set; }
         public static bool Processing { get; set; } = false;
 
