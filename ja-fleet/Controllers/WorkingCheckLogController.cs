@@ -3,29 +3,13 @@ using jafleet.Commons.EF;
 using jafleet.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
+using System.Text.Json;
 
 namespace jafleet.Controllers
 {
     public class WorkingCheckLogController : Controller
     {
         private readonly JafleetContext _context;
-
-        private const string DATE_PAT = @"\d{4}/\d{2}/\d{2} \d{1,2}:\d{2}(?::\d{2})?";
-
-        // REG◎(TYPE):DATE:ROUTE  or  REG◎(TYPE):DATE ROUTE（秒あり時はスペース区切り）
-        // TYPE に () が含まれるケース（ATR42-600(型式-500) 等）に対応するため貪欲マッチ
-        private static readonly Regex EntryRegex = new(
-            @"^(?<reg>JA\w+)(?<mark>[◎☆]?)\((?<type>.+)\)" +
-            @":(?<date>" + DATE_PAT + @")[:\ ]" +
-            @"(?<route>.+?)$",
-            RegexOptions.Compiled);
-
-        // "Tokyo (NRT) Guangzhou (CAN) IJ9811 Landed 15:14 ← 2026/05/14 19:41"
-        // 空港名: "名前 (CODE)" または "—"
-        private static readonly Regex RouteRegex = new(
-            @"^(?<from>.+? \([A-Z0-9]+\)|—) (?<to>.+? \([A-Z0-9]+\)|—) (?<fn>\S+) (?<status>.+?)(?: ← (?<prev>" + DATE_PAT + @"))?$",
-            RegexOptions.Compiled);
 
         public WorkingCheckLogController(JafleetContext context) => _context = context;
 
@@ -54,91 +38,73 @@ namespace jafleet.Controllers
 
             var model = new WorkingCheckLogModel
             {
-                Title = $"稼働チェックログ {searchDate:yyyy/MM/dd}",
+                Title      = $"稼働チェックログ {searchDate:yyyy/MM/dd}",
                 SearchDate = searchDate,
-                Batches = rawLogs.Select(ParseBatch).ToList()
+                Batches    = rawLogs.Select(ToViewModel).ToList()
             };
 
             return View(model);
         }
 
-        private static WorkingCheckLogBatch ParseBatch(string? rawText)
+        /// <summary>LogDetailのJSON文字列をViewModelに変換</summary>
+        private static WorkingCheckLogBatch ToViewModel(string? json)
         {
-            var batch = new WorkingCheckLogBatch();
-            if (string.IsNullOrWhiteSpace(rawText)) return batch;
+            if (string.IsNullOrWhiteSpace(json))
+                return new WorkingCheckLogBatch();
 
-            var lines = rawText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            WorkingCheckLogSection? currentSection = null;
-
-            foreach (var rawLine in lines)
+            WorkingCheckLogJson? logJson;
+            try
             {
-                var line = rawLine.Trim('\r').Trim();
-                if (string.IsNullOrWhiteSpace(line)) continue;
-
-                if (line.StartsWith("RefreshWorkingStatus正常終了:"))
+                logJson = JsonSerializer.Deserialize<WorkingCheckLogJson>(json);
+            }
+            catch
+            {
+                // 旧形式（非JSON）が残っていた場合のフォールバック
+                return new WorkingCheckLogBatch
                 {
-                    batch.FinishedAt = line.Replace("RefreshWorkingStatus正常終了:", "").Trim();
-                    continue;
-                }
-
-                if (line.StartsWith("--------") && line.EndsWith("--------"))
-                {
-                    var title = line.Trim('-').Trim();
-                    currentSection = new WorkingCheckLogSection { SectionTitle = title };
-                    batch.Sections.Add(currentSection);
-                    continue;
-                }
-
-                if (currentSection == null) continue;
-                currentSection.Entries.Add(ParseEntry(line));
+                    Sections = new List<WorkingCheckLogSection>
+                    {
+                        new() { SectionTitle = "（旧形式ログ）", Entries = new List<WorkingCheckLogEntry>
+                            {
+                                new() { RawLine = json }
+                            }
+                        }
+                    }
+                };
             }
 
-            return batch;
+            if (logJson == null) return new WorkingCheckLogBatch();
+
+            return new WorkingCheckLogBatch
+            {
+                FinishedAt = logJson.FinishedAt,
+                Sections   = logJson.Sections.Select(s => new WorkingCheckLogSection
+                {
+                    SectionTitle = s.Title,
+                    Entries      = s.Entries.Select(ToEntry).ToList()
+                }).ToList()
+            };
         }
 
-        private static WorkingCheckLogEntry ParseEntry(string line)
+        private static WorkingCheckLogEntry ToEntry(WorkingCheckLogEntryJson e)
         {
-            var m = EntryRegex.Match(line);
-            if (!m.Success) return new WorkingCheckLogEntry { RawLine = line };
-
-            var routeRaw = m.Groups["route"].Value;
-            var rm = RouteRegex.Match(routeRaw);
-
-            string? from = null, to = null, fn = null, status = null, prev = null;
-            if (rm.Success)
-            {
-                from   = rm.Groups["from"].Value;
-                to     = rm.Groups["to"].Value;
-                fn     = rm.Groups["fn"].Value;
-                status = rm.Groups["status"].Value;
-                prev   = rm.Groups["prev"].Success && !string.IsNullOrEmpty(rm.Groups["prev"].Value)
-                         ? rm.Groups["prev"].Value : null;
-            }
-            else
-            {
-                var arrowIdx = routeRaw.IndexOf(" ← ", StringComparison.Ordinal);
-                status = arrowIdx >= 0 ? routeRaw[..arrowIdx] : routeRaw;
-                prev   = arrowIdx >= 0 ? routeRaw[(arrowIdx + 3)..] : null;
-            }
-
-            var (fromCode, fromName) = SplitAp(from);
-            var (toCode,   toName)   = SplitAp(to);
-
+            var (fromCode, fromName) = SplitAp(e.FromAp);
+            var (toCode,   toName)   = SplitAp(e.ToAp);
             return new WorkingCheckLogEntry
             {
-                RegistrationNumber = m.Groups["reg"].Value,
-                NotifyMark   = string.IsNullOrEmpty(m.Groups["mark"].Value) ? null : m.Groups["mark"].Value,
-                TypeName     = m.Groups["type"].Value,
-                FlightDate   = m.Groups["date"].Value,
-                FromAp       = from,
-                FromApCode   = fromCode,
-                FromApName   = fromName,
-                ToAp         = to,
-                ToApCode     = toCode,
-                ToApName     = toName,
-                FlightNumber = fn,
-                Status       = status,
-                PreviousDate = prev,
+                RegistrationNumber = e.Reg,
+                NotifyMark         = e.Mark,
+                TypeName           = e.Type,
+                FlightDate         = e.Date,
+                FromAp             = e.FromAp,
+                FromApCode         = fromCode,
+                FromApName         = fromName,
+                ToAp               = e.ToAp,
+                ToApCode           = toCode,
+                ToApName           = toName,
+                FlightNumber       = e.FlightNumber,
+                Status             = e.Status,
+                PreviousDate       = e.PreviousDate,
             };
         }
 
@@ -149,9 +115,7 @@ namespace jafleet.Controllers
             if (ap == "—") return ("—", "");
             var idx = ap.LastIndexOf('(');
             if (idx < 0) return (ap, "");
-            var code = ap[(idx + 1)..].TrimEnd(')');
-            var name = ap[..idx].Trim();
-            return (code, name);
+            return (ap[(idx + 1)..].TrimEnd(')'), ap[..idx].Trim());
         }
     }
 }
