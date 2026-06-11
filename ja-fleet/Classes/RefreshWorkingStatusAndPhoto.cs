@@ -266,10 +266,9 @@ namespace jafleet
                         // テストレジのチェック（変更なし）
                         if (!string.IsNullOrEmpty(a.TestRegistration))
                         {
-                            var htmlDocumentTest = parser.ParseDocument(
-                                await HttpClientManager.GetInstance().GetStringAsync(
-                                    FlightradarConstant.FR24_DATA_URL + a.TestRegistration));
-                            var rowTest = htmlDocumentTest.GetElementsByClassName("data-row");
+                            var testRegurl = FlightradarConstant.FR24_DATA_URL + a.TestRegistration;
+                            var testDoc = await _context.OpenAsync(testRegurl);
+                            var rowTest = doc?.Body?.GetElementsByClassName("data-row");
                             if (rowTest!.Length != 0)
                             {
                                 string? timestamp = rowTest[0].GetAttribute("data-timestamp");
